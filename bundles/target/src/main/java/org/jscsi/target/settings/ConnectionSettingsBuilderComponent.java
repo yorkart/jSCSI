@@ -1,11 +1,9 @@
 package org.jscsi.target.settings;
 
-
 import org.jscsi.target.settings.entry.Entry;
 
 import javax.naming.OperationNotSupportedException;
 import java.util.Collection;
-
 
 /**
  * Instances of {@link ConnectionSettingsBuilderComponent} are used jointly with instances of

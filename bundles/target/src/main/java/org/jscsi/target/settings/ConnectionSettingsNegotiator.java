@@ -1,6 +1,5 @@
 package org.jscsi.target.settings;
 
-
 import org.jscsi.parser.ProtocolDataUnit;
 import org.jscsi.parser.login.LoginStage;
 import org.jscsi.target.TargetServer;
@@ -105,10 +104,12 @@ public final class ConnectionSettingsNegotiator extends SettingsNegotiator {
         commitOrRollBackChanges(commitChanges);
         // commit or roll back session-wide entries
         sessionSettingsNegotiator.commitOrRollBackChanges(commitChanges);
+
         // update settings
         updateSettingsBuilderComponent();
         sessionSettingsNegotiator.updateSettingsBuilderComponent();
         updateSettings();
+
         // allow other Threads to negotiate
         sessionSettingsNegotiator.unlock();
     }

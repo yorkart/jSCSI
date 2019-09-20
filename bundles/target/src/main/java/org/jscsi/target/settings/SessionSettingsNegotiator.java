@@ -89,7 +89,6 @@ public final class SessionSettingsNegotiator extends SettingsNegotiator {
 
     @Override
     protected void initializeEntries() {
-
         /*
          * No indicates that the data PDUs within a sequence can be in any order. Yes indicates that the data PDUs
          * within a sequence have to be at continuously increasing addresses and that overlays are forbidden.
@@ -267,7 +266,6 @@ public final class SessionSettingsNegotiator extends SettingsNegotiator {
      * of {@link SettingsNegotiator#entries}.
      */
     protected void updateSettingsBuilderComponent() {
-
         sessionSettingBuilderComponent = new SessionSettingsBuilderComponent(
                 currentSettingsId.getAndIncrement() + 1,// settingsId
                 entries);// entries with current/new values
@@ -283,7 +281,9 @@ public final class SessionSettingsNegotiator extends SettingsNegotiator {
             // ensure FirstBurstLength <= MaxBurstLength
             final int firstBurstLength = getEntry(TextKeyword.FIRST_BURST_LENGTH).getIntegerValue();
             final int maxBurstLength = getEntry(TextKeyword.MAX_BURST_LENGTH).getIntegerValue();
-            if (maxBurstLength > firstBurstLength) return false;
+            if (maxBurstLength > firstBurstLength) {
+                return false;
+            }
         } catch (OperationNotSupportedException e) {
             // programmer error, requested wrong data type
             e.printStackTrace();

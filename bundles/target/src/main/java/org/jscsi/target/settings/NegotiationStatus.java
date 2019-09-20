@@ -31,7 +31,7 @@ public enum NegotiationStatus {
      */
     REJECTED,
     /**
-     * The parameter is irrelevant.
+     * The parameter is irrelevant. 不相关错误的状态
      */
     IRRELEVANT;
 }

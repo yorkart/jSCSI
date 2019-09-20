@@ -1,6 +1,5 @@
 package org.jscsi.target.settings.entry;
 
-
 import org.jscsi.parser.ProtocolDataUnit;
 import org.jscsi.parser.login.LoginStage;
 import org.jscsi.target.TargetServer;
@@ -15,7 +14,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.naming.OperationNotSupportedException;
 import java.util.Collection;
-
 
 /**
  * {@link Entry} objects are used by instances {@link SettingsNegotiator} during text negotiation of connection and
@@ -109,6 +107,7 @@ public abstract class Entry {
 
     /**
      * This method is used for negotiating or declaring the {@link Entry}'s parameter.
+     * 根据initiator返回的数据协商返回的参数
      *
      * @param loginStage            specifying the current stage or phase of the connection whose parameters are to be negotiated
      * @param leadingConnection     <code>true</code> if the connection is the first connection in its session,
@@ -120,8 +119,13 @@ public abstract class Entry {
      * @param responseKeyValuePairs where the reply <i>key=value</i> pair will be added to if necessary
      * @return <code>true</code> if everything went fine, <code>false</code> if errors occured
      */
-    public final boolean negotiate(TargetServer target, final LoginStage loginStage, final boolean leadingConnection, final boolean initialPdu, final String key, final String values, final Collection<String> responseKeyValuePairs) {
-
+    public final boolean negotiate(TargetServer target,
+                                   final LoginStage loginStage,
+                                   final boolean leadingConnection,
+                                   final boolean initialPdu,
+                                   final String key,
+                                   final String values,
+                                   final Collection<String> responseKeyValuePairs) {
         // (re)check key (just in case), this should have been checked before
         // calling this method
         if (!matchKey(key)) {
@@ -167,13 +171,13 @@ public abstract class Entry {
 
         // *** negotiate ***
         if (negotiationType == NegotiationType.NEGOTIATED) {
-
             String negotiatedValue;// will be returned as value part
 
-            if (negotiationStatus == NegotiationStatus.IRRELEVANT)
+            if (negotiationStatus == NegotiationStatus.IRRELEVANT) {
                 negotiatedValue = TextKeyword.IRRELEVANT;
-            else
+            } else {
                 negotiatedValue = processNegotiation(offer);
+            }
 
             String reply;
             // reply, remember outcome, log, and return

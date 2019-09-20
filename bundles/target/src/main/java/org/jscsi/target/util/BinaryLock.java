@@ -1,9 +1,7 @@
 package org.jscsi.target.util;
 
-
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-
 
 /**
  * Instances of {@link BinaryLock} can be used to prevent concurrent access to the same resource, so, in essence, this
