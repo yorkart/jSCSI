@@ -1,6 +1,5 @@
 package org.jscsi.target.connection.phase;
 
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.ProtocolDataUnit;
 import org.jscsi.target.connection.Connection;
@@ -9,7 +8,6 @@ import org.jscsi.target.settings.SettingsException;
 import javax.naming.OperationNotSupportedException;
 import java.io.IOException;
 import java.security.DigestException;
-
 
 /**
  * Instances of this class represent a connection's phase (see {@link Connection} for a description of the relationship

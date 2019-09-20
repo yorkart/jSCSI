@@ -1,6 +1,5 @@
 package org.jscsi.target.connection.stage.login;
 
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.BasicHeaderSegment;
 import org.jscsi.parser.OperationCode;
@@ -18,7 +17,6 @@ import org.jscsi.target.util.ReadWrite;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.security.DigestException;
-
 
 /**
  * This class is an abstract super-class for stages of the {@link TargetLoginPhase} (see <code>Connection</code> for a
@@ -93,9 +91,9 @@ public abstract class TargetLoginStage extends TargetStage {
     protected boolean checkPdu(ProtocolDataUnit pdu) {
         final BasicHeaderSegment bhs = pdu.getBasicHeaderSegment();
         final LoginRequestParser parser = (LoginRequestParser) bhs.getParser();
-        if (bhs.getOpCode() == OperationCode.LOGIN_REQUEST && parser.getCurrentStageNumber() == stageNumber && bhs.getInitiatorTaskTag() == initiatorTaskTag)
-            return true;
-        return false;
+        return bhs.getOpCode() == OperationCode.LOGIN_REQUEST
+                && parser.getCurrentStageNumber() == stageNumber
+                && bhs.getInitiatorTaskTag() == initiatorTaskTag;
     }
 
     /**
@@ -127,7 +125,6 @@ public abstract class TargetLoginStage extends TargetStage {
      * @throws SettingsException
      */
     protected final String receivePduSequence(ProtocolDataUnit pdu) throws InternetSCSIException, InterruptedException, IOException, DigestException, SettingsException {
-
         // StringBuilder for the key-value pairs received during this sequence
         final StringBuilder stringBuilder = new StringBuilder();
 
@@ -192,7 +189,6 @@ public abstract class TargetLoginStage extends TargetStage {
      * @throws DigestException
      */
     protected final void sendPduSequence(final String keyValuePairs, final LoginStage nextStage) throws SettingsException, InterruptedException, IOException, InternetSCSIException, DigestException {
-
         // some variables
         ProtocolDataUnit pdu;
         BasicHeaderSegment bhs;

@@ -1,6 +1,5 @@
 package org.jscsi.target.connection.stage.fullfeature;
 
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.BasicHeaderSegment;
 import org.jscsi.parser.ProtocolDataUnit;
@@ -26,7 +25,6 @@ import org.jscsi.target.settings.SettingsException;
 import java.io.IOException;
 import java.security.DigestException;
 
-
 /**
  * A stage for processing <code>REQUEST SENSE</code> SCSI commands.
  * <p>
@@ -43,7 +41,6 @@ public class RequestSenseStage extends TargetFullFeatureStage {
 
     @Override
     public void execute(ProtocolDataUnit pdu) throws IOException, InterruptedException, InternetSCSIException, DigestException, SettingsException {
-
         final BasicHeaderSegment bhs = pdu.getBasicHeaderSegment();
         final SCSICommandParser parser = (SCSICommandParser) bhs.getParser();
 
@@ -69,7 +66,6 @@ public class RequestSenseStage extends TargetFullFeatureStage {
                         // and
                         // qualifier
                         new SenseDataDescriptor[0]);// sense data descriptors
-
             } else {
                 // fixed format sense data has been requested
 
@@ -106,7 +102,6 @@ public class RequestSenseStage extends TargetFullFeatureStage {
                     0,// residualCount
                     new ScsiResponseDataSegment(senseData, parser.getExpectedDataTransferLength()));// data
             // segment
-
         } else {
             /*
              * PDU is okay carry out command Sense data shall be available and cleared under the conditions defined in

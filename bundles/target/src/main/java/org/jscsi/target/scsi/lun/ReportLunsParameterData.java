@@ -1,11 +1,9 @@
 package org.jscsi.target.scsi.lun;
 
-
 import org.jscsi.target.scsi.IResponseData;
 import org.jscsi.target.util.ReadWrite;
 
 import java.nio.ByteBuffer;
-
 
 /**
  * Instances of this class are sent to the initiator in response to <code>REPORT LUNS</code> SCSI commands. They contain
@@ -45,7 +43,6 @@ public final class ReportLunsParameterData implements IResponseData {
     }
 
     public void serialize(ByteBuffer byteBuffer, int index) {
-
         // LUN list length
         ReadWrite.writeInt(lunListLength, byteBuffer, index);
 

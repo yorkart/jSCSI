@@ -20,7 +20,6 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-
 /**
  * A stage for processing <code>READ (6)</code> and <code>READ (10)</code> SCSI commands.
  *
@@ -36,7 +35,6 @@ public class ReadStage extends ReadOrWriteStage {
 
     @Override
     public void execute(ProtocolDataUnit pdu) throws IOException, InterruptedException, InternetSCSIException, SettingsException {
-
         // get relevant variables ...
         // ... from settings
         final boolean immediateData = settings.getImmediateData();
@@ -195,7 +193,6 @@ public class ReadStage extends ReadOrWriteStage {
             LOGGER.debug("sending SCSI Response PDU");
             connection.sendPdu(responsePdu);
         }
-
     }
 
 }

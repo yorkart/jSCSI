@@ -1,6 +1,5 @@
 package org.jscsi.target.connection.stage.fullfeature;
 
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.BasicHeaderSegment;
 import org.jscsi.parser.ProtocolDataUnit;
@@ -18,7 +17,6 @@ import java.nio.ByteBuffer;
 import java.security.DigestException;
 import java.util.List;
 import java.util.Vector;
-
 
 /**
  * A stage for processing requests by the initiator for a list of all targets available through the iSCSI portal and for
@@ -38,7 +36,6 @@ public final class TextNegotiationStage extends TargetFullFeatureStage {
 
     @Override
     public void execute(ProtocolDataUnit pdu) throws IOException, InterruptedException, InternetSCSIException, DigestException, SettingsException {
-
         final BasicHeaderSegment bhs = pdu.getBasicHeaderSegment();
 
         final int initiatorTaskTag = bhs.getInitiatorTaskTag();

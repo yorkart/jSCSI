@@ -1,8 +1,6 @@
 package org.jscsi.target.scsi;
 
-
 import java.nio.ByteBuffer;
-
 
 /**
  * This interface specifies methods for serializing an object. The serialized object can be inserted into an existing

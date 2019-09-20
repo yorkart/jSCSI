@@ -1,6 +1,5 @@
 package org.jscsi.target.connection;
 
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.OperationCode;
 import org.jscsi.parser.ProtocolDataUnit;
@@ -23,7 +22,6 @@ import java.io.IOException;
 import java.nio.channels.SocketChannel;
 import java.security.DigestException;
 import java.util.concurrent.Callable;
-
 
 /**
  * A class for objects representing an iSCSI connection with all necessary variables.
@@ -207,7 +205,6 @@ public interface Connection extends Callable<Void> {
          * received via {@link #receivePdu()}.
          */
         public Void call() {
-
             try {
                 // *** login phase ***
                 phase = new TargetLoginPhase(this);

@@ -75,7 +75,6 @@ public final class TargetFullFeaturePhase extends TargetPhase {
      * @throws SettingsException              {@inheritDoc}
      */
     public boolean execute() throws DigestException, IOException, InterruptedException, InternetSCSIException, SettingsException {
-
         running = true;
         while (running) {
             ProtocolDataUnit pdu = connection.receivePdu();

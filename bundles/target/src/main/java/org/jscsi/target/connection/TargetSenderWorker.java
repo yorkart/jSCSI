@@ -1,6 +1,5 @@
 package org.jscsi.target.connection;
 
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.BasicHeaderSegment;
 import org.jscsi.parser.InitiatorMessageParser;
@@ -21,7 +20,6 @@ import java.io.IOException;
 import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SocketChannel;
 import java.security.DigestException;
-
 
 /**
  * Instances of this class are used by {@link Connection} objects for sending and receiving {@link ProtocolDataUnit}
@@ -113,7 +111,6 @@ public class TargetSenderWorker {
      * @throws SettingsException
      */
     ProtocolDataUnit receiveFromWire() throws DigestException, InternetSCSIException, IOException, SettingsException {
-
         ProtocolDataUnit pdu;
         if (initialPdu) {
             /*
@@ -153,12 +150,13 @@ public class TargetSenderWorker {
                 LOGGER.debug("CDB bytes: \n" + Debug.byteBufferToString(scsiParser.getCDB()));
             }
             // LOGGER.debug("parser.expectedStatusSequenceNumber: " + expectedStatusSequenceNumber);
-            if (connection == null)
+            if (connection == null) {
                 LOGGER.debug("connection: null");
-            else if (connection.getStatusSequenceNumber() == null)
+            } else if (connection.getStatusSequenceNumber() == null) {
                 LOGGER.debug("connection.getStatusSequenceNumber: null");
-            else
+            } else {
                 LOGGER.debug("connection.getStatusSequenceNumber: " + connection.getStatusSequenceNumber().getValue());
+            }
         }
 
         // if this is the first PDU in the leading connection, then
@@ -185,7 +183,9 @@ public class TargetSenderWorker {
 
         // increment CmdSN if not immediate PDU (or Data-Out PDU)
         try {
-            if (parser.incrementSequenceNumber()) session.getExpectedCommandSequenceNumber().increment();
+            if (parser.incrementSequenceNumber()) {
+                session.getExpectedCommandSequenceNumber().increment();
+            }
         } catch (NullPointerException exc) {
 
         }
@@ -205,23 +205,26 @@ public class TargetSenderWorker {
      */
 
     final void sendOverWire(final ProtocolDataUnit pdu) throws InternetSCSIException, IOException, InterruptedException {
-
         // set sequence counters
         final TargetMessageParser parser = (TargetMessageParser) pdu.getBasicHeaderSegment().getParser();
         parser.setExpectedCommandSequenceNumber(session.getExpectedCommandSequenceNumber().getValue());
         parser.setMaximumCommandSequenceNumber(session.getMaximumCommandSequenceNumber().getValue());
         final boolean incrementSequenceNumber = parser.incrementSequenceNumber();
-        if (incrementSequenceNumber) // set StatSN only if field is not reserved
+        if (incrementSequenceNumber) {// set StatSN only if field is not reserved
             parser.setStatusSequenceNumber(connection.getStatusSequenceNumber().getValue());
-
-        if (LOGGER.isDebugEnabled()) LOGGER.debug("Sending this PDU:\n" + pdu);
+        }
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Sending this PDU:\n" + pdu);
+        }
 
         // send pdu
         pdu.write(socketChannel);
 
         // increment StatusSN if this was a Response PDU (with status)
         // or if special cases apply
-        if (incrementSequenceNumber) connection.getStatusSequenceNumber().increment();
-
+        if (incrementSequenceNumber) {
+            connection.getStatusSequenceNumber().increment();
+        }
     }
+
 }

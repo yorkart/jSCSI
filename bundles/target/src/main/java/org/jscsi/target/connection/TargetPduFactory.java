@@ -1,6 +1,5 @@
 package org.jscsi.target.connection;
 
-
 import org.jscsi.parser.BasicHeaderSegment;
 import org.jscsi.parser.OperationCode;
 import org.jscsi.parser.ProtocolDataUnit;
@@ -21,7 +20,6 @@ import org.jscsi.parser.tmf.TaskManagementFunctionResponseParser;
 import org.jscsi.target.scsi.ScsiResponseDataSegment;
 
 import java.nio.ByteBuffer;
-
 
 /**
  * A factory class for creating instances of different {@link ProtocolDataUnit} types sent by the jSCSI Target.

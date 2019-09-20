@@ -1,6 +1,5 @@
 package org.jscsi.target.connection.stage;
 
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.ProtocolDataUnit;
 import org.jscsi.target.connection.Connection;
@@ -11,7 +10,6 @@ import org.jscsi.target.settings.SettingsException;
 
 import java.io.IOException;
 import java.security.DigestException;
-
 
 /**
  * This class is an abstract super-class for stages of the (see {@link Connection} for a description of the relationship

@@ -73,7 +73,6 @@ public final class TargetLoginPhase extends TargetPhase {
      */
     @Override
     public boolean execute(ProtocolDataUnit pdu) throws IOException, InterruptedException, InternetSCSIException, DigestException, SettingsException {
-
         // begin login negotiation
         final ConnectionSettingsNegotiator negotiator = connection.getConnectionSettingsNegotiator();
         while (!negotiator.beginNegotiation()) {
@@ -159,7 +158,9 @@ public final class TargetLoginPhase extends TargetPhase {
      * @return <code>true</code> if and only if this method is called for the first time
      */
     public boolean getFirstPduAndSetToFalse() {
-        if (!firstPdu) return false;
+        if (!firstPdu){
+            return false;
+        }
         firstPdu = false;
         return true;
     }

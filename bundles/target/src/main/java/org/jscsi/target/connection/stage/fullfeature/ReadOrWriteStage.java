@@ -1,11 +1,9 @@
 package org.jscsi.target.connection.stage.fullfeature;
 
-
 import org.jscsi.target.connection.phase.TargetFullFeaturePhase;
 import org.jscsi.target.scsi.cdb.CommandDescriptorBlock;
 import org.jscsi.target.scsi.cdb.ReadOrWriteCdb;
 import org.jscsi.target.scsi.sense.senseDataDescriptor.senseKeySpecific.FieldPointerSenseKeySpecificData;
-
 
 /**
  * This is an abstract superclass for stages that handle PDUs with command descriptor blocks of the
@@ -32,9 +30,11 @@ public abstract class ReadOrWriteStage extends TargetFullFeatureStage {
         // check if requested blocks are out of bounds
         final int boundsCheck = session.getStorageModule().checkBounds(cdb.getLogicalBlockAddress(), cdb.getTransferLength());
         // add illegal field pointer, or not
-        if (boundsCheck == 1)
+        if (boundsCheck == 1) {
             cdb.addIllegalFieldPointerForLogicalBlockAddress();
-        else if (boundsCheck == 2) cdb.addIllegalFieldPointerForTransferLength();
+        } else if (boundsCheck == 2) {
+            cdb.addIllegalFieldPointerForTransferLength();
+        }
     }
 
 }

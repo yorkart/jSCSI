@@ -1,6 +1,5 @@
 package org.jscsi.target.scsi;
 
-
 import org.jscsi.target.connection.TargetPduFactory;
 import org.jscsi.target.scsi.sense.SenseData;
 import org.jscsi.target.util.Debug;
@@ -9,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.ByteBuffer;
-
 
 /**
  * Instances of this class represent data that may be sent in a SCSI Command Response PDU.
@@ -110,7 +108,6 @@ public final class ScsiResponseDataSegment {
      * @return a {@link ByteBuffer} containing a serialized representation of this object
      */
     public ByteBuffer serialize() {
-
         final int size = uncroppedSize();
         if (size == 0) {
             return ByteBuffer.allocate(0);// empty data segment

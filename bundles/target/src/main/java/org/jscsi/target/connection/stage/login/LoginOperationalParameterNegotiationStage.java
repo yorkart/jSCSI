@@ -1,6 +1,5 @@
 package org.jscsi.target.connection.stage.login;
 
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.BasicHeaderSegment;
 import org.jscsi.parser.ProtocolDataUnit;
@@ -16,7 +15,6 @@ import java.io.IOException;
 import java.security.DigestException;
 import java.util.List;
 import java.util.Vector;
-
 
 /**
  * A {@link TargetLoginStage} sub-class representing Login Operational (Parameter) Negotiation Stages.

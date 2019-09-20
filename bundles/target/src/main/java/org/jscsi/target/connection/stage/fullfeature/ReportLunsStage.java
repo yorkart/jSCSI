@@ -1,6 +1,5 @@
 package org.jscsi.target.connection.stage.fullfeature;
 
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.BasicHeaderSegment;
 import org.jscsi.parser.ProtocolDataUnit;
@@ -17,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.security.DigestException;
 
-
 /**
  * A stage for processing <code>REPORT LUNS</code> SCSI commands.
  *
@@ -33,7 +31,6 @@ public class ReportLunsStage extends TargetFullFeatureStage {
 
     @Override
     public void execute(ProtocolDataUnit pdu) throws IOException, InterruptedException, InternetSCSIException, DigestException, SettingsException {
-
         final BasicHeaderSegment bhs = pdu.getBasicHeaderSegment();
         final SCSICommandParser parser = (SCSICommandParser) bhs.getParser();
 
@@ -80,7 +77,6 @@ public class ReportLunsStage extends TargetFullFeatureStage {
             sendResponse(bhs.getInitiatorTaskTag(),// initiatorTaskTag
                     parser.getExpectedDataTransferLength(),// expectedDataTransferLength
                     reportLunsParameterData);// responseData
-
         }
     }
 

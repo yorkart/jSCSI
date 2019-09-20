@@ -1,6 +1,5 @@
 package org.jscsi.target.connection.stage.fullfeature;
 
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.BasicHeaderSegment;
 import org.jscsi.parser.InitiatorMessageParser;
@@ -12,7 +11,6 @@ import org.jscsi.target.settings.SettingsException;
 
 import java.io.IOException;
 import java.security.DigestException;
-
 
 /**
  * Unlike the other subclasses of {@link TargetFullFeatureStage}, this class is not associated with a single
@@ -31,7 +29,6 @@ public class UnsupportedOpCodeStage extends TargetFullFeatureStage {
 
     @Override
     public void execute(ProtocolDataUnit pdu) throws IOException, InterruptedException, InternetSCSIException, DigestException, SettingsException {
-
         final BasicHeaderSegment bhs = pdu.getBasicHeaderSegment();
         final InitiatorMessageParser parser = (InitiatorMessageParser) bhs.getParser();
 

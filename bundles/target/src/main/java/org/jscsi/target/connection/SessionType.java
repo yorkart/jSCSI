@@ -1,8 +1,6 @@
 package org.jscsi.target.connection;
 
-
 import org.jscsi.target.settings.TextKeyword;
-
 
 /**
  * The {@link SessionType} of a {@link TargetSession} determines which stages can be reached in the Full Feature Phase.
@@ -49,8 +47,11 @@ public enum SessionType {
      */
     public static final SessionType getSessionType(final String value) {
         final SessionType[] values = values();
-        for (SessionType s : values)
-            if (s.value.equals(value)) return s;
+        for (SessionType s : values) {
+            if (s.value.equals(value)) {
+                return s;
+            }
+        }
         return null;
     }
 }

@@ -21,7 +21,6 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.security.DigestException;
 
-
 /**
  * A stage for processing <code>MODE SENSE (6)</code> SCSI commands.
  *
@@ -37,7 +36,6 @@ public final class ModeSenseStage extends TargetFullFeatureStage {
 
     @Override
     public void execute(final ProtocolDataUnit pdu) throws IOException, InterruptedException, InternetSCSIException, DigestException, SettingsException {
-
         final BasicHeaderSegment bhs = pdu.getBasicHeaderSegment();
         final SCSICommandParser parser = (SCSICommandParser) bhs.getParser();
         final ModeSense6Cdb cdb = new ModeSense6Cdb(parser.getCDB());

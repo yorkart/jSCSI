@@ -1,6 +1,5 @@
 package org.jscsi.target.connection.stage.login;
 
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.BasicHeaderSegment;
 import org.jscsi.parser.ProtocolDataUnit;
@@ -17,7 +16,6 @@ import java.io.IOException;
 import java.security.DigestException;
 import java.util.List;
 import java.util.Vector;
-
 
 /**
  * A {@link TargetLoginStage} sub-class representing Security Negotiation Stages.
@@ -39,7 +37,6 @@ public final class SecurityNegotiationStage extends TargetLoginStage {
 
     @Override
     public void execute(ProtocolDataUnit initialPdu) throws IOException, InterruptedException, InternetSCSIException, DigestException, SettingsException {
-
         // "receive" initial PDU
         BasicHeaderSegment bhs = initialPdu.getBasicHeaderSegment();
         initiatorTaskTag = bhs.getInitiatorTaskTag();
@@ -163,11 +160,15 @@ public final class SecurityNegotiationStage extends TargetLoginStage {
      * @return <code>true</code> if the String is an AuthMethod key, <code>false</code> if it is not.
      */
     private final boolean isAuthenticationKey(final String key) {
-        if (key == null || key.length() < 5) return false;
+        if (key == null || key.length() < 5) {
+            return false;
+        }
         final String fourChars = key.substring(0, 4);
         final String fiveChars = key.substring(0, 5);
-        if ("CHAP_".matches(fiveChars) || "KRB_".matches(fourChars) || "SPKM_".matches(fiveChars) || "SRP_".matches(fourChars) || (key.length() >= 10 && "TargetAuth".matches(key.substring(0, 10))))
-            return true;
-        return false;
+        return "CHAP_".matches(fiveChars)
+                || "KRB_".matches(fourChars)
+                || "SPKM_".matches(fiveChars)
+                || "SRP_".matches(fourChars)
+                || (key.length() >= 10 && "TargetAuth".matches(key.substring(0, 10)));
     }
 }

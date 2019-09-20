@@ -1,6 +1,5 @@
 package org.jscsi.target.connection.stage;
 
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.BasicHeaderSegment;
 import org.jscsi.parser.ProtocolDataUnit;
@@ -16,7 +15,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.security.DigestException;
-
 
 /**
  * A stage for processing Task Management Function Request defined in RFC(7320).
@@ -38,7 +36,6 @@ public class TMStage extends TargetFullFeatureStage {
 
     @Override
     public void execute(ProtocolDataUnit pdu) throws IOException, InterruptedException, InternetSCSIException, DigestException, SettingsException {
-
         final BasicHeaderSegment bhs = pdu.getBasicHeaderSegment();
         final TaskManagementFunctionRequestParser parser = (TaskManagementFunctionRequestParser) bhs.getParser();
         final int initiatorTaskTag = bhs.getInitiatorTaskTag();
@@ -76,7 +73,6 @@ public class TMStage extends TargetFullFeatureStage {
 
         final ProtocolDataUnit responsePDU = TargetPduFactory.createTMResponsePdu(responseCode, initiatorTaskTag);
         connection.sendPdu(responsePDU);
-
     }
 
 }

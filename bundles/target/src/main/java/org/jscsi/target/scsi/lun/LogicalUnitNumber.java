@@ -1,11 +1,9 @@
 package org.jscsi.target.scsi.lun;
 
-
 import org.jscsi.target.scsi.ISerializable;
 import org.jscsi.target.util.ReadWrite;
 
 import java.nio.ByteBuffer;
-
 
 /**
  * A 64-bit identifier for a logical unit.

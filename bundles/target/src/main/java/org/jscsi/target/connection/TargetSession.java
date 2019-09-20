@@ -1,6 +1,5 @@
 package org.jscsi.target.connection;
 
-
 import org.jscsi.parser.ProtocolDataUnit;
 import org.jscsi.parser.login.ISID;
 import org.jscsi.target.Target;
@@ -8,7 +7,6 @@ import org.jscsi.target.TargetServer;
 import org.jscsi.target.settings.SessionSettingsNegotiator;
 import org.jscsi.target.storage.IStorageModule;
 import org.jscsi.target.util.SerialArithmeticNumber;
-
 
 /**
  * A class for objects representing an iSCSI session with all necessary variables.
@@ -232,7 +230,9 @@ public class TargetSession {
      */
     boolean setSessionType(SessionType sessionType) {
         // allow just once, accept only non-null parameter
-        if (sessionType == null || this.sessionType != null) return false;
+        if (sessionType == null || this.sessionType != null) {
+            return false;
+        }
         this.sessionType = sessionType;
         return true;
     }
@@ -243,12 +243,16 @@ public class TargetSession {
      * @param targetName
      */
     public void setTargetName(String targetName) {
-        if (targetName == null) target = null;
+        if (targetName == null) {
+            target = null;
+        }
         target = targetServer.getTarget(targetName);
     }
 
     public String getTargetName() {
-        if (target != null) return target.getTargetName();
+        if (target != null) {
+            return target.getTargetName();
+        }
         return null;
     }
 }

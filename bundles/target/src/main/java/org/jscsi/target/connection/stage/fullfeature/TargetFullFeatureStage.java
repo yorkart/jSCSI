@@ -132,7 +132,6 @@ public abstract class TargetFullFeatureStage extends TargetStage {
      */
     protected static final ProtocolDataUnit createScsiResponsePdu(final SCSIStatus status,
                                                                   final int initiatorTaskTag, final int expectedDataTransferLength, final int responseDataSize) {
-
         // calculate residuals and flags
         final int residualCount = Math.abs(expectedDataTransferLength - responseDataSize);
         final boolean residualOverflow = expectedDataTransferLength < responseDataSize;
@@ -168,7 +167,6 @@ public abstract class TargetFullFeatureStage extends TargetStage {
      */
     protected final void sendResponse(final int initiatorTaskTag, final int expectedDataTransferLength,
                                       final IResponseData responseData) throws InterruptedException, IOException, InternetSCSIException {
-
         // serialize all response data
         final ByteBuffer fullBuffer = ByteBuffer.allocate(responseData.size());
         responseData.serialize(fullBuffer, 0);
