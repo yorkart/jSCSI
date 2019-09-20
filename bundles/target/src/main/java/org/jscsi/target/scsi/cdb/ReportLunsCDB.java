@@ -1,21 +1,21 @@
 package org.jscsi.target.scsi.cdb;
 
 
-import java.nio.ByteBuffer;
-
 import org.jscsi.target.util.ReadWrite;
+
+import java.nio.ByteBuffer;
 
 
 /**
  * This class represents Command Descriptor Blocks for the <code>REPORT LUNS</code> SCSI command.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public class ReportLunsCDB extends CommandDescriptorBlock {
 
     /**
      * The SELECT REPORT field specifies the types of logical unit addresses that shall be reported.
-     * 
+     *
      * @see SelectReport
      */
     private final SelectReport selectReport;
@@ -43,7 +43,7 @@ public class ReportLunsCDB extends CommandDescriptorBlock {
      */
     private final int allocationLength;
 
-    public ReportLunsCDB (ByteBuffer buffer) {
+    public ReportLunsCDB(ByteBuffer buffer) {
         super(buffer);
 
         // select report
@@ -53,14 +53,14 @@ public class ReportLunsCDB extends CommandDescriptorBlock {
         // allocation length
         allocationLength = ReadWrite.readFourByteInt(buffer, 6);
         if (allocationLength < 16) addIllegalFieldPointer(6);// The allocation length should be at
-                                                             // least 16.
+        // least 16.
     }
 
-    public final int getAllocationLength () {
+    public final int getAllocationLength() {
         return allocationLength;
     }
 
-    public final SelectReport getSelectReport () {
+    public final SelectReport getSelectReport() {
         return selectReport;
     }
 }

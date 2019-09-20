@@ -1,8 +1,6 @@
 package org.jscsi.target.connection;
 
 
-import java.nio.ByteBuffer;
-
 import org.jscsi.parser.BasicHeaderSegment;
 import org.jscsi.parser.OperationCode;
 import org.jscsi.parser.ProtocolDataUnit;
@@ -22,6 +20,8 @@ import org.jscsi.parser.text.TextResponseParser;
 import org.jscsi.parser.tmf.TaskManagementFunctionResponseParser;
 import org.jscsi.target.scsi.ScsiResponseDataSegment;
 
+import java.nio.ByteBuffer;
+
 
 /**
  * A factory class for creating instances of different {@link ProtocolDataUnit} types sent by the jSCSI Target.
@@ -40,8 +40,8 @@ public class TargetPduFactory {
     private TargetPduFactory() {
     }
 
-    public static final ProtocolDataUnit createDataInPdu (boolean finalFlag, boolean acknowledgeFlag, boolean residualOverflowFlag, boolean residualUnderflowFlag, boolean statusFlag, SCSIStatus status, long logicalUnitNumber, int initiatorTaskTag, int targetTransferTag, int dataSequenceNumber,//
-            int bufferOffset, int residualCount, ByteBuffer dataSegment) {
+    public static final ProtocolDataUnit createDataInPdu(boolean finalFlag, boolean acknowledgeFlag, boolean residualOverflowFlag, boolean residualUnderflowFlag, boolean statusFlag, SCSIStatus status, long logicalUnitNumber, int initiatorTaskTag, int targetTransferTag, int dataSequenceNumber,//
+                                                         int bufferOffset, int residualCount, ByteBuffer dataSegment) {
         final ProtocolDataUnit pdu = factory.create(false, finalFlag, OperationCode.SCSI_DATA_IN, "None", "None");
         final BasicHeaderSegment bhs = pdu.getBasicHeaderSegment();
         final DataInParser parser = (DataInParser) bhs.getParser();
@@ -60,7 +60,7 @@ public class TargetPduFactory {
         return pdu;
     }
 
-    public static final ProtocolDataUnit createLoginResponsePdu (boolean transitFlag, boolean continueFlag, LoginStage currentStage, LoginStage nextStage, ISID initiatorSessionID, short targetSessionIdentifyingHandle, int initiatorTaskTag, LoginStatus status, ByteBuffer dataSegment) {
+    public static final ProtocolDataUnit createLoginResponsePdu(boolean transitFlag, boolean continueFlag, LoginStage currentStage, LoginStage nextStage, ISID initiatorSessionID, short targetSessionIdentifyingHandle, int initiatorTaskTag, LoginStatus status, ByteBuffer dataSegment) {
         final ProtocolDataUnit pdu = factory.create(false, transitFlag, OperationCode.LOGIN_RESPONSE, "None", "None");
         final BasicHeaderSegment bhs = pdu.getBasicHeaderSegment();
         final LoginResponseParser parser = (LoginResponseParser) bhs.getParser();
@@ -75,7 +75,7 @@ public class TargetPduFactory {
         return pdu;
     }
 
-    public static final ProtocolDataUnit createLogoutResponsePdu (LogoutResponse response, int initiatorTaskTag, short time2Wait, short time2Retain) {
+    public static final ProtocolDataUnit createLogoutResponsePdu(LogoutResponse response, int initiatorTaskTag, short time2Wait, short time2Retain) {
         final ProtocolDataUnit pdu = factory.create(false, true, OperationCode.LOGOUT_RESPONSE, "None", "None");
         final BasicHeaderSegment bhs = pdu.getBasicHeaderSegment();
         final LogoutResponseParser parser = (LogoutResponseParser) bhs.getParser();
@@ -86,7 +86,7 @@ public class TargetPduFactory {
         return pdu;
     }
 
-    public static final ProtocolDataUnit createTMResponsePdu (TaskManagementFunctionResponseParser.ResponseCode response, int initiatorTaskTag) {
+    public static final ProtocolDataUnit createTMResponsePdu(TaskManagementFunctionResponseParser.ResponseCode response, int initiatorTaskTag) {
         final ProtocolDataUnit pdu = factory.create(false, true, OperationCode.SCSI_TM_RESPONSE, "None", "None");
         final BasicHeaderSegment bhs = pdu.getBasicHeaderSegment();
         final TaskManagementFunctionResponseParser parser = (TaskManagementFunctionResponseParser) bhs.getParser();
@@ -95,7 +95,7 @@ public class TargetPduFactory {
         return pdu;
     }
 
-    public static final ProtocolDataUnit createReadyToTransferPdu (long logicalUnitNumber, int initiatorTaskTag, int targetTransferTag, int readyToTransferSequenceNumber, int bufferOffset, int desiredDataTransferLength) {
+    public static final ProtocolDataUnit createReadyToTransferPdu(long logicalUnitNumber, int initiatorTaskTag, int targetTransferTag, int readyToTransferSequenceNumber, int bufferOffset, int desiredDataTransferLength) {
         final ProtocolDataUnit pdu = factory.create(false, true, OperationCode.R2T, "None", "None");
         final BasicHeaderSegment bhs = pdu.getBasicHeaderSegment();
         final Ready2TransferParser parser = (Ready2TransferParser) bhs.getParser();
@@ -108,7 +108,7 @@ public class TargetPduFactory {
         return pdu;
     }
 
-    public static final ProtocolDataUnit createSCSIResponsePdu (final boolean bidirectionalReadResidualOverflow, final boolean bidirectionalReadResidualUnderflow, final boolean residualOverflow, final boolean residualUnderflow, final SCSIResponseParser.ServiceResponse response, final SCSIStatus status, final int initiatorTaskTag, final int snackTag, final int expectedDataSequenceNumber, final int bidirectionalReadResidualCount, final int residualCount, final ScsiResponseDataSegment scsiResponseDataSegment) {
+    public static final ProtocolDataUnit createSCSIResponsePdu(final boolean bidirectionalReadResidualOverflow, final boolean bidirectionalReadResidualUnderflow, final boolean residualOverflow, final boolean residualUnderflow, final SCSIResponseParser.ServiceResponse response, final SCSIStatus status, final int initiatorTaskTag, final int snackTag, final int expectedDataSequenceNumber, final int bidirectionalReadResidualCount, final int residualCount, final ScsiResponseDataSegment scsiResponseDataSegment) {
         final ProtocolDataUnit pdu = factory.create(false, true, OperationCode.SCSI_RESPONSE, "None", "None");
         final BasicHeaderSegment bhs = pdu.getBasicHeaderSegment();
         final SCSIResponseParser parser = (SCSIResponseParser) bhs.getParser();
@@ -127,7 +127,7 @@ public class TargetPduFactory {
         return pdu;
     }
 
-    public static final ProtocolDataUnit createTextResponsePdu (boolean finalFlag, boolean continueFlag, long logicalUnitNumber, int initiatorTaskTag, int targetTransferTag, ByteBuffer dataSegment) {
+    public static final ProtocolDataUnit createTextResponsePdu(boolean finalFlag, boolean continueFlag, long logicalUnitNumber, int initiatorTaskTag, int targetTransferTag, ByteBuffer dataSegment) {
         final ProtocolDataUnit pdu = factory.create(false, finalFlag, OperationCode.TEXT_RESPONSE, "None", "None");
         final BasicHeaderSegment bhs = pdu.getBasicHeaderSegment();
         final TextResponseParser parser = (TextResponseParser) bhs.getParser();
@@ -139,7 +139,7 @@ public class TargetPduFactory {
         return pdu;
     }
 
-    public static final ProtocolDataUnit createNopInPDU (final long logicalUnitNumber, final int initiatorTaskTag, final int targetTransferTag, final ByteBuffer dataSegment, final int statusSequenceNumber) {
+    public static final ProtocolDataUnit createNopInPDU(final long logicalUnitNumber, final int initiatorTaskTag, final int targetTransferTag, final ByteBuffer dataSegment, final int statusSequenceNumber) {
         final ProtocolDataUnit pdu = factory.create(false, true, OperationCode.NOP_IN, "None", "None");
         final BasicHeaderSegment bhs = pdu.getBasicHeaderSegment();
         final NOPInParser parser = (NOPInParser) bhs.getParser();

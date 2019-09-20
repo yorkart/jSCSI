@@ -1,13 +1,13 @@
 /**
  * Copyright (c) 2012, University of Konstanz, Distributed Systems Group All rights reserved.
- * 
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
  * following conditions are met: * Redistributions of source code must retain the above copyright notice, this list of
  * conditions and the following disclaimer. * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation and/or other materials provided with the
  * distribution. * Neither the name of the University of Konstanz nor the names of its contributors may be used to
  * endorse or promote products derived from this software without specific prior written permission.
- * 
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
  * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -18,8 +18,6 @@
  */
 package org.jscsi.initiator.connection.state;
 
-
-import java.nio.ByteBuffer;
 
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.initiator.connection.Connection;
@@ -34,12 +32,14 @@ import org.jscsi.parser.scsi.SCSICommandDescriptorBlockParser;
 import org.jscsi.parser.scsi.SCSICommandParser;
 import org.jscsi.parser.scsi.SCSICommandParser.TaskAttributes;
 
+import java.nio.ByteBuffer;
+
 
 /**
  * <h1>WriteRequestState</h1>
  * <p/>
  * This state handles a Write Response with unsolicited data.
- * 
+ *
  * @author Volker Wildi
  */
 public final class WriteRequestState extends AbstractState {
@@ -72,7 +72,7 @@ public final class WriteRequestState extends AbstractState {
 
     /**
      * Constructor to create a <code>WriteRequestState</code> instance, which creates a request to the iSCSI Target.
-     * 
+     *
      * @param initConnection This is the connection, which is used for the network transmission.
      * @param initBuffer This buffer should be sent.
      * @param initBufferPosition The start index of the buffer.
@@ -81,7 +81,7 @@ public final class WriteRequestState extends AbstractState {
      * @param initLogicalBlockAddress The logical block address of the first block to write.
      * @param initTransferLength The number of blocks to write.
      */
-    public WriteRequestState (final Connection initConnection, final ByteBuffer initBuffer, final int initBufferPosition, final TaskAttributes initTaskAttributes, final int initExpectedDataTransferLength, final int initLogicalBlockAddress, final short initTransferLength) {
+    public WriteRequestState(final Connection initConnection, final ByteBuffer initBuffer, final int initBufferPosition, final TaskAttributes initTaskAttributes, final int initExpectedDataTransferLength, final int initLogicalBlockAddress, final short initTransferLength) {
 
         super(initConnection);
         buffer = initBuffer;
@@ -96,7 +96,7 @@ public final class WriteRequestState extends AbstractState {
     // --------------------------------------------------------------------------
 
     /** {@inheritDoc} */
-    public final void execute () throws InternetSCSIException {
+    public final void execute() throws InternetSCSIException {
 
         final ProtocolDataUnit protocolDataUnit = protocolDataUnitFactory.create(false, true, OperationCode.SCSI_COMMAND, connection.getSetting(OperationalTextKey.HEADER_DIGEST), connection.getSetting(OperationalTextKey.DATA_DIGEST));
         final SCSICommandParser scsi = (SCSICommandParser) protocolDataUnit.getBasicHeaderSegment().getParser();

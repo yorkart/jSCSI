@@ -3,7 +3,7 @@ package org.jscsi.target.scsi.sense;
 /**
  * The SENSE KEY field indicates generic information describing an error or exception condition. The field's length is 4
  * bits.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public enum SenseKey {
@@ -39,12 +39,12 @@ public enum SenseKey {
     HARDWARE_ERROR(0x4),
     /**
      * Indicates that:
-     * 
+     * <p>
      * a) The command was addressed to an incorrect logical unit number (see SAM-3); b) The command had an invalid task
      * attribute (see SAM-3); c) The command was addressed to a logical unit whose current configuration prohibits
      * processing the command; d) There was an illegal parameter in the CDB; or e) There was an illegal parameter in the
      * additional parameters supplied as data for some commands (e.g., PERSISTENT RESERVE OUT).
-     * 
+     * <p>
      * If the device server detects an invalid parameter in the CDB, it shall terminate the command without altering the
      * medium. If the device server detects an invalid parameter in the additional parameters supplied as data, the
      * device server may have already altered the medium.
@@ -110,11 +110,11 @@ public enum SenseKey {
 
     /**
      * Returns the {@link SenseKey} instance representing the passed <i>value</i>.
-     * 
+     *
      * @param value a sense key value
      * @return the {@link SenseKey} instance representing the passed <i>value</i>
      */
-    public static SenseKey valueOf (final int value) {
+    public static SenseKey valueOf(final int value) {
         final int index = 15 & value;// keep only the last four bits
         if (0 < index || index >= mapping.length) return null;
         return mapping[index];
@@ -127,19 +127,19 @@ public enum SenseKey {
 
     /**
      * The constructor.
-     * 
+     *
      * @param value the serialized value of the object.
      */
-    private SenseKey (int value) {
+    private SenseKey(int value) {
         this.value = value;
     }
 
     /**
      * The serialized value of the instance.
-     * 
+     *
      * @return serialized value of the instance
      */
-    public int getValue () {
+    public int getValue() {
         return value;
     }
 }

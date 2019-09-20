@@ -1,18 +1,18 @@
 package org.jscsi.target.scsi.sense;
 
 
-import java.nio.ByteBuffer;
-
 import org.jscsi.target.scsi.sense.senseDataDescriptor.SenseDataDescriptor;
 import org.jscsi.target.util.BitManip;
 import org.jscsi.target.util.ReadWrite;
 
+import java.nio.ByteBuffer;
+
 
 /**
  * Instances of this class represent sense data using the descriptor format.
- * 
- * @see SenseDataFormat#DESCRIPTOR
+ *
  * @author Andreas Ergenzinger
+ * @see SenseDataFormat#DESCRIPTOR
  */
 public final class DescriptorFormatSenseData extends SenseData {
 
@@ -28,14 +28,14 @@ public final class DescriptorFormatSenseData extends SenseData {
 
     /**
      * The position of the first reserved byte.
-     * 
+     *
      * @see #RESERVED_BYTES_MAX_INDEX
      */
     private static final int RESERVED_BYTES_MIN_INDEX = 4;
 
     /**
      * The position of the last reserved byte.
-     * 
+     *
      * @see #RESERVED_BYTES_MIN_INDEX
      */
     private static final int RESERVED_BYTES_MAX_INDEX = 6;
@@ -52,18 +52,18 @@ public final class DescriptorFormatSenseData extends SenseData {
 
     /**
      * The constructor.
-     * 
-     * @param errorType the error type
-     * @param senseKey a general description of what caused the error
+     *
+     * @param errorType                       the error type
+     * @param senseKey                        a general description of what caused the error
      * @param additionalSenseCodeAndQualifier a more specific description of the error
-     * @param senseDataDescriptors more specific error information
+     * @param senseDataDescriptors            more specific error information
      */
-    public DescriptorFormatSenseData (final ErrorType errorType, final SenseKey senseKey, AdditionalSenseCodeAndQualifier additionalSenseCodeAndQualifier, SenseDataDescriptor... senseDataDescriptors) {
+    public DescriptorFormatSenseData(final ErrorType errorType, final SenseKey senseKey, AdditionalSenseCodeAndQualifier additionalSenseCodeAndQualifier, SenseDataDescriptor... senseDataDescriptors) {
         super(errorType, SenseDataFormat.DESCRIPTOR, senseKey, additionalSenseCodeAndQualifier);
         this.senseDataDescriptors = senseDataDescriptors;
     }
 
-    public void serialize (ByteBuffer byteBuffer, int index) {
+    public void serialize(ByteBuffer byteBuffer, int index) {
 
         byteBuffer.position(index);
 
@@ -100,10 +100,10 @@ public final class DescriptorFormatSenseData extends SenseData {
      * Returns the value of the ADDITIONAL SENSE LENGTH field.
      * <p>
      * This is the total length of all included {@link SenseDataDescriptor} objects.
-     * 
+     *
      * @return the value of the ADDITIONAL SENSE LENGTH field
      */
-    private int getAdditionalSenseLength () {
+    private int getAdditionalSenseLength() {
         int additionalSenseLength = 0;
         if (senseDataDescriptors != null) {
             for (int i = 0; i < senseDataDescriptors.length; ++i)
@@ -112,7 +112,7 @@ public final class DescriptorFormatSenseData extends SenseData {
         return additionalSenseLength;
     }
 
-    public int size () {
+    public int size() {
         return getAdditionalSenseLength()// is never negative
                 + HEADER_LENGTH;
     }

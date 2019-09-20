@@ -6,9 +6,9 @@ import org.jscsi.target.scsi.cdb.ModeSense6Cdb;
 
 /**
  * The page control (PC) field specifies the type of mode parameter values to be returned in the mode pages.
- * 
- * @see ModeSense6Cdb
+ *
  * @author Andreas Ergenzinger
+ * @see ModeSense6Cdb
  */
 public enum PageControl {
     /**
@@ -30,11 +30,11 @@ public enum PageControl {
 
     private final int value;
 
-    private PageControl (final int value) {
+    private PageControl(final int value) {
         this.value = value;
     }
 
-    public static PageControl getPageControl (final int value) {
+    public static PageControl getPageControl(final int value) {
         final PageControl[] vals = values();
         for (PageControl p : vals)
             if (p.value == value) return p;

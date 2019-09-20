@@ -5,7 +5,7 @@ package org.jscsi.target.scsi.cdb;
  * the address descriptors in the defect list.
  * <p>
  * The DEFECT LIST FORMAT field has a length of 3 bits.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public enum DefectListFormat {
@@ -14,15 +14,15 @@ public enum DefectListFormat {
 
     private final byte value;
 
-    private DefectListFormat (byte value) {
+    private DefectListFormat(byte value) {
         this.value = value;
     }
 
-    public byte getValue () {
+    public byte getValue() {
         return value;
     }
 
-    public static DefectListFormat valueOf (int value) {
+    public static DefectListFormat valueOf(int value) {
         DefectListFormat[] values = values();
         for (int i = 0; i < values.length; ++i)
             if (values[i].getValue() == value) return values[i];

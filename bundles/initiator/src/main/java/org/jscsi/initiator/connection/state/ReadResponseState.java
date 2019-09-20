@@ -1,13 +1,13 @@
 /**
  * Copyright (c) 2012, University of Konstanz, Distributed Systems Group All rights reserved.
- * 
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
  * following conditions are met: * Redistributions of source code must retain the above copyright notice, this list of
  * conditions and the following disclaimer. * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation and/or other materials provided with the
  * distribution. * Neither the name of the University of Konstanz nor the names of its contributors may be used to
  * endorse or promote products derived from this software without specific prior written permission.
- * 
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
  * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -19,8 +19,6 @@
 package org.jscsi.initiator.connection.state;
 
 
-import java.nio.ByteBuffer;
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.exception.OperationalTextKeyException;
 import org.jscsi.initiator.connection.Connection;
@@ -31,12 +29,14 @@ import org.jscsi.parser.datasegment.OperationalTextKey;
 import org.jscsi.parser.scsi.SCSIResponseParser;
 import org.jscsi.parser.scsi.SCSIStatus;
 
+import java.nio.ByteBuffer;
+
 
 /**
  * <h1>ReadResponseState</h1>
  * <p/>
  * This state handles a Read Response.
- * 
+ *
  * @author Volker Wildi
  */
 public final class ReadResponseState extends AbstractState {
@@ -67,13 +67,13 @@ public final class ReadResponseState extends AbstractState {
 
     /**
      * Constructor to create a new, empty <code>ReadResponseState</code>.
-     * 
+     *
      * @param initConnection This is the connection, which is used for the network transmission.
      * @param initBuffer The buffer, where the readed bytes are stored in.
      * @param initBufferOffset The start offset of the data to send.
      * @param initExpectedDataSequenceNumber The Expected Data Sequence Number of the next response message.
      */
-    public ReadResponseState (final Connection initConnection, final ByteBuffer initBuffer, final int initBufferOffset, final int initExpectedDataSequenceNumber) {
+    public ReadResponseState(final Connection initConnection, final ByteBuffer initBuffer, final int initBufferOffset, final int initExpectedDataSequenceNumber) {
 
         super(initConnection);
         buffer = initBuffer;
@@ -85,7 +85,7 @@ public final class ReadResponseState extends AbstractState {
     // --------------------------------------------------------------------------
 
     /** {@inheritDoc} */
-    public final void execute () throws InternetSCSIException {
+    public final void execute() throws InternetSCSIException {
 
         ProtocolDataUnit protocolDataUnit;
 
@@ -131,7 +131,7 @@ public final class ReadResponseState extends AbstractState {
 
     }
 
-    private void readHandleImmediateData (final ProtocolDataUnit protocolDataUnit) throws InternetSCSIException {
+    private void readHandleImmediateData(final ProtocolDataUnit protocolDataUnit) throws InternetSCSIException {
         final SCSIResponseParser parser = (SCSIResponseParser) protocolDataUnit.getBasicHeaderSegment().getParser();
 
         final ByteBuffer dataSegment = protocolDataUnit.getDataSegment();
@@ -153,7 +153,7 @@ public final class ReadResponseState extends AbstractState {
 
     /** {@inheritDoc} */
     @Override
-    public Exception isCorrect (final ProtocolDataUnit protocolDataUnit) {
+    public Exception isCorrect(final ProtocolDataUnit protocolDataUnit) {
 
         final AbstractMessageParser parser = protocolDataUnit.getBasicHeaderSegment().getParser();
 
@@ -162,14 +162,17 @@ public final class ReadResponseState extends AbstractState {
             final DataInParser dataParser = (DataInParser) parser;
             try {
                 if (connection.getSettingAsBoolean(OperationalTextKey.DATA_PDU_IN_ORDER) && connection.getSettingAsBoolean(OperationalTextKey.DATA_SEQUENCE_IN_ORDER)) {
-                    if (dataParser.getBufferOffset() < bufferOffset) { return new IllegalStateException(new StringBuilder("This buffer offsets must be in increasing order and overlays are forbidden.").append(" The parserOffset here is ").append(dataParser.getBufferOffset()).append(" and the bufferOffset is ").append(bufferOffset).toString()); }
+                    if (dataParser.getBufferOffset() < bufferOffset) {
+                        return new IllegalStateException(new StringBuilder("This buffer offsets must be in increasing order and overlays are forbidden.").append(" The parserOffset here is ").append(dataParser.getBufferOffset()).append(" and the bufferOffset is ").append(bufferOffset).toString());
+                    }
                     bufferOffset = dataParser.getBufferOffset();
                 }
             } catch (OperationalTextKeyException e) {
                 return e;
             }
 
-            if (dataParser.getDataSequenceNumber() != expectedDataSequenceNumber) { return new IllegalStateException(new StringBuilder("Data Sequence Number Mismatch (received, expected): " + dataParser.getDataSequenceNumber() + ", " + expectedDataSequenceNumber).toString());
+            if (dataParser.getDataSequenceNumber() != expectedDataSequenceNumber) {
+                return new IllegalStateException(new StringBuilder("Data Sequence Number Mismatch (received, expected): " + dataParser.getDataSequenceNumber() + ", " + expectedDataSequenceNumber).toString());
 
             }
 
@@ -178,11 +181,15 @@ public final class ReadResponseState extends AbstractState {
             if (dataParser.isStatusFlag()) {
                 incrementExpectedDataSequenceNumber();
                 return super.isCorrect(protocolDataUnit);
-            } else if (dataParser.getStatusSequenceNumber() != 0) { return new IllegalStateException(new StringBuilder("Status Sequence Number must be zero.").toString()); }
+            } else if (dataParser.getStatusSequenceNumber() != 0) {
+                return new IllegalStateException(new StringBuilder("Status Sequence Number must be zero.").toString());
+            }
             return null;
         } else if (parser instanceof SCSIResponseParser) {
             try {
-                if (connection.getSettingAsBoolean(OperationalTextKey.IMMEDIATE_DATA)) { return new IllegalStateException(new StringBuilder("Parser ").append("should not be instance of SCSIResponseParser because of ImmendiateData-Flag \"no\" in config!").toString()); }
+                if (connection.getSettingAsBoolean(OperationalTextKey.IMMEDIATE_DATA)) {
+                    return new IllegalStateException(new StringBuilder("Parser ").append("should not be instance of SCSIResponseParser because of ImmendiateData-Flag \"no\" in config!").toString());
+                }
             } catch (OperationalTextKeyException e) {
                 return e;
             }
@@ -200,7 +207,7 @@ public final class ReadResponseState extends AbstractState {
     /**
      * Increments the Expected Data Sequence Number counter.
      */
-    private void incrementExpectedDataSequenceNumber () {
+    private void incrementExpectedDataSequenceNumber() {
 
         expectedDataSequenceNumber = (expectedDataSequenceNumber + 1) % WRAP_AROUND_DIVISOR;
     }

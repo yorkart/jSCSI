@@ -1,15 +1,15 @@
 package org.jscsi.target.scsi.modeSense;
 
 
-import java.nio.ByteBuffer;
-
 import org.jscsi.target.util.BitManip;
 import org.jscsi.target.util.ReadWrite;
+
+import java.nio.ByteBuffer;
 
 
 /**
  * The Caching mode page defines the parameters that affect the use of the data cache by the storage medium.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public final class CachingModePage extends Page_0FormatModePage {
@@ -188,14 +188,14 @@ public final class CachingModePage extends Page_0FormatModePage {
      * If the pre-fetch has read more than the amount of data specified by the MINIMUM PRE-FETCH field, then
      * pre-fetching should be terminated whenever another command enters the enabled state (see SAM-4). This requirement
      * is ignored when the MINIMUM PRE-FETCH field value is equal to the MAXIMUM PRE-FETCH field value.
-     * 
+     *
      * @see #disablePrefetchTransferLength
      */
     private final int minimumPrefetch;
 
     /**
      * A complementary field to the {@link #minimumPrefetch} field.
-     * 
+     *
      * @see #disablePrefetchTransferLength
      * @see #minimumPrefetch
      */
@@ -206,7 +206,7 @@ public final class CachingModePage extends Page_0FormatModePage {
      * maximum pre-fetch. If this number of logical blocks is greater than the value in the MAXIMUM PRE-FETCH field,
      * then the number of logical blocks to pre-fetch shall be truncated to the value stored in the MAXIMUM PRE-FETCH
      * CEILING field.
-     * 
+     *
      * @see #disablePrefetchTransferLength
      */
     private final int maximumPrefetchCeiling;
@@ -257,7 +257,7 @@ public final class CachingModePage extends Page_0FormatModePage {
      * The constructor.
      * <p>
      * The meaning of all parameters is described in the member descriptions of the variables with the same name.
-     * 
+     *
      * @param parametersSaveable
      * @param initiatorControl
      * @param abortPrefetch
@@ -280,10 +280,10 @@ public final class CachingModePage extends Page_0FormatModePage {
      * @param numberOfCacheSegments
      * @param cacheSegmentSize
      */
-    public CachingModePage (final boolean parametersSaveable, final boolean initiatorControl, final boolean abortPrefetch, final boolean cachingAnalysisPermitted, final boolean discontinuity, final boolean sizeEnable, final boolean writebackCacheEnable, final boolean multiplicationFactor, final boolean readCacheDisable, final int demandReadRetentionPriority, final int writeRetentionPriority, final int disablePrefetchTransferLength, final int minimumPrefetch, final int maximumPrefetch, final int maximumPrefetchCeiling, final boolean forceSequentialWrite, final boolean logicalBlockCacheSegmentSize, final boolean disableReadAhead, final boolean nonVolatileCacheDisabled, final int numberOfCacheSegments, final int cacheSegmentSize) {
+    public CachingModePage(final boolean parametersSaveable, final boolean initiatorControl, final boolean abortPrefetch, final boolean cachingAnalysisPermitted, final boolean discontinuity, final boolean sizeEnable, final boolean writebackCacheEnable, final boolean multiplicationFactor, final boolean readCacheDisable, final int demandReadRetentionPriority, final int writeRetentionPriority, final int disablePrefetchTransferLength, final int minimumPrefetch, final int maximumPrefetch, final int maximumPrefetchCeiling, final boolean forceSequentialWrite, final boolean logicalBlockCacheSegmentSize, final boolean disableReadAhead, final boolean nonVolatileCacheDisabled, final int numberOfCacheSegments, final int cacheSegmentSize) {
         super(parametersSaveable,// PS
-        0x08,// pageCode
-        0x12);// pageLength
+                0x08,// pageCode
+                0x12);// pageLength
         this.initiatorControl = initiatorControl;
         this.abortPrefetch = abortPrefetch;
         this.cachingAnalysisPermitted = cachingAnalysisPermitted;
@@ -307,7 +307,7 @@ public final class CachingModePage extends Page_0FormatModePage {
     }
 
     @Override
-    protected void serializeModeParameters (ByteBuffer buffer, int index) {
+    protected void serializeModeParameters(ByteBuffer buffer, int index) {
         // serialize byte 2
         buffer.position(index + 2);
         byte b = 0;

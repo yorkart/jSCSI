@@ -1,15 +1,15 @@
 package org.jscsi.target.scsi.sense.senseDataDescriptor;
 
 
-import java.nio.ByteBuffer;
-
 import org.jscsi.target.scsi.sense.information.EightByteInformation;
+
+import java.nio.ByteBuffer;
 
 
 /**
  * The command-specific information sense data descriptor provides information that depends on the command on which the
  * exception condition occurred.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public class CommandSpecificSenseDataDescriptor extends SenseDataDescriptor {
@@ -26,17 +26,17 @@ public class CommandSpecificSenseDataDescriptor extends SenseDataDescriptor {
 
     /**
      * The constructor.
-     * 
+     *
      * @param commandSpecificInformation {@link EightByteInformation} which should contain command-specific information.
      */
-    public CommandSpecificSenseDataDescriptor (final EightByteInformation commandSpecificInformation) {
+    public CommandSpecificSenseDataDescriptor(final EightByteInformation commandSpecificInformation) {
         super(SenseDataDescriptorType.COMMAND_SPECIFIC_INFORMATION, 0x0a);// additional
-                                                                          // length
+        // length
         this.commandSpecificInformation = commandSpecificInformation;
     }
 
     @Override
-    protected void serializeSpecificFields (ByteBuffer byteBuffer, int index) {
+    protected void serializeSpecificFields(ByteBuffer byteBuffer, int index) {
         commandSpecificInformation.serialize(byteBuffer, index + COMMAND_SPECIFIC_INFORMATION_INDEX);
     }
 

@@ -24,9 +24,9 @@ import org.jscsi.target.settings.SingleNumericalValue;
  * Please note the difference between numerical values and numerical range values (see {@link NumericalRangeEntry}).
  * <p>
  * The default or negotiated value can be accessed via the {@link #getIntegerValue()} method.
- * 
- * @see Entry
+ *
  * @author Andreas Ergenzinger
+ * @see Entry
  */
 public final class NumericalEntry extends Entry {
 
@@ -54,21 +54,21 @@ public final class NumericalEntry extends Entry {
 
     /**
      * The {@link NumericalEntry} constructor.
-     * 
-     * @param keySet contains all relevant keys
-     * @param negotiationType declared or negotiated
-     * @param use determines under which circumstances the parameter may be negotiated
-     * @param negotiationStatus indicates whether there is a default value or if the parameter must be negotiated
-     * @param negotiationValue together with the <i>resultFunction</i> and the <i>protocolValueRange</i> parameters this
-     *            value indicates the values supported by the jSCSI Target
+     *
+     * @param keySet             contains all relevant keys
+     * @param negotiationType    declared or negotiated
+     * @param use                determines under which circumstances the parameter may be negotiated
+     * @param negotiationStatus  indicates whether there is a default value or if the parameter must be negotiated
+     * @param negotiationValue   together with the <i>resultFunction</i> and the <i>protocolValueRange</i> parameters this
+     *                           value indicates the values supported by the jSCSI Target
      * @param protocolValueRange specifying the range of legal values
-     * @param resultFunction determines the negotiation outcome
-     * @param defaultValue the default value or <code>null</code>
-     * @param zeroMeansDontCare if <code>true</code> and <i>negotiationValue</i> equals <code>0</code> then
-     *            <i>negotiationValue</i> does not serve as an upper or lower boundary to the values the jSCSI Target
-     *            will accept
+     * @param resultFunction     determines the negotiation outcome
+     * @param defaultValue       the default value or <code>null</code>
+     * @param zeroMeansDontCare  if <code>true</code> and <i>negotiationValue</i> equals <code>0</code> then
+     *                           <i>negotiationValue</i> does not serve as an upper or lower boundary to the values the jSCSI Target
+     *                           will accept
      */
-    public NumericalEntry (final KeySet keySet, final NegotiationType negotiationType, final Use use, final NegotiationStatus negotiationStatus, final int negotiationValue, final NumericalValueRange protocolValueRange, final NumericalResultFunction resultFunction, final Integer defaultValue, final boolean zeroMeansDontCare) {
+    public NumericalEntry(final KeySet keySet, final NegotiationType negotiationType, final Use use, final NegotiationStatus negotiationStatus, final int negotiationValue, final NumericalValueRange protocolValueRange, final NumericalResultFunction resultFunction, final Integer defaultValue, final boolean zeroMeansDontCare) {
         super(keySet, negotiationType, use, negotiationStatus, defaultValue);
         this.protocolValueRange = protocolValueRange;
         this.negotiationValue = negotiationValue;
@@ -77,51 +77,62 @@ public final class NumericalEntry extends Entry {
     }
 
     @Override
-    protected boolean inProtocolValueRange (final Object values) {
+    protected boolean inProtocolValueRange(final Object values) {
         // receives an Integer
         final int val = (Integer) values;
-        if (zeroMeansDontCare && val == 0) // val might not lie inside reg.
-                                           // interval
-        return true;
+        if (zeroMeansDontCare && val == 0) {// val might not lie inside reg. interval
+            return true;
+        }
         return protocolValueRange.contains(val);
     }
 
     @Override
-    protected Object parseOffer (final TargetServer target, final String values) {
+    protected Object parseOffer(final TargetServer target, final String values) {
         // return an Integer
         return SingleNumericalValue.parseSingleNumericValue(values).getValue();
     }
 
     @Override
-    protected void processDeclaration (final Object values) {
+    protected void processDeclaration(final Object values) {
         // receives an Integer
         final int val = (Integer) values;
-        if (zeroMeansDontCare && val == 0)// pick value desired by target
+        if (zeroMeansDontCare && val == 0) { // pick value desired by target
             value = negotiationValue;
-        else
+        } else {
             value = values;
+        }
     }
 
     @Override
-    protected String processNegotiation (final Object values) {
+    protected String processNegotiation(final Object values) {
         // receives an Integer
         final int val = (Integer) values;
-        if (zeroMeansDontCare && val == 0)// pick value desired by target
+        if (zeroMeansDontCare && val == 0) { // pick value desired by target
             value = negotiationValue;
-        else
+        } else {
             // pick value based on result function and offer
             value = resultFunction.getResult(negotiationValue, val);
+        }
         return value.toString();
     }
 
     @Override
-    public Integer getIntegerValue () {
+    public Integer getIntegerValue() {
         return (Integer) value;
     }
 
     @Override
-    public Entry copy () {
-        final NumericalEntry e = new NumericalEntry(keySet, negotiationType, use, negotiationStatus, negotiationValue, protocolValueRange, resultFunction, (Integer) value, zeroMeansDontCare);
+    public Entry copy() {
+        final NumericalEntry e = new NumericalEntry(
+                keySet,
+                negotiationType,
+                use,
+                negotiationStatus,
+                negotiationValue,
+                protocolValueRange,
+                resultFunction,
+                (Integer) value,
+                zeroMeansDontCare);
         e.alreadyNegotiated = this.alreadyNegotiated;
         return e;
     }

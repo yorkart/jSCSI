@@ -14,19 +14,19 @@ import org.jscsi.target.util.SerialArithmeticNumber;
  * A class for objects representing an iSCSI session with all necessary variables.
  * <p>
  * Currently, a {@link TargetSession} can only have <b>one</b> {@link Connection}, i.e. <code>MaxConnections=1</code>.
- * 
+ *
  * @author Andreas Ergenzinger, University of Konstanz
  */
 public class TargetSession {
 
     /**
      * Returns the value of the next {@link TargetSession} object's {@link #targetSessionIdentifyingHandle} variable.
-     * 
+     *
      * @return the value of the next {@link TargetSession} object's {@link #targetSessionIdentifyingHandle} variable
      */
-    private static short getNextTargetSessionIdentifyingHandle () {
+    private static short getNextTargetSessionIdentifyingHandle() {
         short handle = nextTargetSessionIdentifyingHandle++;// no concurrency
-                                                            // necessary
+        // necessary
         if (handle == 0) {// is reserved
             handle = nextTargetSessionIdentifyingHandle++;
         }
@@ -65,7 +65,7 @@ public class TargetSession {
      * <p>
      * A value of <code>1</code> means that the initiator must wait for each command to finish before issuing the next
      * one.
-     * 
+     *
      * @see #getExpectedCommandSequenceNumber()
      * @see #getMaximumCommandSequenceNumber()
      */
@@ -83,7 +83,7 @@ public class TargetSession {
 
     /**
      * A counter for {@link #targetSessionIdentifyingHandle}s.
-     * 
+     *
      * @see #getNextTargetSessionIdentifyingHandle()
      */
     private static short nextTargetSessionIdentifyingHandle = 1;
@@ -95,14 +95,14 @@ public class TargetSession {
 
     /**
      * Constructs a new {@link TargetSession}
-     * 
-     * @param connection the session's (first) {@link Connection}
-     * @param initiatorSessionID the {@link ISID} specified by the initiator
+     *
+     * @param connection                    the session's (first) {@link Connection}
+     * @param initiatorSessionID            the {@link ISID} specified by the initiator
      * @param expectedCommandSequenceNumber initialization value of {@link #expectedCommandSequenceNumber}
-     * @param statusSequenceNumber the value expected by the initiator in the next {@link ProtocolDataUnit}'s
-     *            <code>StatSN</code> field
+     * @param statusSequenceNumber          the value expected by the initiator in the next {@link ProtocolDataUnit}'s
+     *                                      <code>StatSN</code> field
      */
-    public TargetSession (final TargetServer target, final Connection connection, final ISID initiatorSessionID, final int expectedCommandSequenceNumber, final int statusSequenceNumber) {
+    public TargetSession(final TargetServer target, final Connection connection, final ISID initiatorSessionID, final int expectedCommandSequenceNumber, final int statusSequenceNumber) {
         this.targetServer = target;
         // set connection variables and parameters
         connection.setSession(this);
@@ -122,37 +122,37 @@ public class TargetSession {
 
     /**
      * Returns the session's {@link TargetServer}.
-     * 
+     *
      * @return the session's {@link TargetServer}
      */
-    public TargetServer getTargetServer () {
+    public TargetServer getTargetServer() {
         return targetServer;
     }
 
     /**
      * Returns the session's {@link Connection}.
-     * 
+     *
      * @return the session's {@link Connection}
      */
-    public Connection getConnection () {
+    public Connection getConnection() {
         return connection;
     }
 
     /**
      * Returns the session's {@link Target}
-     * 
+     *
      * @return the session's {@link Target}
      */
-    public Target getTarget () {
+    public Target getTarget() {
         return target;
     }
 
     /**
      * Returns the session's {@link IStorageModule}.
-     * 
+     *
      * @return the session's {@link IStorageModule}
      */
-    public IStorageModule getStorageModule () {
+    public IStorageModule getStorageModule() {
         return target.getStorageModule();
     }
 
@@ -161,20 +161,20 @@ public class TargetSession {
      * <p>
      * This value will be used both during sending (<code>ExpCmdSN</code> field) and receiving ( <code>CmdSN</code>) of
      * {@link ProtocolDataUnit}s.
-     * 
+     *
      * @return the {@link SerialArithmeticNumber} representing the next expected command sequence number
      * @see #expectedCommandSequenceNumber
      */
-    SerialArithmeticNumber getExpectedCommandSequenceNumber () {
+    SerialArithmeticNumber getExpectedCommandSequenceNumber() {
         return expectedCommandSequenceNumber;
     }
 
     /**
      * Returns the {@link ISID} used by the initiator to identify this session.
-     * 
+     *
      * @return the {@link ISID} used by the initiator to identify this session
      */
-    public ISID getInitiatorSessionID () {
+    public ISID getInitiatorSessionID() {
         return initiatorSessionID;
     }
 
@@ -184,39 +184,39 @@ public class TargetSession {
      * This value will be used both during sending (<code>MaxCmdSN</code> field) and receiving (checking if PDU's
      * <code>CmdSN</code> lies in the command sequence number window resulting from
      * {@link #expectedCommandSequenceNumber} and {@link #commandWindowSize}) of {@link ProtocolDataUnit}s.
-     * 
+     *
      * @return the {@link SerialArithmeticNumber} representing the next expected command sequence number
      */
-    SerialArithmeticNumber getMaximumCommandSequenceNumber () {
+    SerialArithmeticNumber getMaximumCommandSequenceNumber() {
         return new SerialArithmeticNumber(expectedCommandSequenceNumber.getValue() + commandWindowSize - 1);
     }
 
     /**
      * Returns the value used by the jSCSI Target to identify this session.
-     * 
+     *
      * @return the value used by the jSCSI Target to identify this session
      */
-    public short getTargetSessionIdentifyingHandle () {
+    public short getTargetSessionIdentifyingHandle() {
         return targetSessionIdentifyingHandle;
     }
 
     /**
      * Returns <code>true</code> if this session is a regular (operational) session, and <code>false</code> if it is s
      * discovery session.
-     * 
+     *
      * @return <code>true</code> if and only if this is not a regular (operational) session
      */
-    public boolean isNormalSession () {
+    public boolean isNormalSession() {
         return sessionType == SessionType.NORMAL;
     }
 
     /**
      * Removes a {@link TargetConnection} from the session's list of open connections. If this reduces the number of
      * connections to zero, the session will be removed from the {@link TargetServer}'s list of active sessions.
-     * 
+     *
      * @param connection the connection to be removed
      */
-    void removeTargetConnection (Connection connection) {
+    void removeTargetConnection(Connection connection) {
         // do this only if connection count == 0, currently it always is
         targetServer.removeTargetSession(this);
     }
@@ -226,11 +226,11 @@ public class TargetSession {
      * <p>
      * The type may and must be set just once. Repeated calls of this method will fail. <code>true</code> will be
      * returned if the session type was set successfully, <code>false</code> if not.
-     * 
+     *
      * @param sessionType the session type
      * @return <code>true</code> if the session type was set successfully, <code>false</code> if not
      */
-    boolean setSessionType (SessionType sessionType) {
+    boolean setSessionType(SessionType sessionType) {
         // allow just once, accept only non-null parameter
         if (sessionType == null || this.sessionType != null) return false;
         this.sessionType = sessionType;
@@ -239,15 +239,15 @@ public class TargetSession {
 
     /**
      * Sets the target name and retrieves the target (if it exists) from the TargetServer
-     * 
+     *
      * @param targetName
      */
-    public void setTargetName (String targetName) {
+    public void setTargetName(String targetName) {
         if (targetName == null) target = null;
         target = targetServer.getTarget(targetName);
     }
 
-    public String getTargetName () {
+    public String getTargetName() {
         if (target != null) return target.getTargetName();
         return null;
     }

@@ -1,13 +1,13 @@
 /**
  * Copyright (c) 2012, University of Konstanz, Distributed Systems Group All rights reserved.
- * 
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
  * following conditions are met: * Redistributions of source code must retain the above copyright notice, this list of
  * conditions and the following disclaimer. * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation and/or other materials provided with the
  * distribution. * Neither the name of the University of Konstanz nor the names of its contributors may be used to
  * endorse or promote products derived from this software without specific prior written permission.
- * 
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
  * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -655,7 +655,7 @@ public enum OperationalTextKey {
      * <code>1024</code> means <code>1024</code> words (<code>4096</code> bytes of iSCSI payload between markers).
      * <p>
      * The default is <code>2048</code>.
-     * 
+     *
      * @see #IF_MARKER
      */
     IF_MARK_INT("IFMarkInt"),
@@ -663,14 +663,14 @@ public enum OperationalTextKey {
     /**
      * OFMarker is used to turn on or off the initiator to target markers on the connection.
      * <p>
-     * 
+     *
      * @see #IF_MARKER
      */
     OF_MARKER("OFMarker"),
 
     /**
      * OFMarkInt is used to set the interval for the initiator to target markers on the connection.
-     * 
+     *
      * @see #OF_MARKER
      * @see #IF_MARK_INT
      */
@@ -678,38 +678,38 @@ public enum OperationalTextKey {
 
     private final String value;
 
-    private static Map<String , OperationalTextKey> mapping;
+    private static Map<String, OperationalTextKey> mapping;
 
     static {
-        OperationalTextKey.mapping = new HashMap<String , OperationalTextKey>();
+        OperationalTextKey.mapping = new HashMap<String, OperationalTextKey>();
         for (OperationalTextKey s : values()) {
             OperationalTextKey.mapping.put(s.value, s);
         }
     }
 
-    private OperationalTextKey (final String newValue) {
+    private OperationalTextKey(final String newValue) {
 
         value = newValue;
     }
 
     /**
      * Returns the value of this enumeration.
-     * 
+     *
      * @return The value of this enumeration.
      */
-    public final String value () {
+    public final String value() {
 
         return value;
     }
 
     /**
      * Returns the constant defined for the given <code>value</code>.
-     * 
+     *
      * @param value The value to search for.
      * @return The constant defined for the given <code>value</code>. Or <code>null</code>, if this value is not defined
      *         by this enumeration.
      */
-    public static final OperationalTextKey valueOfEx (final String value) {
+    public static final OperationalTextKey valueOfEx(final String value) {
 
         return OperationalTextKey.mapping.get(value);
     }

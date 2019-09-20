@@ -1,14 +1,14 @@
 package org.jscsi.target.scsi.cdb;
 
 
-import java.nio.ByteBuffer;
-
 import org.jscsi.target.util.BitManip;
+
+import java.nio.ByteBuffer;
 
 
 /**
  * This class represents Command Descriptor Blocks for the <code>FORMAT UNIT</code> SCSI command.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public final class FormatUnitCDB extends CommandDescriptorBlock {
@@ -45,7 +45,7 @@ public final class FormatUnitCDB extends CommandDescriptorBlock {
      */
     private DefectListFormat defectListFormat;
 
-    public FormatUnitCDB (ByteBuffer buffer) {
+    public FormatUnitCDB(ByteBuffer buffer) {
         super(buffer);
 
         byte b = buffer.get(1);
@@ -66,7 +66,7 @@ public final class FormatUnitCDB extends CommandDescriptorBlock {
         defectListFormat = DefectListFormat.valueOf(b & 7);
         if (!formatData) {
             if (defectListFormat != DefectListFormat.SHORT_BLOCK) addIllegalFieldPointer(1, 2);// illegal defect list
-                                                                                               // format
+            // format
             /*
              * If the FMTDATA bit is set to zero and the FMTPINFO field is not set to zero, then the device server shall
              * terminate the command with CHECK CONDITION status with the sense key set to ILLEGAL REQUEST and the
@@ -76,15 +76,15 @@ public final class FormatUnitCDB extends CommandDescriptorBlock {
         } else if (formatData) addIllegalFieldPointer(1, 4);// no support for format data
     }
 
-    public final boolean getCompleteList () {
+    public final boolean getCompleteList() {
         return completeList;
     }
 
-    public final int getFormatProtectionInformation () {
+    public final int getFormatProtectionInformation() {
         return formatProtectionInformation;
     }
 
-    public final boolean getLongList () {
+    public final boolean getLongList() {
         return longList;
     }
 }

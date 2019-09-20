@@ -1,13 +1,13 @@
 /**
  * Copyright (c) 2012, University of Konstanz, Distributed Systems Group All rights reserved.
- * 
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
  * following conditions are met: * Redistributions of source code must retain the above copyright notice, this list of
  * conditions and the following disclaimer. * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation and/or other materials provided with the
  * distribution. * Neither the name of the University of Konstanz nor the names of its contributors may be used to
  * endorse or promote products derived from this software without specific prior written permission.
- * 
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
  * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -40,7 +40,7 @@ import org.jscsi.utils.Utils;
  * <h4>TotalAHSLength and DataSegmentLength</h4> For this PDU TotalAHSLength and DataSegmentLength MUST be
  * <code>0</code>.
  * <p>
- * 
+ *
  * @author Volker Wildi
  */
 public final class LogoutResponseParser extends TargetMessageParser {
@@ -62,11 +62,11 @@ public final class LogoutResponseParser extends TargetMessageParser {
 
     /**
      * Default constructor, creates a new, empty <code>LogoutResponseParser</code> object.
-     * 
+     *
      * @param initProtocolDataUnit The reference <code>ProtocolDataUnit</code> instance, which contains this
      *            <code>LogoutResponseParser</code> subclass object.
      */
-    public LogoutResponseParser (final ProtocolDataUnit initProtocolDataUnit) {
+    public LogoutResponseParser(final ProtocolDataUnit initProtocolDataUnit) {
 
         super(initProtocolDataUnit);
     }
@@ -76,7 +76,7 @@ public final class LogoutResponseParser extends TargetMessageParser {
 
     /** {@inheritDoc} */
     @Override
-    public final String toString () {
+    public final String toString() {
 
         final StringBuilder sb = new StringBuilder(Constants.LOG_INITIAL_SIZE);
 
@@ -90,14 +90,14 @@ public final class LogoutResponseParser extends TargetMessageParser {
 
     /** {@inheritDoc} */
     @Override
-    public final DataSegmentFormat getDataSegmentFormat () {
+    public final DataSegmentFormat getDataSegmentFormat() {
 
         return DataSegmentFormat.NONE;
     }
 
     /** {@inheritDoc} */
     @Override
-    public final void clear () {
+    public final void clear() {
 
         super.clear();
 
@@ -111,11 +111,11 @@ public final class LogoutResponseParser extends TargetMessageParser {
 
     /**
      * Returns the Logout Response of this <code>LogoutResponseParser</code> object.
-     * 
+     *
      * @return The Logout Response of this <code>LogoutResponseParser</code> object.
      * @see LogoutResponse
      */
-    public final LogoutResponse getResponse () {
+    public final LogoutResponse getResponse() {
 
         return response;
     }
@@ -136,10 +136,10 @@ public final class LogoutResponseParser extends TargetMessageParser {
      * <p>
      * If <code>Time2Retain</code> is <code>0</code>, the target has already discarded the connection (and possibly the
      * session) state along with the task states. No reassignment or Logout is required in this case.
-     * 
+     *
      * @return The Time2Retain of this <code>LogoutResponseParser</code> object.
      */
-    public final short getTime2Retain () {
+    public final short getTime2Retain() {
 
         return time2Retain;
     }
@@ -156,23 +156,23 @@ public final class LogoutResponseParser extends TargetMessageParser {
      * before attempting a new implicit or explicit logout.
      * <p>
      * If <code>Time2Wait</code> is <code>0</code>, the reassignment or a new Logout may be attempted immediately.
-     * 
+     *
      * @return The Time2Wait of this <code>LogoutResponseParser</code> object.
      */
-    public final short getTime2Wait () {
+    public final short getTime2Wait() {
 
         return time2Wait;
     }
 
-    public final void setResponse (LogoutResponse response) {
+    public final void setResponse(LogoutResponse response) {
         this.response = response;
     }
 
-    public final void setTime2Retain (short time2Retain) {
+    public final void setTime2Retain(short time2Retain) {
         this.time2Retain = time2Retain;
     }
 
-    public final void setTime2Wait (short time2Wait) {
+    public final void setTime2Wait(short time2Wait) {
         this.time2Wait = time2Wait;
     }
 
@@ -181,7 +181,7 @@ public final class LogoutResponseParser extends TargetMessageParser {
 
     /** {@inheritDoc} */
     @Override
-    protected final void deserializeBytes1to3 (final int line) throws InternetSCSIException {
+    protected final void deserializeBytes1to3(final int line) throws InternetSCSIException {
 
         Utils.isReserved(line & Constants.SECOND_BYTE_MASK);
         response = LogoutResponse.valueOf((byte) (line & Constants.THIRD_BYTE_MASK));
@@ -190,7 +190,7 @@ public final class LogoutResponseParser extends TargetMessageParser {
 
     /** {@inheritDoc} */
     @Override
-    protected final void deserializeBytes40to43 (final int line) throws InternetSCSIException {
+    protected final void deserializeBytes40to43(final int line) throws InternetSCSIException {
 
         time2Wait = (short) ((line & Constants.FIRST_TWO_BYTES_MASK) >>> Constants.TWO_BYTES_SHIFT);
         time2Retain = (short) (line & Constants.LAST_TWO_BYTES_MASK);
@@ -201,7 +201,7 @@ public final class LogoutResponseParser extends TargetMessageParser {
 
     /** {@inheritDoc} */
     @Override
-    protected final void checkIntegrity () throws InternetSCSIException {
+    protected final void checkIntegrity() throws InternetSCSIException {
 
         String exceptionMessage;
 
@@ -228,14 +228,14 @@ public final class LogoutResponseParser extends TargetMessageParser {
 
     /** {@inheritDoc} */
     @Override
-    protected final int serializeBytes1to3 () {
+    protected final int serializeBytes1to3() {
 
         return response.value() << Constants.ONE_BYTE_SHIFT;
     }
 
     /** {@inheritDoc} */
     @Override
-    protected final int serializeBytes40to43 () {
+    protected final int serializeBytes40to43() {
 
         int line = time2Retain;
         line |= time2Wait << Constants.TWO_BYTES_SHIFT;

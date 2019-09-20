@@ -1,13 +1,13 @@
 /**
  * Copyright (c) 2012, University of Konstanz, Distributed Systems Group All rights reserved.
- * 
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
  * following conditions are met: * Redistributions of source code must retain the above copyright notice, this list of
  * conditions and the following disclaimer. * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation and/or other materials provided with the
  * distribution. * Neither the name of the University of Konstanz nor the names of its contributors may be used to
  * endorse or promote products derived from this software without specific prior written permission.
- * 
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
  * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -26,7 +26,7 @@ import java.util.NoSuchElementException;
  * <h1>ResultFunctionFactory</h1>
  * <p/>
  * This factory creates a specific <code>IResultFunction</code> instance for a given parameter.
- * 
+ *
  * @author Volker Wildi
  */
 public final class ResultFunctionFactory {
@@ -76,11 +76,11 @@ public final class ResultFunctionFactory {
 
     /**
      * Creates an <code>IResultFunction</code> instance depending on the given parameter.
-     * 
+     *
      * @param result The type of the <code>IResultFunction</code>.
      * @return The <code>IResultFunction</code> instance.
      */
-    public final IResultFunction create (final String result) {
+    public final IResultFunction create(final String result) {
 
         if (result.compareTo(RESULT_AND) == 0) {
             return new AndResultFunction();
@@ -108,13 +108,13 @@ public final class ResultFunctionFactory {
      * <h1>NoneResultFunction</h1>
      * <p/>
      * The result of this class is nothing.
-     * 
+     *
      * @author Volker Wildi
      */
     class NoneResultFunction implements IResultFunction {
 
         /** {@inheritDoc} */
-        public final String result (final String a, final String b) {
+        public final String result(final String a, final String b) {
 
             return "";
         }
@@ -129,13 +129,13 @@ public final class ResultFunctionFactory {
      * <h1>MinResultFunction</h1>
      * <p/>
      * The result of this class is the minimum of the input values.
-     * 
+     *
      * @author Volker Wildi
      */
     class MinResultFunction implements IResultFunction {
 
         /** {@inheritDoc} */
-        public final String result (final String a, final String b) {
+        public final String result(final String a, final String b) {
 
             try {
 
@@ -162,13 +162,13 @@ public final class ResultFunctionFactory {
      * <h1>MaxResultFunction</h1>
      * <p/>
      * The result of this class is the maximum of the input values.
-     * 
+     *
      * @author Volker Wildi
      */
     class MaxResultFunction implements IResultFunction {
 
         /** {@inheritDoc} */
-        public final String result (final String a, final String b) {
+        public final String result(final String a, final String b) {
 
             if (a.compareTo(b) >= 0) {
                 return a;
@@ -188,13 +188,13 @@ public final class ResultFunctionFactory {
      * <h1>OrResultFunction</h1>
      * <p/>
      * The result of this class is the <i>OR</i>-function of the input values.
-     * 
+     *
      * @author Volker Wildi
      */
     class OrResultFunction implements IResultFunction {
 
         /** {@inheritDoc} */
-        public final String result (final String a, final String b) {
+        public final String result(final String a, final String b) {
 
             if (a.compareTo(BOOLEAN_YES) == 0) {
                 return BOOLEAN_YES;
@@ -217,13 +217,13 @@ public final class ResultFunctionFactory {
      * <h1>AndResultFunction</h1>
      * <p/>
      * The result of this class is the <i>AND</i>-function of the input values.
-     * 
+     *
      * @author Volker Wildi
      */
     class AndResultFunction implements IResultFunction {
 
         /** {@inheritDoc} */
-        public final String result (final String a, final String b) {
+        public final String result(final String a, final String b) {
 
             if ((a.compareTo(BOOLEAN_YES) == 0) && (b.compareTo(BOOLEAN_YES) == 0)) {
                 return BOOLEAN_YES;
@@ -237,20 +237,22 @@ public final class ResultFunctionFactory {
      * <h1>ChooseResultFunction</h1>
      * <p/>
      * The result of this class is the first common values of the list of the input values.
-     * 
+     *
      * @author Volker Wildi
      */
     class ChooseResultFunction implements IResultFunction {
 
         /** {@inheritDoc} */
-        public final String result (final String a, final String b) {
+        public final String result(final String a, final String b) {
 
             final String[] aItems = a.split(",");
             final String[] bItems = b.split(",");
 
             for (String aItem : aItems) {
                 for (String bItem : bItems) {
-                    if (aItem.compareTo(bItem) == 0) { return aItem; }
+                    if (aItem.compareTo(bItem) == 0) {
+                        return aItem;
+                    }
                 }
             }
 

@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 /**
  * This is an abstract super-class for command descriptor blocks that that are used for requesting information about the
  * capacity of the storage device.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public abstract class ReadCapacityCdb extends CommandDescriptorBlock {
@@ -18,7 +18,7 @@ public abstract class ReadCapacityCdb extends CommandDescriptorBlock {
      * If the specified LBA exceeds the capacity of the medium, then the device server shall terminate the command with
      * CHECK CONDITION status with the sense key set to ILLEGAL REQUEST and the additional sense code set to LOGICAL
      * BLOCK ADDRESS OUT OF RANGE.
-     * 
+     *
      * @see #partialMediumIndicator
      */
     protected final long logicalBlockAddress;
@@ -35,12 +35,12 @@ public abstract class ReadCapacityCdb extends CommandDescriptorBlock {
      * and the LOGICAL BLOCK ADDRESS field is not set to zero, then the device server shall terminate the command with
      * CHECK CONDITION status with the sense key set to ILLEGAL REQUEST and the additional sense code set to INVALID
      * FIELD IN CDB.
-     * 
+     *
      * @see #logicalBlockAddress
      */
     protected final boolean partialMediumIndicator;
 
-    public ReadCapacityCdb (final ByteBuffer buffer) {
+    public ReadCapacityCdb(final ByteBuffer buffer) {
         super(buffer);
         logicalBlockAddress = deserializeLogicalBlockAddress(buffer);
         partialMediumIndicator = deserializePartialMediumIndicator(buffer);
@@ -48,15 +48,15 @@ public abstract class ReadCapacityCdb extends CommandDescriptorBlock {
         if (!partialMediumIndicator && logicalBlockAddress > 0) addIllegalFieldPointer(2);
     }
 
-    protected abstract long deserializeLogicalBlockAddress (ByteBuffer buffer);
+    protected abstract long deserializeLogicalBlockAddress(ByteBuffer buffer);
 
-    protected abstract boolean deserializePartialMediumIndicator (ByteBuffer buffer);
+    protected abstract boolean deserializePartialMediumIndicator(ByteBuffer buffer);
 
-    public final long getLogicalBlockAddress () {
+    public final long getLogicalBlockAddress() {
         return logicalBlockAddress;
     }
 
-    public final boolean getPartialMediumIndicator () {
+    public final boolean getPartialMediumIndicator() {
         return partialMediumIndicator;
     }
 }

@@ -1,19 +1,19 @@
 package org.jscsi.target.scsi.sense.senseDataDescriptor.senseKeySpecific;
 
 
-import java.nio.ByteBuffer;
-
 import org.jscsi.target.scsi.sense.SenseData;
 import org.jscsi.target.scsi.sense.SenseKey;
 import org.jscsi.target.scsi.sense.senseDataDescriptor.CommandSpecificSenseDataDescriptor;
 import org.jscsi.target.util.BitManip;
 import org.jscsi.target.util.ReadWrite;
 
+import java.nio.ByteBuffer;
+
 
 /**
  * Segment pointer sense-key-specific data is to be used, when the sense key of the enclosing {@link SenseData} has the
  * value {@link SenseKey#COPY_ABORTED}.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public class SegmentPointerSenseKeySpecificData extends SenseKeySpecificData {
@@ -37,14 +37,14 @@ public class SegmentPointerSenseKeySpecificData extends SenseKeySpecificData {
 
     /**
      * The FIELD POINTER field indicates which byte of the parameter list or segment descriptor was in error.
-     * 
+     *
      * @see #bitPointerValid
      */
     private final short fieldPointer;
 
     /**
      * Points to the leftmost bit of the field in error.
-     * 
+     *
      * @see #bitPointerValid
      */
     private final int bitPointer;
@@ -53,14 +53,14 @@ public class SegmentPointerSenseKeySpecificData extends SenseKeySpecificData {
      * The constructor.
      * <p>
      * All parameters are used to initialize the member variables with the same name.
-     * 
+     *
      * @param senseKeySpecificDataValid
      * @param segmentDescriptor
      * @param bitPointerValid
      * @param bitPointer
      * @param fieldPointer
      */
-    public SegmentPointerSenseKeySpecificData (final boolean senseKeySpecificDataValid, final boolean segmentDescriptor, final boolean bitPointerValid, final int bitPointer, final int fieldPointer) {
+    public SegmentPointerSenseKeySpecificData(final boolean senseKeySpecificDataValid, final boolean segmentDescriptor, final boolean bitPointerValid, final int bitPointer, final int fieldPointer) {
         super(senseKeySpecificDataValid);
         this.segmentDescriptor = segmentDescriptor;
         this.bitPointerValid = bitPointerValid;
@@ -69,10 +69,10 @@ public class SegmentPointerSenseKeySpecificData extends SenseKeySpecificData {
     }
 
     @Override
-    protected void serializeSpecificFields (final ByteBuffer byteBuffer, final int index) {
+    protected void serializeSpecificFields(final ByteBuffer byteBuffer, final int index) {
 
         byte b = byteBuffer.get(index);// SKSV bit has already been set and has
-                                       // to be preserved
+        // to be preserved
 
         // segment descriptor
         b = BitManip.getByteWithBitSet(b, 5, segmentDescriptor);

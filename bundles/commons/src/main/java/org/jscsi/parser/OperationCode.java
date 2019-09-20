@@ -1,13 +1,13 @@
 /**
  * Copyright (c) 2012, University of Konstanz, Distributed Systems Group All rights reserved.
- * 
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
  * following conditions are met: * Redistributions of source code must retain the above copyright notice, this list of
  * conditions and the following disclaimer. * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation and/or other materials provided with the
  * distribution. * Neither the name of the University of Konstanz nor the names of its contributors may be used to
  * endorse or promote products derived from this software without specific prior written permission.
- * 
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
  * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -18,10 +18,8 @@
  */
 package org.jscsi.parser;
 
-
 import java.util.HashMap;
 import java.util.Map;
-
 
 /**
  * <h1>OperationCode</h1>
@@ -112,7 +110,7 @@ import java.util.Map;
  * </table>
  * <p>
  * Not Supported: 0x1c-0x1e Vendor specific codes
- * 
+ *
  * @author Volker Wildi
  */
 public enum OperationCode {
@@ -359,43 +357,37 @@ public enum OperationCode {
 
     private final byte value;
 
-    private static Map<Byte , OperationCode> mapping;
+    private static Map<Byte, OperationCode> mapping;
 
     static {
-        OperationCode.mapping = new HashMap<Byte , OperationCode>();
+        OperationCode.mapping = new HashMap<Byte, OperationCode>();
         for (OperationCode s : values()) {
             OperationCode.mapping.put(s.value, s);
         }
     }
 
-    private OperationCode (final byte newValue) {
-
+    private OperationCode(final byte newValue) {
         value = newValue;
     }
 
     /**
      * Returns the value of this enumeration.
-     * 
+     *
      * @return The value of this enumeration.
      */
-    public final byte value () {
-
+    public final byte value() {
         return value;
     }
 
     /**
      * Returns the constant defined for the given <code>value</code>.
-     * 
+     *
      * @param value The value to search for.
      * @return The constant defined for the given <code>value</code>. Or <code>null</code>, if this value is not defined
-     *         by this enumeration.
+     * by this enumeration.
      */
-    public static final OperationCode valueOf (final byte value) {
-
+    public static final OperationCode valueOf(final byte value) {
         return OperationCode.mapping.get(value);
     }
-
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
 
 }

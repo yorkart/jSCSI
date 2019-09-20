@@ -1,15 +1,15 @@
 package org.jscsi.target.scsi.sense.senseDataDescriptor.senseKeySpecific;
 
 
-import java.nio.ByteBuffer;
-
 import org.jscsi.target.util.ReadWrite;
+
+import java.nio.ByteBuffer;
 
 
 /**
  * Actual retry count sense-key-specific data is used to communicate the number of retries of the recovery algorithm
  * used in attempting to recover an error or exception condition.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public final class ActualRetryCountSenseKeySpecificData extends SenseKeySpecificData {
@@ -30,18 +30,18 @@ public final class ActualRetryCountSenseKeySpecificData extends SenseKeySpecific
 
     /**
      * The constructor.
-     * 
+     *
      * @param senseKeySpecificDataValid <code>true</code> if and only if the second <i>actualRetryCount</i> parameter is
-     *            valid
-     * @param actualRetryCount the number of performed recovery attempts
+     *                                  valid
+     * @param actualRetryCount          the number of performed recovery attempts
      */
-    public ActualRetryCountSenseKeySpecificData (final boolean senseKeySpecificDataValid, final int actualRetryCount) {
+    public ActualRetryCountSenseKeySpecificData(final boolean senseKeySpecificDataValid, final int actualRetryCount) {
         super(senseKeySpecificDataValid);
         this.actualRetryCount = (short) actualRetryCount;
     }
 
     @Override
-    protected void serializeSpecificFields (final ByteBuffer byteBuffer, final int index) {
+    protected void serializeSpecificFields(final ByteBuffer byteBuffer, final int index) {
         ReadWrite.writeTwoByteInt(byteBuffer, actualRetryCount, index + ACTUAL_RETRY_COUNT_FIELD_INDEX);
     }
 

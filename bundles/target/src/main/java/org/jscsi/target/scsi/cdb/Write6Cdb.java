@@ -1,9 +1,9 @@
 package org.jscsi.target.scsi.cdb;
 
 
-import java.nio.ByteBuffer;
-
 import org.jscsi.target.util.ReadWrite;
+
+import java.nio.ByteBuffer;
 
 
 /**
@@ -18,17 +18,17 @@ import org.jscsi.target.util.ReadWrite;
  * <p>
  * A TRANSFER LENGTH field set to zero specifies that 256 logical blocks shall be written. Any other value specifies the
  * number of logical blocks that shall be written.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public class Write6Cdb extends WriteCdb {
 
-    public Write6Cdb (ByteBuffer buffer) {
+    public Write6Cdb(ByteBuffer buffer) {
         super(buffer);
     }
 
     @Override
-    protected long deserializeLogicalBlockAddress (ByteBuffer buffer) {
+    protected long deserializeLogicalBlockAddress(ByteBuffer buffer) {
         // the first three bits of byte 1 are reserved, i.e. must be 0,
         // check that
         final byte b = buffer.get(1);
@@ -39,7 +39,7 @@ public class Write6Cdb extends WriteCdb {
     }
 
     @Override
-    protected int deserializeTransferLength (ByteBuffer buffer) {
+    protected int deserializeTransferLength(ByteBuffer buffer) {
         /*
          * A TRANSFER LENGTH field set to zero specifies that 256 logical blocks shall be written. Any other value
          * specifies the number of logical blocks that shall be written.
@@ -50,12 +50,12 @@ public class Write6Cdb extends WriteCdb {
     }
 
     @Override
-    protected int getLogicalBlockAddressFieldIndex () {
+    protected int getLogicalBlockAddressFieldIndex() {
         return 1;
     }
 
     @Override
-    protected int getTransferLengthFieldIndex () {
+    protected int getTransferLengthFieldIndex() {
         return 4;
     }
 

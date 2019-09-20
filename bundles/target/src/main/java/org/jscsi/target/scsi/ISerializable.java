@@ -14,7 +14,7 @@ import java.nio.ByteBuffer;
  * Additional care must be taken when implementing objects consisting of several {@link ISerializable} components, not
  * to overwrite the fields of another component. The advantage of this strategy, however, will be higher speed, since
  * unnecessary buffer-to-buffer copying is avoided.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public interface ISerializable {
@@ -22,17 +22,17 @@ public interface ISerializable {
     /**
      * Inserts a serialized representation of the object into the specified {@link ByteBuffer}. The serialized object
      * will occupy the byte positions from <i>index</i> to <i>index + {@link #size()} - 1</i>.
-     * 
+     *
      * @param byteBuffer where to insert the serialized object representation
-     * @param index the position of the first byte of the serialized object in the {@link ByteBuffer}
+     * @param index      the position of the first byte of the serialized object in the {@link ByteBuffer}
      */
-    public void serialize (ByteBuffer byteBuffer, int index);
+    void serialize(ByteBuffer byteBuffer, int index);
 
     /**
      * Returns the size in bytes of the object's serialized representation.
-     * 
+     *
      * @return the size in bytes of the object's serialized representation
      */
-    public int size ();
+    int size();
 
 }

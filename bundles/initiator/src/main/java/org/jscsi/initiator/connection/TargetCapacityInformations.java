@@ -1,13 +1,13 @@
 /**
  * Copyright (c) 2012, University of Konstanz, Distributed Systems Group All rights reserved.
- * 
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
  * following conditions are met: * Redistributions of source code must retain the above copyright notice, this list of
  * conditions and the following disclaimer. * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation and/or other materials provided with the
  * distribution. * Neither the name of the University of Konstanz nor the names of its contributors may be used to
  * endorse or promote products derived from this software without specific prior written permission.
- * 
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
  * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -26,7 +26,7 @@ import java.nio.ByteBuffer;
  * <h1>TargetCapacityInformations</h1>
  * <p>
  * This class encapsulates the informations about the capacity of an iSCSI Target.
- * 
+ *
  * @author Volker Wildi
  */
 public final class TargetCapacityInformations {
@@ -52,7 +52,7 @@ public final class TargetCapacityInformations {
     /**
      * Default constructor to create a new, empty <code>TargetCapacityInformations</code> object.
      */
-    public TargetCapacityInformations () {
+    public TargetCapacityInformations() {
 
     }
 
@@ -61,20 +61,20 @@ public final class TargetCapacityInformations {
 
     /**
      * Returns the number of blocks of the connected target.
-     * 
+     *
      * @return Number of blocks.
      */
-    public final long getSize () {
+    public final long getSize() {
 
         return size;
     }
 
     /**
      * Returns the block size (in bytes).
-     * 
+     *
      * @return The size of one block (in bytes).
      */
-    public final long getBlockSize () {
+    public final long getBlockSize() {
 
         return blockSize;
     }
@@ -84,10 +84,10 @@ public final class TargetCapacityInformations {
 
     /**
      * This method deserializes from <code>buf</code> the capacity informations of the iSCSI Target.
-     * 
+     *
      * @param buf The input buffer to read from.
      */
-    public final void deserialize (final ByteBuffer buf) {
+    public final void deserialize(final ByteBuffer buf) {
         size = buf.getInt();
         blockSize = buf.getInt();
     }
@@ -97,7 +97,7 @@ public final class TargetCapacityInformations {
 
     /** {@inheritDoc} */
     @Override
-    public final String toString () {
+    public final String toString() {
 
         return "Block Size: " + blockSize + "B, Size: " + size + " blocks, Total Capacity: " + (size * blockSize) / MEGA_BYTES + " MB";
     }

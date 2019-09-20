@@ -1,11 +1,6 @@
 package org.jscsi.target.connection.phase;
 
 
-import java.io.IOException;
-import java.security.DigestException;
-
-import javax.naming.OperationNotSupportedException;
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.BasicHeaderSegment;
 import org.jscsi.parser.ProtocolDataUnit;
@@ -18,12 +13,16 @@ import org.jscsi.target.connection.stage.login.TargetLoginStage;
 import org.jscsi.target.settings.ConnectionSettingsNegotiator;
 import org.jscsi.target.settings.SettingsException;
 
+import javax.naming.OperationNotSupportedException;
+import java.io.IOException;
+import java.security.DigestException;
+
 
 /**
  * Objects of this class represent the Target Login Phase of a connection.
- * 
- * @see TargetPhase
+ *
  * @author Andreas Ergenzinger
+ * @see TargetPhase
  */
 public final class TargetLoginPhase extends TargetPhase {
 
@@ -40,7 +39,7 @@ public final class TargetLoginPhase extends TargetPhase {
      * <code>true</code> for all initiators.
      */
     private boolean authenticated = true;// TODO false if authentication
-                                         // required
+    // required
 
     /**
      * This variable will be <code>true</code> until the first call of {@link #getFirstPduAndSetToFalse()} has happened.
@@ -53,27 +52,27 @@ public final class TargetLoginPhase extends TargetPhase {
 
     /**
      * The constructor.
-     * 
+     *
      * @param connection {@inheritDoc}
      */
-    public TargetLoginPhase (Connection connection) {
+    public TargetLoginPhase(Connection connection) {
         super(connection);
     }
 
     /**
      * Starts the login phase.
-     * 
+     *
      * @param pdu {@inheritDoc}
      * @return {@inheritDoc}
      * @throws OperationNotSupportedException {@inheritDoc}
-     * @throws IOException {@inheritDoc}
-     * @throws InterruptedException {@inheritDoc}
-     * @throws InternetSCSIException {@inheritDoc}
-     * @throws DigestException {@inheritDoc}
-     * @throws SettingsException {@inheritDoc}
+     * @throws IOException                    {@inheritDoc}
+     * @throws InterruptedException           {@inheritDoc}
+     * @throws InternetSCSIException          {@inheritDoc}
+     * @throws DigestException                {@inheritDoc}
+     * @throws SettingsException              {@inheritDoc}
      */
     @Override
-    public boolean execute (ProtocolDataUnit pdu) throws IOException , InterruptedException , InternetSCSIException , DigestException , SettingsException {
+    public boolean execute(ProtocolDataUnit pdu) throws IOException, InterruptedException, InternetSCSIException, DigestException, SettingsException {
 
         // begin login negotiation
         final ConnectionSettingsNegotiator negotiator = connection.getConnectionSettingsNegotiator();
@@ -82,7 +81,7 @@ public final class TargetLoginPhase extends TargetPhase {
         }
 
         boolean loginSuccessful = true;// will determine if settings are
-                                       // committed
+        // committed
 
         try {
             // if possible, enter LOPN Stage
@@ -90,7 +89,7 @@ public final class TargetLoginPhase extends TargetPhase {
             LoginRequestParser parser = (LoginRequestParser) bhs.getParser();
 
             LoginStage nextStageNumber;// will store return value from the last
-                                       // login stage
+            // login stage
 
             // Security Negotiation Stage (optional)
             if (parser.getCurrentStageNumber() == LoginStage.SECURITY_NEGOTIATION) {
@@ -156,16 +155,16 @@ public final class TargetLoginPhase extends TargetPhase {
     /**
      * This method will return <code>true</code> if currently processed PDU is the first PDU sent by the initiator over
      * this phase's connection. Subsequent calls will always return <code>false</code>.
-     * 
+     *
      * @return <code>true</code> if and only if this method is called for the first time
      */
-    public boolean getFirstPduAndSetToFalse () {
+    public boolean getFirstPduAndSetToFalse() {
         if (!firstPdu) return false;
         firstPdu = false;
         return true;
     }
 
-    public final boolean getAuthenticated () {
+    public final boolean getAuthenticated() {
         return authenticated;
     }
 }

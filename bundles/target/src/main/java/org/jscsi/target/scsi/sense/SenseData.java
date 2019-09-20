@@ -13,7 +13,7 @@ import org.jscsi.target.scsi.ISerializable;
  * <p>
  * The REQUEST SENSE command may be used to request either the fixed format sense data or the descriptor format sense
  * data.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public abstract class SenseData implements ISerializable {
@@ -21,7 +21,7 @@ public abstract class SenseData implements ISerializable {
     /**
      * The first byte of all sense data contains the RESPONSE CODE field that indicates the error type and format of the
      * sense data.
-     * 
+     *
      * @see #errorType
      * @see #senseDataFormat
      */
@@ -53,13 +53,13 @@ public abstract class SenseData implements ISerializable {
 
     /**
      * The sense data constructor.
-     * 
-     * @param errorType the error type of the sense data
-     * @param senseDataFormat the format of the sense data
-     * @param senseKey describes the general category of the error requiring the sending of sense data
+     *
+     * @param errorType                       the error type of the sense data
+     * @param senseDataFormat                 the format of the sense data
+     * @param senseKey                        describes the general category of the error requiring the sending of sense data
      * @param additionalSenseCodeAndQualifier a more specific description of the error
      */
-    public SenseData (final ErrorType errorType, final SenseDataFormat senseDataFormat, final SenseKey senseKey, final AdditionalSenseCodeAndQualifier additionalSenseCodeAndQualifier) {
+    public SenseData(final ErrorType errorType, final SenseDataFormat senseDataFormat, final SenseKey senseKey, final AdditionalSenseCodeAndQualifier additionalSenseCodeAndQualifier) {
         this.errorType = errorType;
         this.senseDataFormat = senseDataFormat;
         responseCode = getReponseCodeFor(errorType, senseDataFormat);
@@ -69,12 +69,12 @@ public abstract class SenseData implements ISerializable {
 
     /**
      * Returns the proper response code for the given error type and sense data format.
-     * 
-     * @param errorType a sense data error type
+     *
+     * @param errorType       a sense data error type
      * @param senseDataFormat a sense data format
      * @return the proper response code
      */
-    public static final int getReponseCodeFor (final ErrorType errorType, final SenseDataFormat senseDataFormat) {
+    public static final int getReponseCodeFor(final ErrorType errorType, final SenseDataFormat senseDataFormat) {
         if (senseDataFormat == SenseDataFormat.FIXED) {
             if (errorType == ErrorType.CURRENT)
                 return 0x70;

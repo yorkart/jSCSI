@@ -1,11 +1,24 @@
 /**
- * 
+ *
  */
 package org.jscsi.target.storage;
 
 
-import static com.google.common.base.Preconditions.checkState;
+import com.google.common.annotations.Beta;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
+import org.jclouds.ContextBuilder;
+import org.jclouds.blobstore.BlobStore;
+import org.jclouds.blobstore.BlobStoreContext;
+import org.jclouds.blobstore.domain.Blob;
+import org.jclouds.domain.Location;
+import org.jclouds.filesystem.reference.FilesystemConstants;
 
+import javax.crypto.Cipher;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -24,30 +37,15 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import javax.crypto.Cipher;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.spec.SecretKeySpec;
-
-import org.jclouds.ContextBuilder;
-import org.jclouds.blobstore.BlobStore;
-import org.jclouds.blobstore.BlobStoreContext;
-import org.jclouds.blobstore.domain.Blob;
-import org.jclouds.domain.Location;
-import org.jclouds.filesystem.reference.FilesystemConstants;
-
-import com.google.common.annotations.Beta;
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
+import static com.google.common.base.Preconditions.checkState;
 
 
 /**
  * JClouds-Binding to store blocks as buckets in clouds-backends. This class utilizes caching as well as multithreaded
  * writing to improve performance.
- * 
+ *
  * @author Sebastian Graf, University of Konstanz
- * 
+ *
  */
 @Beta
 public class JCloudsStorageModule implements IStorageModule {
@@ -83,7 +81,7 @@ public class JCloudsStorageModule implements IStorageModule {
 
     private static final boolean ENCRYPT = false;
     private static final String ALGO = "AES";
-    private static byte[] keyValue = new byte[] { 'k', 'k', 'k', 'k', 'k', 'k', 'k', 'k', 'k', 'k', 'k', 'k', 'k', 'k', 'k', 'k' };
+    private static byte[] keyValue = new byte[]{'k', 'k', 'k', 'k', 'k', 'k', 'k', 'k', 'k', 'k', 'k', 'k', 'k', 'k', 'k', 'k'};
     private static final Key KEY = new SecretKeySpec(keyValue, "AES");
 
     private static final int VIRTUAL_BLOCK_SIZE = 512;
@@ -101,25 +99,25 @@ public class JCloudsStorageModule implements IStorageModule {
 
     private final BlobStoreContext mContext;
 
-    private final Cache<Integer , byte[]> mByteCache;
+    private final Cache<Integer, byte[]> mByteCache;
 
     private int lastIndexWritten;
     private byte[] lastBlobWritten;
 
     private final CompletionService<Integer> mWriterService;
-    private final CompletionService<Map.Entry<Integer , byte[]>> mReaderService;
-    private final ConcurrentHashMap<Integer , Future<Integer>> mRunningWriteTasks;
-    private final ConcurrentHashMap<Integer , Future<Map.Entry<Integer , byte[]>>> mRunningReadTasks;
+    private final CompletionService<Map.Entry<Integer, byte[]>> mReaderService;
+    private final ConcurrentHashMap<Integer, Future<Integer>> mRunningWriteTasks;
+    private final ConcurrentHashMap<Integer, Future<Map.Entry<Integer, byte[]>>> mRunningReadTasks;
 
     /**
      * Creates a new {@link JCloudsStorageModule} backed by the specified file. If no such file exists, a
      * {@link FileNotFoundException} will be thrown.
-     * 
+     *
      * @param pSizeInBlocks blocksize for this module
      * @param pFile local storage, not used over here
-     * 
+     *
      */
-    public JCloudsStorageModule (final long pSizeInBlocks, final File pFile) {
+    public JCloudsStorageModule(final long pSizeInBlocks, final File pFile) {
         // number * 512 = size in bytes
         // 4gig, bench for iozone and bonnie++
         // mNumberOfCluster = 8388608 / BLOCK_IN_CLUSTER;
@@ -172,25 +170,25 @@ public class JCloudsStorageModule implements IStorageModule {
      * {@inheritDoc}
      */
     @Override
-    public int checkBounds (long logicalBlockAddress, int transferLengthInBlocks) {
+    public int checkBounds(long logicalBlockAddress, int transferLengthInBlocks) {
         if (logicalBlockAddress < 0 || logicalBlockAddress >= getSizeInBlocks()) {
             return 1;
         } else
-        // if the logical block address is in bounds but the transferlength
-        // either exceeds
-        // the device size or is faulty return 2
-        if (transferLengthInBlocks < 0 || logicalBlockAddress + transferLengthInBlocks > getSizeInBlocks()) {
-            return 2;
-        } else {
-            return 0;
-        }
+            // if the logical block address is in bounds but the transferlength
+            // either exceeds
+            // the device size or is faulty return 2
+            if (transferLengthInBlocks < 0 || logicalBlockAddress + transferLengthInBlocks > getSizeInBlocks()) {
+                return 2;
+            } else {
+                return 0;
+            }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public long getSizeInBlocks () {
+    public long getSizeInBlocks() {
         return mNumberOfCluster * BLOCK_IN_CLUSTER;
     }
 
@@ -198,7 +196,7 @@ public class JCloudsStorageModule implements IStorageModule {
      * {@inheritDoc}
      */
     @Override
-    public synchronized void read (byte[] bytes, long storageIndex) throws IOException {
+    public synchronized void read(byte[] bytes, long storageIndex) throws IOException {
 
         final int bucketIndex = (int) (storageIndex / SIZE_PER_BUCKET);
         final int bucketOffset = (int) (storageIndex % SIZE_PER_BUCKET);
@@ -241,11 +239,11 @@ public class JCloudsStorageModule implements IStorageModule {
         }
     }
 
-    private final byte[] getAndprefetchBuckets (final int pBucketStartId) throws InterruptedException , ExecutionException {
+    private final byte[] getAndprefetchBuckets(final int pBucketStartId) throws InterruptedException, ExecutionException {
         byte[] returnval;
-        Future<Map.Entry<Integer , byte[]>> startTask = null;
+        Future<Map.Entry<Integer, byte[]>> startTask = null;
         for (int i = pBucketStartId; i < pBucketStartId + BUCKETS_TO_PREFETCH; i++) {
-            Future<Map.Entry<Integer , byte[]>> currentTask = mRunningReadTasks.remove(i);
+            Future<Map.Entry<Integer, byte[]>> currentTask = mRunningReadTasks.remove(i);
             if (currentTask == null) {
                 currentTask = mReaderService.submit(new ReadTask(i));
                 mRunningReadTasks.put(i, currentTask);
@@ -259,7 +257,7 @@ public class JCloudsStorageModule implements IStorageModule {
 
     }
 
-    private final void storeBucket (int pBucketId, byte[] pData) throws InterruptedException , ExecutionException {
+    private final void storeBucket(int pBucketId, byte[] pData) throws InterruptedException, ExecutionException {
         if (lastIndexWritten != pBucketId && lastBlobWritten != null) {
             Future<Integer> writeTask = mRunningWriteTasks.remove(lastIndexWritten);
             if (writeTask != null) {
@@ -273,11 +271,11 @@ public class JCloudsStorageModule implements IStorageModule {
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @throws Exception
      */
     @Override
-    public synchronized void write (byte[] bytes, long storageIndex) throws IOException {
+    public synchronized void write(byte[] bytes, long storageIndex) throws IOException {
         final int bucketIndex = (int) (storageIndex / SIZE_PER_BUCKET);
         final int bucketOffset = (int) (storageIndex % SIZE_PER_BUCKET);
         try {
@@ -317,7 +315,7 @@ public class JCloudsStorageModule implements IStorageModule {
      * {@inheritDoc}
      */
     @Override
-    public void close () throws IOException {
+    public void close() throws IOException {
         mContext.close();
     }
 
@@ -328,10 +326,10 @@ public class JCloudsStorageModule implements IStorageModule {
 
     /**
      * Getting credentials for aws from homedir/.credentials
-     * 
+     *
      * @return a two-dimensional String[] with login and password
      */
-    private static String[] getCredentials () {
+    private static String[] getCredentials() {
         return new String[0];
         // File userStore = new File(System.getProperty("user.home"),
         // new StringBuilder(".credentials").append(File.separator)
@@ -353,11 +351,11 @@ public class JCloudsStorageModule implements IStorageModule {
 
     /**
      * Single task to write data to the cloud.
-     * 
+     *
      * @author Sebastian Graf, University of Konstanz
-     * 
+     *
      */
-    class ReadTask implements Callable<Map.Entry<Integer , byte[]>> {
+    class ReadTask implements Callable<Map.Entry<Integer, byte[]>> {
 
         final Cipher mCipher;
 
@@ -366,7 +364,7 @@ public class JCloudsStorageModule implements IStorageModule {
          */
         final int mBucketId;
 
-        ReadTask (final int pBucketId) {
+        ReadTask(final int pBucketId) {
             if (ENCRYPT) {
                 try {
                     mCipher = Cipher.getInstance(ALGO);
@@ -381,7 +379,7 @@ public class JCloudsStorageModule implements IStorageModule {
         }
 
         @Override
-        public Map.Entry<Integer , byte[]> call () throws Exception {
+        public Map.Entry<Integer, byte[]> call() throws Exception {
             byte[] data = mByteCache.getIfPresent(mBucketId);
             if (data == null) {
                 // long time = System.currentTimeMillis();
@@ -394,7 +392,7 @@ public class JCloudsStorageModule implements IStorageModule {
                     // download.flush();
                 } else {
                     try (InputStream is = blob.getPayload().getInput()) {
-                       data = ByteStreams.toByteArray(is);
+                        data = ByteStreams.toByteArray(is);
                     }
                     // download.write(Integer.toString(mBucketId) + "," +
                     // data.length + " , "
@@ -423,19 +421,19 @@ public class JCloudsStorageModule implements IStorageModule {
             }
             mByteCache.put(mBucketId, data);
             final byte[] finalizedData = data;
-            return new Map.Entry<Integer , byte[]>() {
+            return new Map.Entry<Integer, byte[]>() {
                 @Override
-                public byte[] setValue (byte[] value) {
+                public byte[] setValue(byte[] value) {
                     throw new UnsupportedOperationException();
                 }
 
                 @Override
-                public byte[] getValue () {
+                public byte[] getValue() {
                     return finalizedData;
                 }
 
                 @Override
-                public Integer getKey () {
+                public Integer getKey() {
                     return mBucketId;
                 }
             };
@@ -444,9 +442,9 @@ public class JCloudsStorageModule implements IStorageModule {
 
     /**
      * Single task to write data to the cloud.
-     * 
+     *
      * @author Sebastian Graf, University of Konstanz
-     * 
+     *
      */
     class WriteTask implements Callable<Integer> {
         /**
@@ -456,7 +454,7 @@ public class JCloudsStorageModule implements IStorageModule {
         final int mBucketIndex;
         final Cipher mCipher;
 
-        WriteTask (byte[] pData, int pBucketIndex) {
+        WriteTask(byte[] pData, int pBucketIndex) {
             checkState(pData.length == SIZE_PER_BUCKET);
             if (ENCRYPT) {
                 try {
@@ -473,7 +471,7 @@ public class JCloudsStorageModule implements IStorageModule {
         }
 
         @Override
-        public Integer call () throws Exception {
+        public Integer call() throws Exception {
             boolean finished = false;
 
             while (!finished) {
@@ -504,10 +502,10 @@ public class JCloudsStorageModule implements IStorageModule {
 
     class ReadFutureCleaner extends Thread {
 
-        public void run () {
+        public void run() {
             while (true) {
                 try {
-                    Future<Map.Entry<Integer , byte[]>> element = mReaderService.take();
+                    Future<Map.Entry<Integer, byte[]>> element = mReaderService.take();
                     if (!element.isCancelled()) {
                         mRunningReadTasks.remove(element.get().getKey());
                     }
@@ -520,7 +518,7 @@ public class JCloudsStorageModule implements IStorageModule {
 
     class WriteFutureCleaner extends Thread {
 
-        public void run () {
+        public void run() {
             while (true) {
                 try {
                     Future<Integer> element = mWriterService.take();

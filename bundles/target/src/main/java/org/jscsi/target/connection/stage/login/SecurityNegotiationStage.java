@@ -1,11 +1,6 @@
 package org.jscsi.target.connection.stage.login;
 
 
-import java.io.IOException;
-import java.security.DigestException;
-import java.util.List;
-import java.util.Vector;
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.BasicHeaderSegment;
 import org.jscsi.parser.ProtocolDataUnit;
@@ -18,10 +13,15 @@ import org.jscsi.target.settings.TextParameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.security.DigestException;
+import java.util.List;
+import java.util.Vector;
+
 
 /**
  * A {@link TargetLoginStage} sub-class representing Security Negotiation Stages.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public final class SecurityNegotiationStage extends TargetLoginStage {
@@ -30,15 +30,15 @@ public final class SecurityNegotiationStage extends TargetLoginStage {
 
     /**
      * The constructor.
-     * 
+     *
      * @param targetLoginPhase the login phase this stage is a part of
      */
-    public SecurityNegotiationStage (TargetLoginPhase targetLoginPhase) {
+    public SecurityNegotiationStage(TargetLoginPhase targetLoginPhase) {
         super(targetLoginPhase, LoginStage.SECURITY_NEGOTIATION);
     }
 
     @Override
-    public void execute (ProtocolDataUnit initialPdu) throws IOException , InterruptedException , InternetSCSIException , DigestException , SettingsException {
+    public void execute(ProtocolDataUnit initialPdu) throws IOException, InterruptedException, InternetSCSIException, DigestException, SettingsException {
 
         // "receive" initial PDU
         BasicHeaderSegment bhs = initialPdu.getBasicHeaderSegment();
@@ -82,22 +82,22 @@ public final class SecurityNegotiationStage extends TargetLoginStage {
                         authMethodValues = split[1];
                         // remove key-value pair from Vector
                         requestKeyValuePairs.remove(i--);// correct for shifted
-                                                         // indices
+                        // indices
                         // no break here to catch all authMethodKeyValuePairs in
                         // else block
                     } else if (isAuthenticationKey(split[0])) {
                         // move key-value pair to authMethodKeyValuePairs
                         authMethodKeyValuePairs.add(requestKeyValuePairs.remove(i--));// correct for shifted
-                                                                                      // indices
+                        // indices
                     }
                 }
                 if (authMethodValues == null) {// missing AuthMethod key
                     sendRejectPdu(LoginStatus.MISSING_PARAMETER);// require
-                                                                 // AuthMethod
-                                                                 // to be
-                                                                 // specified in
-                                                                 // first PDU
-                                                                 // sequence
+                    // AuthMethod
+                    // to be
+                    // specified in
+                    // first PDU
+                    // sequence
                     // close connection
                     throw new InternetSCSIException("Missing AuthMethod key-value pair");
                 }
@@ -105,10 +105,10 @@ public final class SecurityNegotiationStage extends TargetLoginStage {
 
             // negotiate remaining parameters
             final Vector<String> responseKeyValuePairs = new Vector<>();// these
-                                                                              // will
-                                                                              // be
-                                                                              // sent
-                                                                              // back
+            // will
+            // be
+            // sent
+            // back
             if (!negotiator.negotiate(session.getTargetServer(), stageNumber, connection.isLeadingConnection(), ((TargetLoginPhase) targetPhase).getFirstPduAndSetToFalse(), requestKeyValuePairs, responseKeyValuePairs)) {
                 // negotiation error
                 sendRejectPdu(LoginStatus.INITIATOR_ERROR);
@@ -158,15 +158,16 @@ public final class SecurityNegotiationStage extends TargetLoginStage {
      * <li>SPKM_&#60;key&#62;/il>
      * <li>SRP_&#60;key&#62;/il>
      * </ul>
-     * 
+     *
      * @param <i>key</i> part of a <i>key-value</i> pair
      * @return <code>true</code> if the String is an AuthMethod key, <code>false</code> if it is not.
      */
-    private final boolean isAuthenticationKey (final String key) {
+    private final boolean isAuthenticationKey(final String key) {
         if (key == null || key.length() < 5) return false;
         final String fourChars = key.substring(0, 4);
         final String fiveChars = key.substring(0, 5);
-        if ("CHAP_".matches(fiveChars) || "KRB_".matches(fourChars) || "SPKM_".matches(fiveChars) || "SRP_".matches(fourChars) || (key.length() >= 10 && "TargetAuth".matches(key.substring(0, 10)))) return true;
+        if ("CHAP_".matches(fiveChars) || "KRB_".matches(fourChars) || "SPKM_".matches(fiveChars) || "SRP_".matches(fourChars) || (key.length() >= 10 && "TargetAuth".matches(key.substring(0, 10))))
+            return true;
         return false;
     }
 }

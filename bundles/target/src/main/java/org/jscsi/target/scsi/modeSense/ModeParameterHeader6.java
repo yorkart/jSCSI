@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 /**
  * A {@link ModeParameterHeader} sub-class. Instances of this class are sent in response to <code>MODE SENSE (6)</code>
  * SCSI commands and have a serialized length of 4 bytes.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public final class ModeParameterHeader6 extends ModeParameterHeader {
@@ -24,15 +24,15 @@ public final class ModeParameterHeader6 extends ModeParameterHeader {
 
     /**
      * The constructor.
-     * 
-     * @param modeDataLength the total length in bytes of all MODE DATA list elements
+     *
+     * @param modeDataLength        the total length in bytes of all MODE DATA list elements
      * @param blockDescriptorLength the total length in bytes of all BLOCK DESCRIPTOR list elements
      */
-    public ModeParameterHeader6 (final int modeDataLength, final int blockDescriptorLength) {
+    public ModeParameterHeader6(final int modeDataLength, final int blockDescriptorLength) {
         super(modeDataLength, blockDescriptorLength);
     }
 
-    public void serialize (ByteBuffer byteBuffer, int index) {
+    public void serialize(ByteBuffer byteBuffer, int index) {
         byteBuffer.position(index);
         byteBuffer.put((byte) modeDataLength);
         byteBuffer.put(mediumType);
@@ -40,7 +40,7 @@ public final class ModeParameterHeader6 extends ModeParameterHeader {
         byteBuffer.put((byte) blockDescriptorLength);
     }
 
-    public int size () {
+    public int size() {
         return SIZE;
     }
 

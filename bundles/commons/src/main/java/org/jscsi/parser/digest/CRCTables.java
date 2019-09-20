@@ -1,13 +1,13 @@
 /**
  * Copyright (c) 2012, University of Konstanz, Distributed Systems Group All rights reserved.
- * 
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
  * following conditions are met: * Redistributions of source code must retain the above copyright notice, this list of
  * conditions and the following disclaimer. * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation and/or other materials provided with the
  * distribution. * Neither the name of the University of Konstanz nor the names of its contributors may be used to
  * endorse or promote products derived from this software without specific prior written permission.
- * 
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
  * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -30,7 +30,7 @@ package org.jscsi.parser.digest;
  * <code>32</code>.</li>
  * <li>You will have CRC table(<code>0-255</code>) for the requested polynom.</li>
  * </ol>
- * 
+ *
  * @author Stepan
  */
 public final class CRCTables {
@@ -61,10 +61,10 @@ public final class CRCTables {
 
     /**
      * Constructor to create a new, empty <code>CRCTables</code> object with the initialized generator polynom.
-     * 
+     *
      * @param initGeneratorPolynom The generator polynom to use.
      */
-    public CRCTables (final long initGeneratorPolynom) {
+    public CRCTables(final long initGeneratorPolynom) {
 
         // FIXME: Really needed?
         generatorPolynom = initGeneratorPolynom;
@@ -75,12 +75,12 @@ public final class CRCTables {
 
     /**
      * Returns all remainders of the polynomial division for the given offset.
-     * 
+     *
      * @param offset The numbers of bits to shift, e.g. for <code>A</code> offset is <code>56</code>, for <code>D</code>
      *            <code>32</code>.
      * @return The CRC table with all remainders for the given offset.
      */
-    public final int[] getTable (final int offset) {
+    public final int[] getTable(final int offset) {
 
         final int[] table = new int[SIZE_OF_TABLE];
         long numberToCalculate;
@@ -103,11 +103,11 @@ public final class CRCTables {
      * If (a 1 bit popped out of the register during step 3) Register = Register XOR Poly. End Reverse register The
      * register now contains the CRC. Notes: W=32, that's why we have offsets 32, 40, 48 and 56 instead of 0,8,16,24
      * Size of register=W;
-     * 
+     *
      * @param value A <code>long</code> value, for which the CRC should be calculated.
      * @return The remainder of the polynomial division --> CRC.
      */
-    protected final int calculateCRC32 (final long value) {
+    protected final int calculateCRC32(final long value) {
 
         long l = value;
         int register = 0;

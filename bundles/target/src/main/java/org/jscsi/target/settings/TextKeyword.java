@@ -3,7 +3,7 @@ package org.jscsi.target.settings;
 /**
  * This class contains all keys and some common variables and other static, final {@link String} objects used during
  * text parameter negotiation.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public final class TextKeyword {

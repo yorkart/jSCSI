@@ -5,7 +5,7 @@ package org.jscsi.target.util;
  * different lengths can be stored, quickly retrievable with the {@link #getArray(int)} method. Frequently requested
  * arrays will be returned faster, less frequently used arrays might have to be initialized first and are more likely to
  * be removed.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public final class FastByteArrayProvider {
@@ -32,10 +32,10 @@ public final class FastByteArrayProvider {
 
     /**
      * The constructor.
-     * 
+     *
      * @param capacity the {@link #capacity} of the created object.
      */
-    public FastByteArrayProvider (final int capacity) {
+    public FastByteArrayProvider(final int capacity) {
         this.capacity = capacity;
         arrays = new byte[capacity][];
     }
@@ -49,11 +49,11 @@ public final class FastByteArrayProvider {
      * The method consecutively checks {@link #arrays} for an array of the correct length. If such an array exists, it
      * will be moved to one index position closer to the front of the array (if possible), speeding up future retrievals
      * of the same array.
-     * 
+     *
      * @param length the length of the returned array
      * @return a byte array of the specified length
      */
-    public byte[] getArray (final int length) {
+    public byte[] getArray(final int length) {
         for (int i = 0; i < size; ++i) {
             if (length == arrays[i].length) {
                 // swap (if not already at the front) and return
@@ -80,10 +80,10 @@ public final class FastByteArrayProvider {
      * Returns all stored byte arrays.
      * <p>
      * This method's primary purpose is to enable testing of byte array storing and reordering.
-     * 
+     *
      * @return {@link #arrays}.
      */
-    public byte[][] getAll () {
+    public byte[][] getAll() {
         return arrays;
     }
 }

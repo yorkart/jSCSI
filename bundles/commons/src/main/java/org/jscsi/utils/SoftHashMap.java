@@ -1,13 +1,13 @@
 /**
  * Copyright (c) 2012, University of Konstanz, Distributed Systems Group All rights reserved.
- * 
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
  * following conditions are met: * Redistributions of source code must retain the above copyright notice, this list of
  * conditions and the following disclaimer. * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation and/or other materials provided with the
  * distribution. * Neither the name of the University of Konstanz nor the names of its contributors may be used to
  * endorse or promote products derived from this software without specific prior written permission.
- * 
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
  * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -18,14 +18,12 @@
  */
 package org.jscsi.utils;
 
-
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.SoftReference;
 import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
 
 /**
  * <h1>SoftHashMap</h1>
@@ -39,48 +37,57 @@ import java.util.Set;
  * <p>
  * Note that the put and remove methods always return null.
  * </p>
- * 
+ *
  * @param <K> Key object of type K.
  * @param <V> Value object of type V.
- * 
  */
-public final class SoftHashMap<K , V> extends AbstractMap<K , V> {
+public final class SoftHashMap<K, V> extends AbstractMap<K, V> {
 
-    /** Default strong reference count. */
+    /**
+     * Default strong reference count.
+     */
     private static final int DEFAULT_STRONG_REFERENCE_COUNT = 32;
 
-    /** The internal HashMap that will hold the SoftReference. */
-    private final Map<K , SoftReference<V>> internalMap;
+    /**
+     * The internal HashMap that will hold the SoftReference.
+     */
+    private final Map<K, SoftReference<V>> internalMap;
 
-    /** The number of "hard" references to hold internally. */
+    /**
+     * The number of "hard" references to hold internally.
+     */
     private final int strongReferenceCount;
 
-    /** The FIFO list of strong references, order of last access. */
+    /**
+     * The FIFO list of strong references, order of last access.
+     */
     private V[] strongReferenceArray;
 
-    /** Current offset of FIFO list. */
+    /**
+     * Current offset of FIFO list.
+     */
     private int currentStrongReferenceOffset;
 
-    /** Reference queue for cleared SoftReference objects. */
+    /**
+     * Reference queue for cleared SoftReference objects.
+     */
     private final ReferenceQueue<SoftValue<V>> queue;
 
     /**
      * Default constructor internally using 32 strong references.
      */
-    public SoftHashMap () {
-
+    public SoftHashMap() {
         this(DEFAULT_STRONG_REFERENCE_COUNT);
     }
 
     /**
      * Constructor that allows to specify how many strong references should be used internally.
-     * 
+     *
      * @param initStrongReferenceCount Number of internal strong references.
      */
-    @SuppressWarnings ("unchecked")
-    public SoftHashMap (final int initStrongReferenceCount) {
-
-        internalMap = new HashMap<K , SoftReference<V>>();
+    @SuppressWarnings("unchecked")
+    public SoftHashMap(final int initStrongReferenceCount) {
+        internalMap = new HashMap<K, SoftReference<V>>();
         strongReferenceCount = initStrongReferenceCount;
         strongReferenceArray = (V[]) new Object[initStrongReferenceCount];
         currentStrongReferenceOffset = 0;
@@ -91,8 +98,7 @@ public final class SoftHashMap<K , V> extends AbstractMap<K , V> {
      * {@inheritDoc}
      */
     @Override
-    public final V get (final Object key) {
-
+    public final V get(final Object key) {
         V value = null;
         final SoftReference<V> softReference = internalMap.get(key);
         if (softReference != null) {
@@ -120,8 +126,7 @@ public final class SoftHashMap<K , V> extends AbstractMap<K , V> {
      * {@inheritDoc}
      */
     @Override
-    public final V put (final K key, final V value) {
-
+    public final V put(final K key, final V value) {
         processQueue();
         internalMap.put(key, new SoftValue<V>(value, key, queue));
         return null;
@@ -131,8 +136,7 @@ public final class SoftHashMap<K , V> extends AbstractMap<K , V> {
      * {@inheritDoc}
      */
     @Override
-    public final V remove (final Object key) {
-
+    public final V remove(final Object key) {
         processQueue();
         internalMap.remove(key);
         return null;
@@ -142,9 +146,8 @@ public final class SoftHashMap<K , V> extends AbstractMap<K , V> {
      * {@inheritDoc}
      */
     @Override
-    @SuppressWarnings ("unchecked")
-    public final synchronized void clear () {
-
+    @SuppressWarnings("unchecked")
+    public final synchronized void clear() {
         strongReferenceArray = (V[]) new Object[strongReferenceCount];
         processQueue();
         internalMap.clear();
@@ -154,8 +157,7 @@ public final class SoftHashMap<K , V> extends AbstractMap<K , V> {
      * {@inheritDoc}
      */
     @Override
-    public final int size () {
-
+    public final int size() {
         processQueue();
         return internalMap.size();
     }
@@ -164,17 +166,15 @@ public final class SoftHashMap<K , V> extends AbstractMap<K , V> {
      * {@inheritDoc}
      */
     @Override
-    public final Set<Map.Entry<K , V>> entrySet () {
-
+    public final Set<Map.Entry<K, V>> entrySet() {
         throw new UnsupportedOperationException();
     }
 
     /**
      * Remove garbage collected soft values with the help of the reference queue.
      */
-    @SuppressWarnings ({ "rawtypes", "unchecked" })
-    private final void processQueue () {
-
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private final void processQueue() {
         SoftValue<V> softValue;
         while ((softValue = (SoftValue) queue.poll()) != null) {
             internalMap.remove(softValue.key);
@@ -190,15 +190,14 @@ public final class SoftHashMap<K , V> extends AbstractMap<K , V> {
 
         /**
          * Constructor.
-         * 
-         * @param initValue Value wrapped as soft reference.
-         * @param initKey Key for given value.
+         *
+         * @param initValue          Value wrapped as soft reference.
+         * @param initKey            Key for given value.
          * @param initReferenceQueue Reference queue for cleanup.
          */
 
-        @SuppressWarnings ({ "rawtypes", "unchecked" })
-        private SoftValue (final V initValue, final K initKey, final ReferenceQueue initReferenceQueue) {
-
+        @SuppressWarnings({"rawtypes", "unchecked"})
+        private SoftValue(final V initValue, final K initKey, final ReferenceQueue initReferenceQueue) {
             super(initValue, initReferenceQueue);
             key = initKey;
         }

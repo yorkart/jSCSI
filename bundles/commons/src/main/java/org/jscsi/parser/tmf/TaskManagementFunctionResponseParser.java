@@ -1,13 +1,13 @@
 /**
  * Copyright (c) 2012, University of Konstanz, Distributed Systems Group All rights reserved.
- * 
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
  * following conditions are met: * Redistributions of source code must retain the above copyright notice, this list of
  * conditions and the following disclaimer. * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation and/or other materials provided with the
  * distribution. * Neither the name of the University of Konstanz nor the names of its contributors may be used to
  * endorse or promote products derived from this software without specific prior written permission.
- * 
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
  * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -19,17 +19,16 @@
 package org.jscsi.parser.tmf;
 
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.BasicHeaderSegment;
 import org.jscsi.parser.Constants;
 import org.jscsi.parser.ProtocolDataUnit;
 import org.jscsi.parser.TargetMessageParser;
 import org.jscsi.parser.datasegment.DataSegmentFactory.DataSegmentFormat;
-import org.jscsi.parser.logout.LogoutResponse;
 import org.jscsi.utils.Utils;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -63,14 +62,14 @@ import org.jscsi.utils.Utils;
  * <p>
  * <h4>TotalAHSLength and DataSegmentLength</h4> For this PDU TotalAHSLength and DataSegmentLength MUST be
  * <code>0</code>.
- * 
+ *
  * @author Volker Wildi
  */
 public final class TaskManagementFunctionResponseParser extends TargetMessageParser {
 
     /**
      * This enumeration defines all valid response code, which are defined in the iSCSI Standard (RFC 3720).
-     * 
+     *
      * @author Volker Wildi
      */
     public static enum ResponseCode {
@@ -94,38 +93,38 @@ public final class TaskManagementFunctionResponseParser extends TargetMessagePar
 
         private byte value;
 
-        private static Map<Byte , ResponseCode> mapping;
+        private static Map<Byte, ResponseCode> mapping;
 
         static {
-            ResponseCode.mapping = new HashMap<Byte , ResponseCode>();
+            ResponseCode.mapping = new HashMap<Byte, ResponseCode>();
             for (ResponseCode s : values()) {
                 ResponseCode.mapping.put(s.value, s);
             }
         }
 
-        private ResponseCode (final byte newValue) {
+        private ResponseCode(final byte newValue) {
 
             value = newValue;
         }
 
         /**
          * Returns the value of this enumeration.
-         * 
+         *
          * @return The value of this enumeration.
          */
-        public final byte value () {
+        public final byte value() {
 
             return value;
         }
 
         /**
          * Returns the constant defined for the given <code>value</code>.
-         * 
+         *
          * @param value The value to search for.
          * @return The constant defined for the given <code>value</code>. Or <code>null</code>, if this value is not
          *         defined by this enumeration.
          */
-        public static final ResponseCode valueOf (final byte value) {
+        public static final ResponseCode valueOf(final byte value) {
 
             return ResponseCode.mapping.get(value);
         }
@@ -142,11 +141,11 @@ public final class TaskManagementFunctionResponseParser extends TargetMessagePar
 
     /**
      * Default constructor, creates a new, empty <code>TaskManagementFunctionResponseParser</code> object.
-     * 
+     *
      * @param initProtocolDataUnit The reference <code>ProtocolDataUnit</code> instance, which contains this
      *            <code>TaskManagementFunctionResponseParser</code> subclass object.
      */
-    public TaskManagementFunctionResponseParser (final ProtocolDataUnit initProtocolDataUnit) {
+    public TaskManagementFunctionResponseParser(final ProtocolDataUnit initProtocolDataUnit) {
 
         super(initProtocolDataUnit);
     }
@@ -156,7 +155,7 @@ public final class TaskManagementFunctionResponseParser extends TargetMessagePar
 
     /** {@inheritDoc} */
     @Override
-    public final String toString () {
+    public final String toString() {
 
         final StringBuilder sb = new StringBuilder(Constants.LOG_INITIAL_SIZE);
 
@@ -168,14 +167,14 @@ public final class TaskManagementFunctionResponseParser extends TargetMessagePar
 
     /** {@inheritDoc} */
     @Override
-    public final DataSegmentFormat getDataSegmentFormat () {
+    public final DataSegmentFormat getDataSegmentFormat() {
 
         return DataSegmentFormat.NONE;
     }
 
     /** {@inheritDoc} */
     @Override
-    public final void clear () {
+    public final void clear() {
 
         super.clear();
 
@@ -260,15 +259,15 @@ public final class TaskManagementFunctionResponseParser extends TargetMessagePar
      * field in the Task Management function request is outside the valid CmdSN window, then targets must return the
      * "Task does not exist" response.</li>
      * </ol>
-     * 
+     *
      * @return The response code of this <code>TaskManagementFunctionResponseParser</code> object.
      */
-    public final ResponseCode getResponse () {
+    public final ResponseCode getResponse() {
 
         return response;
     }
 
-    public final void setResponse (ResponseCode response) {
+    public final void setResponse(ResponseCode response) {
         this.response = response;
     }
 
@@ -277,7 +276,7 @@ public final class TaskManagementFunctionResponseParser extends TargetMessagePar
 
     /** {@inheritDoc} */
     @Override
-    protected final void deserializeBytes1to3 (final int line) throws InternetSCSIException {
+    protected final void deserializeBytes1to3(final int line) throws InternetSCSIException {
 
         Utils.isReserved(line & Constants.SECOND_BYTE_MASK);
         response = ResponseCode.valueOf((byte) (line & Constants.THIRD_BYTE_MASK));
@@ -286,7 +285,7 @@ public final class TaskManagementFunctionResponseParser extends TargetMessagePar
 
     /** {@inheritDoc} */
     @Override
-    protected final void deserializeBytes20to23 (final int line) throws InternetSCSIException {
+    protected final void deserializeBytes20to23(final int line) throws InternetSCSIException {
 
         Utils.isReserved(line);
     }
@@ -296,7 +295,7 @@ public final class TaskManagementFunctionResponseParser extends TargetMessagePar
 
     /** {@inheritDoc} */
     @Override
-    protected final void checkIntegrity () throws InternetSCSIException {
+    protected final void checkIntegrity() throws InternetSCSIException {
 
         String exceptionMessage;
 
@@ -326,7 +325,7 @@ public final class TaskManagementFunctionResponseParser extends TargetMessagePar
 
     /** {@inheritDoc} */
     @Override
-    protected final int serializeBytes1to3 () {
+    protected final int serializeBytes1to3() {
 
         return response.value() << Constants.ONE_BYTE_SHIFT;
     }

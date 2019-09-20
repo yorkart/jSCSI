@@ -1,13 +1,13 @@
 /**
  * Copyright (c) 2012, University of Konstanz, Distributed Systems Group All rights reserved.
- * 
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
  * following conditions are met: * Redistributions of source code must retain the above copyright notice, this list of
  * conditions and the following disclaimer. * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation and/or other materials provided with the
  * distribution. * Neither the name of the University of Konstanz nor the names of its contributors may be used to
  * endorse or promote products derived from this software without specific prior written permission.
- * 
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
  * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -53,33 +53,23 @@ import org.jscsi.utils.Utils;
  * The StatSN field will always contain the next StatSN. However, when the Initiator Task Tag is set to
  * <code>0xffffffff</code>, StatSN for the connection is not advanced after this PDU is sent.
  * <p>
- * 
+ *
  * @author Volker Wildi
  */
 public final class NOPInParser extends TargetMessageParser {
 
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
-
     /** Target Transfer Tag. */
     private int targetTransferTag;
 
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
-
     /**
      * Default constructor, creates a new, empty <code>NOPInParser</code> object.
-     * 
+     *
      * @param initProtocolDataUnit The reference <code>ProtocolDataUnit</code> instance, which contains this
      *            <code>NOPInParser</code> subclass object.
      */
-    public NOPInParser (final ProtocolDataUnit initProtocolDataUnit) {
-
+    public NOPInParser(final ProtocolDataUnit initProtocolDataUnit) {
         super(initProtocolDataUnit);
     }
-
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
 
     /**
      * If the target is responding to a NOP-Out, this is set to the reserved value <code>0xffffffff</code>.
@@ -89,30 +79,26 @@ public final class NOPInParser extends TargetMessageParser {
      * <p>
      * If the target is initiating a NOP-In without wanting to receive a corresponding NOP-Out, this field MUST hold the
      * reserved value of <code>0xffffffff</code>.
-     * 
+     *
      * @return The target transfer tag of this object.
      */
-    public final int getTargetTransferTag () {
+    public final int getTargetTransferTag() {
 
         return targetTransferTag;
     }
 
     /**
      * Sets the Target Transfer Tag of this object.
-     * 
+     *
      * @param targetTransferTag the new Target Transfer Tag.
      */
-    public final void setTargetTransferTag (final int targetTransferTag) {
+    public final void setTargetTransferTag(final int targetTransferTag) {
         this.targetTransferTag = targetTransferTag;
     }
 
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
-
     /** {@inheritDoc} */
     @Override
-    public final String toString () {
-
+    public final String toString() {
         final StringBuilder sb = new StringBuilder(Constants.LOG_INITIAL_SIZE);
         Utils.printField(sb, "LUN", logicalUnitNumber, 1);
         Utils.printField(sb, "Target Transfer Tag", targetTransferTag, 1);
@@ -123,60 +109,40 @@ public final class NOPInParser extends TargetMessageParser {
 
     /** {@inheritDoc} */
     @Override
-    public final DataSegmentFormat getDataSegmentFormat () {
-
+    public final DataSegmentFormat getDataSegmentFormat() {
         return DataSegmentFormat.BINARY;
     }
 
     /** {@inheritDoc} */
     @Override
-    public final void clear () {
-
+    public final void clear() {
         super.clear();
 
         targetTransferTag = 0x00000000;
     }
 
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
-
     /** {@inheritDoc} */
     @Override
-    protected final void deserializeBytes1to3 (final int line) throws InternetSCSIException {
-
+    protected final void deserializeBytes1to3(final int line) throws InternetSCSIException {
         Utils.isReserved(line & Constants.LAST_THREE_BYTES_MASK);
     }
 
     /** {@inheritDoc} */
     @Override
-    protected final void deserializeBytes20to23 (final int line) throws InternetSCSIException {
-
+    protected final void deserializeBytes20to23(final int line) throws InternetSCSIException {
         targetTransferTag = line;
     }
 
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
-
     /** {@inheritDoc} */
     @Override
-    protected final void checkIntegrity () throws InternetSCSIException {
-
+    protected final void checkIntegrity() throws InternetSCSIException {
         // do nothing...
     }
 
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
-
     /** {@inheritDoc} */
     @Override
-    protected final int serializeBytes20to23 () {
-
+    protected final int serializeBytes20to23() {
         return targetTransferTag;
     }
-
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
 
 }

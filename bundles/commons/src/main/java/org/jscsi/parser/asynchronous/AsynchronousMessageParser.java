@@ -1,13 +1,13 @@
 /**
  * Copyright (c) 2012, University of Konstanz, Distributed Systems Group All rights reserved.
- * 
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
  * following conditions are met: * Redistributions of source code must retain the above copyright notice, this list of
  * conditions and the following disclaimer. * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation and/or other materials provided with the
  * distribution. * Neither the name of the University of Konstanz nor the names of its contributors may be used to
  * endorse or promote products derived from this software without specific prior written permission.
- * 
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
  * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -19,9 +19,6 @@
 package org.jscsi.parser.asynchronous;
 
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.Constants;
 import org.jscsi.parser.ProtocolDataUnit;
@@ -29,12 +26,15 @@ import org.jscsi.parser.TargetMessageParser;
 import org.jscsi.parser.datasegment.DataSegmentFactory.DataSegmentFormat;
 import org.jscsi.utils.Utils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 /**
  * <h1>AsynchronousMessageParser</h1>
  * <p>
  * Parser for the Asynchronous Message of the iSCSI Protocol (RFC3720).
- * 
+ *
  * @author Volker Wildi
  */
 public final class AsynchronousMessageParser extends TargetMessageParser {
@@ -127,38 +127,38 @@ public final class AsynchronousMessageParser extends TargetMessageParser {
 
         private final byte value;
 
-        private static Map<Byte , AsyncEventCodes> mapping;
+        private static Map<Byte, AsyncEventCodes> mapping;
 
         static {
-            AsyncEventCodes.mapping = new HashMap<Byte , AsyncEventCodes>();
+            AsyncEventCodes.mapping = new HashMap<Byte, AsyncEventCodes>();
             for (AsyncEventCodes s : values()) {
                 AsyncEventCodes.mapping.put(s.value, s);
             }
         }
 
-        private AsyncEventCodes (final byte newValue) {
+        private AsyncEventCodes(final byte newValue) {
 
             value = newValue;
         }
 
         /**
          * Returns the value of this enumeration.
-         * 
+         *
          * @return The value of this enumeration.
          */
-        public final byte value () {
+        public final byte value() {
 
             return value;
         }
 
         /**
          * Returns the constant defined for the given <code>value</code>.
-         * 
+         *
          * @param value The value to search for.
          * @return The constant defined for the given <code>value</code>. Or <code>null</code>, if this value is not
          *         defined by this enumeration.
          */
-        public static final AsyncEventCodes valueOf (final byte value) {
+        public static final AsyncEventCodes valueOf(final byte value) {
 
             return AsyncEventCodes.mapping.get(value);
         }
@@ -187,11 +187,11 @@ public final class AsynchronousMessageParser extends TargetMessageParser {
 
     /**
      * Default constructor, creates a new, empty <code>AsynchronousMessageParser</code> object.
-     * 
+     *
      * @param initProtocolDataUnit The reference <code>ProtocolDataUnit</code> instance, which contains this
      *            <code>AsynchronousMessageParser</code> subclass object.
      */
-    public AsynchronousMessageParser (final ProtocolDataUnit initProtocolDataUnit) {
+    public AsynchronousMessageParser(final ProtocolDataUnit initProtocolDataUnit) {
 
         super(initProtocolDataUnit);
     }
@@ -201,7 +201,7 @@ public final class AsynchronousMessageParser extends TargetMessageParser {
 
     /** {@inheritDoc} */
     @Override
-    public final String toString () {
+    public final String toString() {
 
         final StringBuilder sb = new StringBuilder(Constants.LOG_INITIAL_SIZE);
         Utils.printField(sb, "LUN", logicalUnitNumber, 1);
@@ -218,14 +218,14 @@ public final class AsynchronousMessageParser extends TargetMessageParser {
 
     /** {@inheritDoc} */
     @Override
-    public final DataSegmentFormat getDataSegmentFormat () {
+    public final DataSegmentFormat getDataSegmentFormat() {
 
         return DataSegmentFormat.BINARY;
     }
 
     /** {@inheritDoc} */
     @Override
-    public final void clear () {
+    public final void clear() {
 
         super.clear();
 
@@ -245,51 +245,51 @@ public final class AsynchronousMessageParser extends TargetMessageParser {
      * <p>
      * <code>AsyncVCode</code> is a vendor specific detail code that is only valid if the <code>AsyncEvent</code> field
      * indicates a vendor specific event. Otherwise, it is reserved.
-     * 
+     *
      * @return The Asynchronous vendor code.
      * @see AsyncEventCodes
      */
-    public final byte getAsyncVCode () {
+    public final byte getAsyncVCode() {
 
         return asyncVCode;
     }
 
     /**
      * Returns the asynchronous event code of this <code>AsynchronousMessageParser</code> object.
-     * 
+     *
      * @return The asynchronous event.
      */
-    public final AsyncEventCodes getAsyncEvent () {
+    public final AsyncEventCodes getAsyncEvent() {
 
         return asyncEvent;
     }
 
     /**
      * Returns the first parameter of this asynchronous message.
-     * 
+     *
      * @return The first parameter.
      */
-    public final short getParameter1 () {
+    public final short getParameter1() {
 
         return parameter1;
     }
 
     /**
      * Returns the second parameter of this asynchronous message.
-     * 
+     *
      * @return The second parameter.
      */
-    public final short getParameter2 () {
+    public final short getParameter2() {
 
         return parameter2;
     }
 
     /**
      * Returns the third parameter of this asynchronous message.
-     * 
+     *
      * @return The third parameter.
      */
-    public final short getParameter3 () {
+    public final short getParameter3() {
 
         return parameter3;
     }
@@ -299,7 +299,7 @@ public final class AsynchronousMessageParser extends TargetMessageParser {
 
     /** {@inheritDoc} */
     @Override
-    protected final void deserializeBytes36to39 (final int line) throws InternetSCSIException {
+    protected final void deserializeBytes36to39(final int line) throws InternetSCSIException {
 
         asyncEvent = AsyncEventCodes.valueOf((byte) (line & Constants.FIRST_BYTE_MASK));
         asyncVCode = (byte) (line & Constants.SECOND_BYTE_MASK);
@@ -308,7 +308,7 @@ public final class AsynchronousMessageParser extends TargetMessageParser {
 
     /** {@inheritDoc} */
     @Override
-    protected final void deserializeBytes40to43 (final int line) throws InternetSCSIException {
+    protected final void deserializeBytes40to43(final int line) throws InternetSCSIException {
 
         parameter2 = (short) (line & Constants.FIRST_TWO_BYTES_MASK);
         parameter3 = (short) (line & Constants.LAST_TWO_BYTES_MASK);
@@ -319,7 +319,7 @@ public final class AsynchronousMessageParser extends TargetMessageParser {
 
     /** {@inheritDoc} */
     @Override
-    protected final void checkIntegrity () throws InternetSCSIException {
+    protected final void checkIntegrity() throws InternetSCSIException {
 
         String exceptionMessage;
         do {
@@ -346,7 +346,7 @@ public final class AsynchronousMessageParser extends TargetMessageParser {
 
     /** {@inheritDoc} */
     @Override
-    protected final int serializeBytes36to39 () {
+    protected final int serializeBytes36to39() {
 
         int line = parameter1;
         line |= asyncVCode << Constants.TWO_BYTES_SHIFT;
@@ -357,7 +357,7 @@ public final class AsynchronousMessageParser extends TargetMessageParser {
 
     /** {@inheritDoc} */
     @Override
-    protected final int serializeBytes40to43 () {
+    protected final int serializeBytes40to43() {
 
         int line = parameter3;
         line |= parameter2 << Constants.TWO_BYTES_SHIFT;

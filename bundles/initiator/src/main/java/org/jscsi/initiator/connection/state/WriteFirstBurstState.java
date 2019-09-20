@@ -1,13 +1,13 @@
 /**
  * Copyright (c) 2012, University of Konstanz, Distributed Systems Group All rights reserved.
- * 
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
  * following conditions are met: * Redistributions of source code must retain the above copyright notice, this list of
  * conditions and the following disclaimer. * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation and/or other materials provided with the
  * distribution. * Neither the name of the University of Konstanz nor the names of its contributors may be used to
  * endorse or promote products derived from this software without specific prior written permission.
- * 
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
  * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -19,9 +19,6 @@
 package org.jscsi.initiator.connection.state;
 
 
-import java.util.LinkedList;
-import java.util.Queue;
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.initiator.connection.Connection;
 import org.jscsi.parser.OperationCode;
@@ -31,13 +28,16 @@ import org.jscsi.parser.datasegment.IDataSegmentIterator;
 import org.jscsi.parser.datasegment.IDataSegmentIterator.IDataSegmentChunk;
 import org.jscsi.parser.datasegment.OperationalTextKey;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 
 /**
  * <h1>WriteFirstBurstState</h1>
  * <p/>
  * This state handles a first Write Sending State, which sends at most <code>FirstBurstLength</code> bytes in the first
  * sequence.
- * 
+ *
  * @author Volker Wildi
  */
 public final class WriteFirstBurstState extends AbstractState {
@@ -64,14 +64,14 @@ public final class WriteFirstBurstState extends AbstractState {
 
     /**
      * Constructor to create a <code>WriteFirstBurstState</code> instance, which sends the first data sequence.
-     * 
+     *
      * @param initConnection This is the connection, which is used for the network transmission.
      * @param initIterator The next chunk of the data to send.
      * @param initTargetTransferTag The Target Transfer Tag to use as next.
      * @param initDataSequenceNumber The Data Sequence Number to use as next.
      * @param initBufferOffset The start offset of the data to send.
      */
-    public WriteFirstBurstState (final Connection initConnection, final IDataSegmentIterator initIterator, final int initTargetTransferTag, final int initDataSequenceNumber, final int initBufferOffset) {
+    public WriteFirstBurstState(final Connection initConnection, final IDataSegmentIterator initIterator, final int initTargetTransferTag, final int initDataSequenceNumber, final int initBufferOffset) {
 
         super(initConnection);
         iterator = initIterator;
@@ -84,7 +84,7 @@ public final class WriteFirstBurstState extends AbstractState {
     // --------------------------------------------------------------------------
 
     /** {@inheritDoc} */
-    public final void execute () throws InternetSCSIException {
+    public final void execute() throws InternetSCSIException {
 
         final Queue<ProtocolDataUnit> protocolDataUnits = new LinkedList<ProtocolDataUnit>();
 

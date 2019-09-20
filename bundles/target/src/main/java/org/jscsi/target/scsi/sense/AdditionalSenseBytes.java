@@ -1,9 +1,9 @@
 package org.jscsi.target.scsi.sense;
 
 
-import java.nio.ByteBuffer;
-
 import org.jscsi.target.scsi.ISerializable;
+
+import java.nio.ByteBuffer;
 
 
 /**
@@ -12,18 +12,18 @@ import org.jscsi.target.scsi.ISerializable;
  * <p>
  * Since the jSCSI Target currently does not have any additional information to send, the serialized length in bytes of
  * all ADDITTIONAL SENSE BYTES objects is fixed to zero.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public final class AdditionalSenseBytes implements ISerializable {
 
     private static final int SIZE = 0;
 
-    public void serialize (ByteBuffer byteBuffer, int index) {
+    public void serialize(ByteBuffer byteBuffer, int index) {
         // do nothing
     }
 
-    public int size () {
+    public int size() {
         return SIZE;
     }
 

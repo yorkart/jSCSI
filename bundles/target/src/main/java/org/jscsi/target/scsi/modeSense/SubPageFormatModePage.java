@@ -1,14 +1,14 @@
 package org.jscsi.target.scsi.modeSense;
 
 
-import java.nio.ByteBuffer;
-
 import org.jscsi.target.util.ReadWrite;
+
+import java.nio.ByteBuffer;
 
 
 /**
  * Instances of this class represent MODE PAGEs using the SUB-PAGE format.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public abstract class SubPageFormatModePage extends ModePage {
@@ -30,26 +30,26 @@ public abstract class SubPageFormatModePage extends ModePage {
 
     /**
      * The abstract constructor.
-     * 
+     *
      * @param parametersSaveable value of the PARAMETERS SAVEABLE bit
-     * @param pageCode general description of the contained information
-     * @param subPageCode more specific description of the contained information
-     * @param pageLength the value of the PAGE LENGTH field
+     * @param pageCode           general description of the contained information
+     * @param subPageCode        more specific description of the contained information
+     * @param pageLength         the value of the PAGE LENGTH field
      */
-    public SubPageFormatModePage (boolean parametersSaveable, int pageCode, final int subPageCode, int pageLength) {
+    public SubPageFormatModePage(boolean parametersSaveable, int pageCode, final int subPageCode, int pageLength) {
         super(parametersSaveable, true,// subPageFormat
-        pageCode, pageLength);
+                pageCode, pageLength);
         this.subPageCode = subPageCode;
     }
 
     @Override
-    protected final void serializeSubPageCode (final ByteBuffer buffer, final int index) {
+    protected final void serializeSubPageCode(final ByteBuffer buffer, final int index) {
         buffer.position(index + SUB_PAGE_CODE_INDEX);
         buffer.put((byte) subPageCode);
     }
 
     @Override
-    protected final void serializePageLength (ByteBuffer buffer, int index) {
+    protected final void serializePageLength(ByteBuffer buffer, int index) {
         buffer.position(index + PAGE_LENGTH_INDEX);
         ReadWrite.writeTwoByteInt(buffer,// buffer
                 pageLength,// value

@@ -1,11 +1,6 @@
 package org.jscsi.target.connection;
 
 
-import java.io.IOException;
-import java.nio.channels.ClosedChannelException;
-import java.nio.channels.SocketChannel;
-import java.security.DigestException;
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.BasicHeaderSegment;
 import org.jscsi.parser.InitiatorMessageParser;
@@ -22,11 +17,16 @@ import org.jscsi.target.util.Debug;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.nio.channels.ClosedChannelException;
+import java.nio.channels.SocketChannel;
+import java.security.DigestException;
+
 
 /**
  * Instances of this class are used by {@link Connection} objects for sending and receiving {@link ProtocolDataUnit}
  * objects.
- * 
+ *
  * @author Andreas Ergenzinger, University of Konstanz
  */
 public class TargetSenderWorker {
@@ -69,11 +69,11 @@ public class TargetSenderWorker {
 
     /**
      * Creates a new {@link TargetSenderWorker} object.
-     * 
-     * @param connection the connection that will use this object for sending and receiving PDUs
+     *
+     * @param connection    the connection that will use this object for sending and receiving PDUs
      * @param socketChannel used for sending and receiving serialized PDU to and from the target
      */
-    public TargetSenderWorker (final Connection connection, final SocketChannel socketChannel) {
+    public TargetSenderWorker(final Connection connection, final SocketChannel socketChannel) {
         this.connection = connection;
         this.socketChannel = socketChannel;
         protocolDataUnitFactory = new ProtocolDataUnitFactory();
@@ -86,33 +86,33 @@ public class TargetSenderWorker {
      * During the time this object is initialized, the {@link Connection#getSession()} method will return
      * <code>null</code>. Therefore {@link #session} must be set manually once the {@link TargetSession} object has been
      * created.
-     * 
+     *
      * @param session the session of the {@link #connection}
      */
-    void setSession (final TargetSession session) {
+    void setSession(final TargetSession session) {
         this.session = session;
     }
 
     /**
      * This method does all the necessary steps, which are needed when a connection should be closed.
-     * 
+     *
      * @throws IOException if an I/O error occurs.
      */
-    public final void close () throws IOException {
+    public final void close() throws IOException {
         socketChannel.close();
     }
 
     /**
      * Receives a <code>ProtocolDataUnit</code> from the socket and appends it to the end of the receiving queue of this
      * connection.
-     * 
+     *
      * @return Queue with the resulting units
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException           if an I/O error occurs.
      * @throws InternetSCSIException if any violation of the iSCSI-Standard emerge.
-     * @throws DigestException if a mismatch of the digest exists.
+     * @throws DigestException       if a mismatch of the digest exists.
      * @throws SettingsException
      */
-    ProtocolDataUnit receiveFromWire () throws DigestException , InternetSCSIException , IOException , SettingsException {
+    ProtocolDataUnit receiveFromWire() throws DigestException, InternetSCSIException, IOException, SettingsException {
 
         ProtocolDataUnit pdu;
         if (initialPdu) {
@@ -121,7 +121,7 @@ public class TargetSenderWorker {
              * NullPointerException. Initialize PDU with default values, i.e. no digests.
              */
             pdu = protocolDataUnitFactory.create(TextKeyword.NONE,// header
-                                                                  // digest
+                    // digest
                     TextKeyword.NONE);// data digest
         } else {
             // use negotiated or (now available) default settings
@@ -195,16 +195,16 @@ public class TargetSenderWorker {
 
     /**
      * Sends the given <code>ProtocolDataUnit</code> instance over the socket to the connected iSCSI Target.
-     * 
+     *
      * @param pdu The <code>ProtocolDataUnit</code> instances to send.
      * @throws InternetSCSIException if any violation of the iSCSI-Standard emerge.
-     * @throws IOException if an I/O error occurs.
-     * @throws InterruptedException if another caller interrupted the current caller before or while the current caller
-     *             was waiting for a notification. The interrupted status of the current caller is cleared when this
-     *             exception is thrown.
+     * @throws IOException           if an I/O error occurs.
+     * @throws InterruptedException  if another caller interrupted the current caller before or while the current caller
+     *                               was waiting for a notification. The interrupted status of the current caller is cleared when this
+     *                               exception is thrown.
      */
 
-    final void sendOverWire (final ProtocolDataUnit pdu) throws InternetSCSIException , IOException , InterruptedException {
+    final void sendOverWire(final ProtocolDataUnit pdu) throws InternetSCSIException, IOException, InterruptedException {
 
         // set sequence counters
         final TargetMessageParser parser = (TargetMessageParser) pdu.getBasicHeaderSegment().getParser();
@@ -212,7 +212,7 @@ public class TargetSenderWorker {
         parser.setMaximumCommandSequenceNumber(session.getMaximumCommandSequenceNumber().getValue());
         final boolean incrementSequenceNumber = parser.incrementSequenceNumber();
         if (incrementSequenceNumber) // set StatSN only if field is not reserved
-        parser.setStatusSequenceNumber(connection.getStatusSequenceNumber().getValue());
+            parser.setStatusSequenceNumber(connection.getStatusSequenceNumber().getValue());
 
         if (LOGGER.isDebugEnabled()) LOGGER.debug("Sending this PDU:\n" + pdu);
 

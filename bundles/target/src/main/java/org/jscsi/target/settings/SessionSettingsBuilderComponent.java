@@ -1,11 +1,10 @@
 package org.jscsi.target.settings;
 
 
-import java.util.Collection;
+import org.jscsi.target.settings.entry.Entry;
 
 import javax.naming.OperationNotSupportedException;
-
-import org.jscsi.target.settings.entry.Entry;
+import java.util.Collection;
 
 
 /**
@@ -14,9 +13,9 @@ import org.jscsi.target.settings.entry.Entry;
  * <p>
  * {@link SessionSettingsBuilderComponent} objects provide all session-wide parameters managed by the session's
  * {@link SessionSettingsNegotiator}.
- * 
- * @see Settings#Settings(ConnectionSettingsBuilderComponent, SessionSettingsBuilderComponent)
+ *
  * @author Andreas Ergenzinger
+ * @see Settings#Settings(ConnectionSettingsBuilderComponent, SessionSettingsBuilderComponent)
  */
 final class SessionSettingsBuilderComponent {
 
@@ -99,10 +98,10 @@ final class SessionSettingsBuilderComponent {
      * The {@link SessionSettingsBuilderComponent} constructor. The passed {@link Collection} must contain all
      * session-wide {@link Entry} objects, since the constructor will try to locate a specific {@link Entry} for each
      * member variable and copy its current value.
-     * 
+     *
      * @param entries a {@link Collection} containing all session-wide {@link Entry} objects
      */
-    SessionSettingsBuilderComponent (final long settingsId, final Collection<Entry> entries) {
+    SessionSettingsBuilderComponent(final long settingsId, final Collection<Entry> entries) {
         this.settingsId = settingsId;
         try {
             dataPduInOrder = SettingsNegotiator.getEntry(TextKeyword.DATA_PDU_IN_ORDER, entries).getBooleanValue();

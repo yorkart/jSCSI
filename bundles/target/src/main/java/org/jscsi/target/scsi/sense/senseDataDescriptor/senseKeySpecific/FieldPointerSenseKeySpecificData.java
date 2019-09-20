@@ -1,19 +1,19 @@
 package org.jscsi.target.scsi.sense.senseDataDescriptor.senseKeySpecific;
 
 
-import java.nio.ByteBuffer;
-
 import org.jscsi.target.scsi.cdb.CommandDescriptorBlock;
 import org.jscsi.target.util.BitManip;
 import org.jscsi.target.util.ReadWrite;
+
+import java.nio.ByteBuffer;
 
 
 /**
  * Field pointer sense-key-specific data is used to indicate that a certain field of a received command descriptor block
  * contained an illegal value.
- * 
- * @see CommandDescriptorBlock
+ *
  * @author Andreas Ergenzinger
+ * @see CommandDescriptorBlock
  */
 public final class FieldPointerSenseKeySpecificData extends SenseKeySpecificData {
 
@@ -44,7 +44,7 @@ public final class FieldPointerSenseKeySpecificData extends SenseKeySpecificData
      */
     private final short fieldPointer;
 
-    public FieldPointerSenseKeySpecificData (final boolean senseKeySpecificDataValid, final boolean commandData, final boolean bitPointerValid, final int bitPointer, final int fieldPointer) {
+    public FieldPointerSenseKeySpecificData(final boolean senseKeySpecificDataValid, final boolean commandData, final boolean bitPointerValid, final int bitPointer, final int fieldPointer) {
         super(senseKeySpecificDataValid);
         this.commandData = commandData;
         this.bitPointerValid = bitPointerValid;
@@ -53,10 +53,10 @@ public final class FieldPointerSenseKeySpecificData extends SenseKeySpecificData
     }
 
     @Override
-    protected void serializeSpecificFields (final ByteBuffer byteBuffer, final int index) {
+    protected void serializeSpecificFields(final ByteBuffer byteBuffer, final int index) {
 
         byte b = byteBuffer.get(index);// SKSV bit has already been set and has
-                                       // to be preserved
+        // to be preserved
 
         // command data
         b = BitManip.getByteWithBitSet(b, 6, commandData);

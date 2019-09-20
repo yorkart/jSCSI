@@ -1,10 +1,6 @@
 package org.jscsi.target.connection.stage.fullfeature;
 
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.security.DigestException;
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.BasicHeaderSegment;
 import org.jscsi.parser.ProtocolDataUnit;
@@ -12,6 +8,10 @@ import org.jscsi.parser.nop.NOPOutParser;
 import org.jscsi.target.connection.TargetPduFactory;
 import org.jscsi.target.connection.phase.TargetFullFeaturePhase;
 import org.jscsi.target.settings.SettingsException;
+
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.security.DigestException;
 
 
 /**
@@ -24,19 +24,19 @@ import org.jscsi.target.settings.SettingsException;
  * If either the NOP-OUT PDU's initiator or target transfer tag equals the reserved value of 0xffffffff, then no reply
  * will be sent, since the PDU is only supposed to acknowledge a changed ExpCmdSN, or serve as an echo to a NOP-IN ping
  * sent by the target.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public class PingStage extends TargetFullFeatureStage {
 
     private static final int RESERVED_TAG_VALUE = 0xffffffff;
 
-    public PingStage (TargetFullFeaturePhase targetFullFeaturePhase) {
+    public PingStage(TargetFullFeaturePhase targetFullFeaturePhase) {
         super(targetFullFeaturePhase);
     }
 
     @Override
-    public void execute (final ProtocolDataUnit pdu) throws IOException , InterruptedException , InternetSCSIException , DigestException , SettingsException {
+    public void execute(final ProtocolDataUnit pdu) throws IOException, InterruptedException, InternetSCSIException, DigestException, SettingsException {
 
         final BasicHeaderSegment bhs = pdu.getBasicHeaderSegment();
         final NOPOutParser parser = (NOPOutParser) bhs.getParser();
@@ -65,7 +65,7 @@ public class PingStage extends TargetFullFeatureStage {
 
         // send response
         final ProtocolDataUnit responsePdu = TargetPduFactory.createNopInPDU(0,// logicalUnitNumber,
-                                                                               // reserved
+                // reserved
                 bhs.getInitiatorTaskTag(),// initiatorTaskTag
                 RESERVED_TAG_VALUE,// targetTransferTag
                 responseDataSegment, parser.getExpectedStatusSequenceNumber());

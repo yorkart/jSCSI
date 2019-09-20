@@ -1,10 +1,10 @@
 package org.jscsi.target.scsi.inquiry;
 
 
-import java.nio.ByteBuffer;
-
 import org.jscsi.target.scsi.IResponseData;
 import org.jscsi.target.scsi.cdb.ScsiOperationCode;
+
+import java.nio.ByteBuffer;
 
 
 /**
@@ -14,7 +14,7 @@ import org.jscsi.target.scsi.cdb.ScsiOperationCode;
  * <p>
  * Not all fields in the serialized form of the singleton have a corresponding member variable, only those fields
  * containing ASCII information.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public final class StandardInquiryData implements IResponseData {
@@ -41,21 +41,21 @@ public final class StandardInquiryData implements IResponseData {
      */
     private static StandardInquiryData instance;
 
-    private StandardInquiryData () {
+    private StandardInquiryData() {
         // singleton pattern
     }
 
     /**
      * Returns the one and only {@link StandardInquiryData} object.
-     * 
+     *
      * @return the one and only {@link StandardInquiryData} object
      */
-    public static StandardInquiryData getInstance () {
+    public static StandardInquiryData getInstance() {
         if (instance == null) instance = new StandardInquiryData();
         return instance;
     }
 
-    public void serialize (ByteBuffer byteBuffer, int index) {
+    public void serialize(ByteBuffer byteBuffer, int index) {
 
         // *** byte 0 ****
         /*
@@ -163,13 +163,13 @@ public final class StandardInquiryData implements IResponseData {
     /**
      * Puts up to <i>fieldLength</i> of the passed {@link String} into a {@link ByteBuffer} and fills the remaining
      * bytes with zeros.
-     * 
-     * @param byteBuffer where the {@link String}'s characters will be copied
-     * @param string contains the characters to copy
-     * @param position where the first character of the {@link String} will be put
+     *
+     * @param byteBuffer  where the {@link String}'s characters will be copied
+     * @param string      contains the characters to copy
+     * @param position    where the first character of the {@link String} will be put
      * @param fieldLength the number of bytes in the {@link ByteBuffer} that will be overwritten
      */
-    private void putString (final ByteBuffer byteBuffer, final String string, final int position, final int fieldLength) {
+    private void putString(final ByteBuffer byteBuffer, final String string, final int position, final int fieldLength) {
         // set position
         byteBuffer.position(position);
         // put string characters
@@ -181,7 +181,7 @@ public final class StandardInquiryData implements IResponseData {
             byteBuffer.put((byte) 0);
     }
 
-    public int size () {
+    public int size() {
         return SIZE;
     }
 }

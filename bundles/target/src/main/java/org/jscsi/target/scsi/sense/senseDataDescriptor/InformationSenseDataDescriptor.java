@@ -1,16 +1,16 @@
 package org.jscsi.target.scsi.sense.senseDataDescriptor;
 
 
-import java.nio.ByteBuffer;
-
 import org.jscsi.target.scsi.sense.information.EightByteInformation;
 import org.jscsi.target.util.BitManip;
+
+import java.nio.ByteBuffer;
 
 
 /**
  * The information sense data descriptor provides information that is device-type or command specific and is defined in
  * a command standard.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public final class InformationSenseDataDescriptor extends SenseDataDescriptor {
@@ -42,17 +42,17 @@ public final class InformationSenseDataDescriptor extends SenseDataDescriptor {
 
     /**
      * The constructor.
-     * 
+     *
      * @param information {@link EightByteInformation} that may contain useful information
      */
-    public InformationSenseDataDescriptor (final EightByteInformation information) {
+    public InformationSenseDataDescriptor(final EightByteInformation information) {
         super(SenseDataDescriptorType.INFORMATION, // descriptor type
-        0x0a); // additional length
+                0x0a); // additional length
         this.information = information;
     }
 
     @Override
-    protected final void serializeSpecificFields (final ByteBuffer byteBuffer, final int index) {
+    protected final void serializeSpecificFields(final ByteBuffer byteBuffer, final int index) {
 
         byte b = 0;
 

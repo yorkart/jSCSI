@@ -1,16 +1,16 @@
 package org.jscsi.target.scsi.inquiry;
 
 
-import java.nio.ByteBuffer;
-
 import org.jscsi.target.scsi.ISerializable;
 import org.jscsi.target.util.BitManip;
+
+import java.nio.ByteBuffer;
 
 
 /**
  * Instances of this class contain information identifying the logical unit, SCSI target device containing the logical
  * unit, or access path (i.e., target port) used by the command and returned parameter data.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public final class IdentificationDescriptor implements ISerializable {
@@ -59,7 +59,7 @@ public final class IdentificationDescriptor implements ISerializable {
      */
     private final Identifier identifier;
 
-    public IdentificationDescriptor (final ProtocolIdentifier protocolIdentifier, final CodeSet codeSet, final boolean protocolIdentifierValid, final Association association, final IdentifierType identifierType, final Identifier identifier) {
+    public IdentificationDescriptor(final ProtocolIdentifier protocolIdentifier, final CodeSet codeSet, final boolean protocolIdentifierValid, final Association association, final IdentifierType identifierType, final Identifier identifier) {
         this.protocolIdentifier = protocolIdentifier;
         this.codeSet = codeSet;
         this.protocolIdentifierValid = protocolIdentifierValid;
@@ -68,7 +68,7 @@ public final class IdentificationDescriptor implements ISerializable {
         this.identifier = identifier;
     }
 
-    public void serialize (ByteBuffer byteBuffer, int index) {
+    public void serialize(ByteBuffer byteBuffer, int index) {
 
         // byte 0
         byteBuffer.position(index);
@@ -90,7 +90,7 @@ public final class IdentificationDescriptor implements ISerializable {
         identifier.serialize(byteBuffer, index + HEADER_LENGTH);
     }
 
-    public int size () {
+    public int size() {
         return identifier.size() + HEADER_LENGTH;
     }
 }

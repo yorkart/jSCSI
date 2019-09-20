@@ -1,8 +1,5 @@
 package org.jscsi.target.connection.stage.fullfeature;
 
-import java.io.IOException;
-import java.security.DigestException;
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.AbstractMessageParser;
 import org.jscsi.parser.BasicHeaderSegment;
@@ -25,10 +22,13 @@ import org.jscsi.target.util.Debug;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.security.DigestException;
+
 
 /**
  * A stage for processing <code>WRITE (6)</code> and <code>WRITE (10)</code> SCSI commands.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public final class WriteStage extends ReadOrWriteStage {
@@ -40,22 +40,24 @@ public final class WriteStage extends ReadOrWriteStage {
      */
     private int expectedDataSequenceNumber = 0;
 
-    public WriteStage (TargetFullFeaturePhase targetFullFeaturePhase) {
+    public WriteStage(TargetFullFeaturePhase targetFullFeaturePhase) {
         super(targetFullFeaturePhase);
     }
 
     /**
      * Is used for checking if the PDUs received in a Data-Out sequence actually are Data-Out PDU and if the PDUs have
      * been received in order.
-     * 
+     *
      * @param parser the {@link AbstractMessageParser} subclass instance retrieved from the {@link ProtocolDataUnit}'s
-     *            {@link BasicHeaderSegment}
+     *               {@link BasicHeaderSegment}
      * @throws InternetSCSIException if an unexpected PDU has been received
      */
-    private void checkDataOutParser (final AbstractMessageParser parser) throws InternetSCSIException {
+    private void checkDataOutParser(final AbstractMessageParser parser) throws InternetSCSIException {
         if (parser instanceof DataOutParser) {
             final DataOutParser p = (DataOutParser) parser;
-            if (p.getDataSequenceNumber() != expectedDataSequenceNumber++) { throw new InternetSCSIException("received erroneous PDU in data-out sequence, expected " + (expectedDataSequenceNumber - 1)); }
+            if (p.getDataSequenceNumber() != expectedDataSequenceNumber++) {
+                throw new InternetSCSIException("received erroneous PDU in data-out sequence, expected " + (expectedDataSequenceNumber - 1));
+            }
         } else if (parser instanceof NOPOutParser || parser instanceof SCSICommandParser) {
 
         } else {
@@ -69,7 +71,7 @@ public final class WriteStage extends ReadOrWriteStage {
     }
 
     @Override
-    public void execute (ProtocolDataUnit pdu) throws IOException , DigestException , InterruptedException , InternetSCSIException , SettingsException {
+    public void execute(ProtocolDataUnit pdu) throws IOException, DigestException, InterruptedException, InternetSCSIException, SettingsException {
 
         if (LOGGER.isDebugEnabled()) LOGGER.debug("Entering WRITE STAGE");
 
@@ -119,7 +121,7 @@ public final class WriteStage extends ReadOrWriteStage {
              */
             LOGGER.debug("illegal field in Write CDB");
             LOGGER.debug("CDB:\n" + Debug.byteBufferToString(parser.getCDB()));
-            
+
             // Not necessarily close the connection
 
             // create and send error PDU and leave stage
@@ -187,7 +189,7 @@ public final class WriteStage extends ReadOrWriteStage {
 
                 // receive DataOut PDUs
                 expectedDataSequenceNumber = 0;// reset sequence counter//FIXME
-                                               // fix in jSCSI Initiator
+                // fix in jSCSI Initiator
                 boolean solicitedDataCycleOver = false;
                 int bytesReceivedThisCycle = 0;
                 while (!solicitedDataCycleOver) {
@@ -227,7 +229,8 @@ public final class WriteStage extends ReadOrWriteStage {
                          * what is happening during the receiving of the unsolicited data PDU sequence, has not been put
                          * into a dedicated method.
                          */
-                        if (bhs.isFinalFlag() || bytesReceivedThisCycle >= desiredDataTransferLength) solicitedDataCycleOver = true;
+                        if (bhs.isFinalFlag() || bytesReceivedThisCycle >= desiredDataTransferLength)
+                            solicitedDataCycleOver = true;
                     }
                 }
                 bytesReceived += bytesReceivedThisCycle;

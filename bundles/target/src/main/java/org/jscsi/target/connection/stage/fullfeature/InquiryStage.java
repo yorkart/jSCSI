@@ -1,9 +1,6 @@
 package org.jscsi.target.connection.stage.fullfeature;
 
 
-import java.io.IOException;
-import java.security.DigestException;
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.BasicHeaderSegment;
 import org.jscsi.parser.ProtocolDataUnit;
@@ -20,22 +17,25 @@ import org.jscsi.target.util.Debug;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.security.DigestException;
+
 
 /**
  * A stage for processing <code>INQUIRY</code> SCSI commands.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public class InquiryStage extends TargetFullFeatureStage {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(InquiryStage.class);
 
-    public InquiryStage (TargetFullFeaturePhase targetFullFeaturePhase) {
+    public InquiryStage(TargetFullFeaturePhase targetFullFeaturePhase) {
         super(targetFullFeaturePhase);
     }
 
     @Override
-    public void execute (ProtocolDataUnit pdu) throws IOException , InterruptedException , InternetSCSIException , DigestException , SettingsException {
+    public void execute(ProtocolDataUnit pdu) throws IOException, InterruptedException, InternetSCSIException, DigestException, SettingsException {
 
         final BasicHeaderSegment bhs = pdu.getBasicHeaderSegment();
         final SCSICommandParser parser = (SCSICommandParser) bhs.getParser();
@@ -86,13 +86,13 @@ public class InquiryStage extends TargetFullFeatureStage {
                 final VitalProductDataPageName pageName = cdb.getPageCode().getVitalProductDataPageName();
 
                 switch (pageName) {// is never null
-                    case SUPPORTED_VPD_PAGES :
+                    case SUPPORTED_VPD_PAGES:
                         responseData = SupportedVpdPages.getInstance();
                         break;
-                    case DEVICE_IDENTIFICATION :
+                    case DEVICE_IDENTIFICATION:
                         responseData = session.getTargetServer().getDeviceIdentificationVpdPage();
                         break;
-                    default :
+                    default:
                         // The initiator must not request unsupported mode pages.
                         throw new InternetSCSIException();
                 }
@@ -100,7 +100,7 @@ public class InquiryStage extends TargetFullFeatureStage {
 
             // send response
             sendResponse(bhs.getInitiatorTaskTag(), parser.getExpectedDataTransferLength(), responseData);
-           
+
         }
 
     }

@@ -1,8 +1,5 @@
 package org.jscsi.target.connection.stage.fullfeature;
 
-import java.io.IOException;
-import java.security.DigestException;
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.BasicHeaderSegment;
 import org.jscsi.parser.ProtocolDataUnit;
@@ -21,17 +18,20 @@ import org.jscsi.target.settings.SettingsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.security.DigestException;
+
 
 public final class ReadCapacityStage extends TargetFullFeatureStage {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReadCapacityStage.class);
 
-    public ReadCapacityStage (final TargetFullFeaturePhase targetFullFeaturePhase) {
+    public ReadCapacityStage(final TargetFullFeaturePhase targetFullFeaturePhase) {
         super(targetFullFeaturePhase);
     }
 
     @Override
-    public void execute (ProtocolDataUnit pdu) throws IOException , InterruptedException , InternetSCSIException , DigestException , SettingsException {
+    public void execute(ProtocolDataUnit pdu) throws IOException, InterruptedException, InternetSCSIException, DigestException, SettingsException {
 
         // find out the type of READ CAPACITY command ((10) or (16))
         final BasicHeaderSegment bhs = pdu.getBasicHeaderSegment();
@@ -60,11 +60,11 @@ public final class ReadCapacityStage extends TargetFullFeatureStage {
             LOGGER.error("encountered " + cdb.getClass() + " in ReadCapacityStage with " + "LOGICAL BLOCK ADDRESS = " + cdb.getLogicalBlockAddress());
 
             final FieldPointerSenseKeySpecificData fp = new FieldPointerSenseKeySpecificData(true,// senseKeySpecificDataValid
-            true,// commandData (i.e. invalid field in CDB)
-            false,// bitPointerValid
-            0,// bitPointer, reserved since invalid
-            0);// fieldPointer to the SCSI OpCode field
-            final FieldPointerSenseKeySpecificData[] fpArray = new FieldPointerSenseKeySpecificData[] { fp };
+                    true,// commandData (i.e. invalid field in CDB)
+                    false,// bitPointerValid
+                    0,// bitPointer, reserved since invalid
+                    0);// fieldPointer to the SCSI OpCode field
+            final FieldPointerSenseKeySpecificData[] fpArray = new FieldPointerSenseKeySpecificData[]{fp};
             final ProtocolDataUnit responsePdu = createFixedFormatErrorPdu(fpArray,// senseKeySpecificData
                     AdditionalSenseCodeAndQualifier.LOGICAL_BLOCK_ADDRESS_OUT_OF_RANGE,// additionalSenseCodeAndQualifier
                     bhs.getInitiatorTaskTag(),// initiatorTaskTag
@@ -76,10 +76,10 @@ public final class ReadCapacityStage extends TargetFullFeatureStage {
             ReadCapacityParameterData parameterData;
             if (cdb instanceof ReadCapacity10Cdb)
                 parameterData = new ReadCapacity10ParameterData(session.getStorageModule().getSizeInBlocks(),// returnedLogicalBlockAddress
-                session.getStorageModule().getBlockSize());// logicalBlockLengthInBytes
+                        session.getStorageModule().getBlockSize());// logicalBlockLengthInBytes
             else
                 parameterData = new ReadCapacity16ParameterData(session.getStorageModule().getSizeInBlocks(),// returnedLogicalBlockAddress
-                session.getStorageModule().getBlockSize());// logicalBlockLengthInBytes
+                        session.getStorageModule().getBlockSize());// logicalBlockLengthInBytes
 
             sendResponse(bhs.getInitiatorTaskTag(),// initiatorTaskTag,
                     parser.getExpectedDataTransferLength(),// expectedDataTransferLength,

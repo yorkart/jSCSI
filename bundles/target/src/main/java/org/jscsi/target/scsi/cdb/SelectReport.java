@@ -9,7 +9,7 @@ import org.jscsi.target.scsi.lun.AddressMethod;
  * that shall be reported.
  * <p>
  * The field is two bits long.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public enum SelectReport {
@@ -41,26 +41,26 @@ public enum SelectReport {
      */
     private final byte value;
 
-    private SelectReport (final byte value) {
+    private SelectReport(final byte value) {
         this.value = value;
     }
 
     /**
      * Returns the serialized value of this {@link SelectReport} object.
-     * 
+     *
      * @return the serialized value of this {@link SelectReport} object
      */
-    public byte getValue () {
+    public byte getValue() {
         return value;
     }
 
     /**
      * Returns the {@link SelectReport} corresponding to the passed value.
-     * 
+     *
      * @param value the value of a SELECT REPORT field
      * @return the {@link SelectReport} corresponding to the passed value or <code>null</code> if none exists
      */
-    public final static SelectReport getValue (byte value) {
+    public final static SelectReport getValue(byte value) {
         if (0 <= value && value <= 2) return values()[value];
         return null;
     }

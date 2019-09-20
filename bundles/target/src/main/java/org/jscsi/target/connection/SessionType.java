@@ -6,7 +6,7 @@ import org.jscsi.target.settings.TextKeyword;
 
 /**
  * The {@link SessionType} of a {@link TargetSession} determines which stages can be reached in the Full Feature Phase.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public enum SessionType {
@@ -28,26 +28,26 @@ public enum SessionType {
 
     /**
      * The constructor.
-     * 
+     *
      * @param value the text parameter negotiation <i>value</i> (as used in <i>key-value</> pairs) describing this
-     *            session type.
+     *              session type.
      */
-    private SessionType (final String value) {
+    private SessionType(final String value) {
         this.value = value;
     }
 
-    public final String getValue () {
+    public final String getValue() {
         return value;
     }
 
     /**
      * Returns a {@link SessionType} based on the <i>value</i>, which must be either <code>Discovery</code> or
      * <code>Normal</code>. Otherwise the method will return <code>null</code>.
-     * 
+     *
      * @param value <code>Discovery</code> or <code>Normal</code>
      * @return the specified {@link SessionType} or <code>null</code>
      */
-    public static final SessionType getSessionType (final String value) {
+    public static final SessionType getSessionType(final String value) {
         final SessionType[] values = values();
         for (SessionType s : values)
             if (s.value.equals(value)) return s;

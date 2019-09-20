@@ -10,17 +10,17 @@ public class SynchronizedRandomAccessStorageModule extends RandomAccessStorageMo
 
     private static final int VIRTUAL_BLOCK_SIZE = 512;
 
-    public SynchronizedRandomAccessStorageModule (long sizeInBlocks, File file) throws FileNotFoundException {
+    public SynchronizedRandomAccessStorageModule(long sizeInBlocks, File file) throws FileNotFoundException {
         super(sizeInBlocks, file);
     }
 
     @Override
-    public synchronized void read (byte[] bytes, long storageIndex) throws IOException {
+    public synchronized void read(byte[] bytes, long storageIndex) throws IOException {
         super.read(bytes, storageIndex);
     }
 
     @Override
-    public synchronized void write (byte[] bytes, long storageIndex) throws IOException {
+    public synchronized void write(byte[] bytes, long storageIndex) throws IOException {
         super.write(bytes, storageIndex);
     }
 

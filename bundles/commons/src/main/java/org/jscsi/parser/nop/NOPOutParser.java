@@ -1,13 +1,13 @@
 /**
  * Copyright (c) 2012, University of Konstanz, Distributed Systems Group All rights reserved.
- * 
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
  * following conditions are met: * Redistributions of source code must retain the above copyright notice, this list of
  * conditions and the following disclaimer. * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation and/or other materials provided with the
  * distribution. * Neither the name of the University of Konstanz nor the names of its contributors may be used to
  * endorse or promote products derived from this software without specific prior written permission.
- * 
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
  * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -18,14 +18,12 @@
  */
 package org.jscsi.parser.nop;
 
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.Constants;
 import org.jscsi.parser.InitiatorMessageParser;
 import org.jscsi.parser.ProtocolDataUnit;
 import org.jscsi.parser.datasegment.DataSegmentFactory.DataSegmentFormat;
 import org.jscsi.utils.Utils;
-
 
 /**
  * <h1>NOPOutParser</h1>
@@ -60,33 +58,25 @@ import org.jscsi.utils.Utils;
  * <code>MaxRecvDataSegmentLength</code>. The length of ping data are indicated by the <code>DataSegmentLength</code>.
  * <code>0</code> is a valid value for the <code>DataSegmentLength</code> and indicates the absence of ping data.
  * </blockquote>
- * 
+ *
  * @author Volker Wildi
  */
 public final class NOPOutParser extends InitiatorMessageParser {
 
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
-
-    /** The TargetTransferTag. */
+    /**
+     * The TargetTransferTag.
+     */
     protected int targetTransferTag;
-
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
 
     /**
      * Default constructor, creates a new, empty <code>NOPOutParser</code> object.
-     * 
+     *
      * @param initProtocolDataUnit The reference <code>ProtocolDataUnit</code> instance, which contains this
-     *            <code>NOPOutParser</code> subclass object.
+     *                             <code>NOPOutParser</code> subclass object.
      */
-    public NOPOutParser (final ProtocolDataUnit initProtocolDataUnit) {
-
+    public NOPOutParser(final ProtocolDataUnit initProtocolDataUnit) {
         super(initProtocolDataUnit);
     }
-
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
 
     /**
      * A target assigned identifier for the operation.
@@ -97,21 +87,19 @@ public final class NOPOutParser extends InitiatorMessageParser {
      * <p>
      * When the Target Transfer Tag is set to a value other than <code>0xffffffff</code>, the LUN field MUST also be
      * copied from the NOP-In.
-     * 
+     *
      * @return The target transfer tag of this object.
      */
-    public final int getTargetTransferTag () {
+    public final int getTargetTransferTag() {
 
         return targetTransferTag;
     }
 
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
-
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public final String toString () {
-
+    public final String toString() {
         final StringBuilder sb = new StringBuilder(Constants.LOG_INITIAL_SIZE);
         Utils.printField(sb, "LUN", logicalUnitNumber, 1);
         Utils.printField(sb, "Target Transfer Tag", targetTransferTag, 1);
@@ -120,62 +108,54 @@ public final class NOPOutParser extends InitiatorMessageParser {
         return sb.toString();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public final DataSegmentFormat getDataSegmentFormat () {
-
+    public final DataSegmentFormat getDataSegmentFormat() {
         return DataSegmentFormat.BINARY;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public final void clear () {
-
+    public final void clear() {
         super.clear();
 
         targetTransferTag = 0x00000000;
     }
 
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
-
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    protected final void deserializeBytes1to3 (final int line) throws InternetSCSIException {
-
+    protected final void deserializeBytes1to3(final int line) throws InternetSCSIException {
         Utils.isReserved(line & Constants.LAST_THREE_BYTES_MASK);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    protected final void deserializeBytes20to23 (final int line) throws InternetSCSIException {
-
+    protected final void deserializeBytes20to23(final int line) throws InternetSCSIException {
         targetTransferTag = line;
     }
 
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
-
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    protected final void checkIntegrity () throws InternetSCSIException {
-
+    protected final void checkIntegrity() throws InternetSCSIException {
         // do nothing...
     }
 
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
-
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    protected final int serializeBytes20to23 () {
-
+    protected final int serializeBytes20to23() {
         return targetTransferTag;
     }
-
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
 
 }

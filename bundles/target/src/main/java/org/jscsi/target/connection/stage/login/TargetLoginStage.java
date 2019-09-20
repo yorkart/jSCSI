@@ -1,10 +1,6 @@
 package org.jscsi.target.connection.stage.login;
 
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.security.DigestException;
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.BasicHeaderSegment;
 import org.jscsi.parser.OperationCode;
@@ -19,6 +15,10 @@ import org.jscsi.target.settings.ConnectionSettingsNegotiator;
 import org.jscsi.target.settings.SettingsException;
 import org.jscsi.target.util.ReadWrite;
 
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.security.DigestException;
+
 
 /**
  * This class is an abstract super-class for stages of the {@link TargetLoginPhase} (see <code>Connection</code> for a
@@ -30,7 +30,7 @@ import org.jscsi.target.util.ReadWrite;
  * <p>
  * Of equal importance is the {@link #getNextStageNumber()} method, which must be used to find out which stage or phase
  * will follow this one.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public abstract class TargetLoginStage extends TargetStage {
@@ -42,7 +42,7 @@ public abstract class TargetLoginStage extends TargetStage {
 
     /**
      * The stage number used for describing this stage in Login Request PDUs.
-     * 
+     *
      * @see LoginRequestParser#getCurrentStageNumber()
      * @see LoginRequestParser#getNextStageNumber()
      */
@@ -56,7 +56,7 @@ public abstract class TargetLoginStage extends TargetStage {
     /**
      * A stage number describing which stage the initiator wants to transition to. This value will be updated with every
      * received PDU.
-     * 
+     *
      * @see #stageNumber
      */
     protected LoginStage requestedNextStageNumber;
@@ -66,18 +66,18 @@ public abstract class TargetLoginStage extends TargetStage {
      * <p>
      * This value is initialized with <code>null</code>, and will be changed in {@link #execute(ProtocolDataUnit)}, if
      * the stage was finished successfully.
-     * 
+     *
      * @see #stageNumber
      */
     protected LoginStage nextStageNumber;
 
     /**
      * The abstract constructor.
-     * 
+     *
      * @param targetLoginPhase the phase this stage is a part of
-     * @param stageNumber the stage number used for describing this stage in Login Request PDUs
+     * @param stageNumber      the stage number used for describing this stage in Login Request PDUs
      */
-    public TargetLoginStage (final TargetLoginPhase targetLoginPhase, final LoginStage stageNumber) {
+    public TargetLoginStage(final TargetLoginPhase targetLoginPhase, final LoginStage stageNumber) {
         super(targetLoginPhase);
         this.stageNumber = stageNumber;
         negotiator = connection.getConnectionSettingsNegotiator();
@@ -86,21 +86,22 @@ public abstract class TargetLoginStage extends TargetStage {
     /**
      * Returns <code>true</code>, if and only if the specified PDU is a Login Request PDU and the CSN and
      * InitiatorTaskTag fields check out.
-     * 
+     *
      * @param pdu the PDU to check
      * @return <code>true</code> if the PDU checks out
      */
-    protected boolean checkPdu (ProtocolDataUnit pdu) {
+    protected boolean checkPdu(ProtocolDataUnit pdu) {
         final BasicHeaderSegment bhs = pdu.getBasicHeaderSegment();
         final LoginRequestParser parser = (LoginRequestParser) bhs.getParser();
-        if (bhs.getOpCode() == OperationCode.LOGIN_REQUEST && parser.getCurrentStageNumber() == stageNumber && bhs.getInitiatorTaskTag() == initiatorTaskTag) return true;
+        if (bhs.getOpCode() == OperationCode.LOGIN_REQUEST && parser.getCurrentStageNumber() == stageNumber && bhs.getInitiatorTaskTag() == initiatorTaskTag)
+            return true;
         return false;
     }
 
     /**
      * Receives a sequence of Login Request PDUs (as indicated by the {@link LoginRequestParser#isContinueFlag()} and
      * returns the concatenated content of the text data segments.
-     * 
+     *
      * @return the concatenated content of the text data segments
      * @throws DigestException
      * @throws InternetSCSIException
@@ -108,7 +109,7 @@ public abstract class TargetLoginStage extends TargetStage {
      * @throws SettingsException
      * @throws InterruptedException
      */
-    protected final String receivePduSequence () throws DigestException , InternetSCSIException , IOException , SettingsException , InterruptedException {
+    protected final String receivePduSequence() throws DigestException, InternetSCSIException, IOException, SettingsException, InterruptedException {
         final ProtocolDataUnit pdu = connection.receivePdu();
         return receivePduSequence(pdu);
     }
@@ -116,7 +117,7 @@ public abstract class TargetLoginStage extends TargetStage {
     /**
      * Receives a sequence of Login Request PDUs (as indicated by the {@link LoginRequestParser#isContinueFlag()} and
      * returns the concatenated content of the text data segments.
-     * 
+     *
      * @param pdu the first PDU of the sequence
      * @return the concatenated content of the text data segments
      * @throws InternetSCSIException
@@ -125,7 +126,7 @@ public abstract class TargetLoginStage extends TargetStage {
      * @throws DigestException
      * @throws SettingsException
      */
-    protected final String receivePduSequence (ProtocolDataUnit pdu) throws InternetSCSIException , InterruptedException , IOException , DigestException , SettingsException {
+    protected final String receivePduSequence(ProtocolDataUnit pdu) throws InternetSCSIException, InterruptedException, IOException, DigestException, SettingsException {
 
         // StringBuilder for the key-value pairs received during this sequence
         final StringBuilder stringBuilder = new StringBuilder();
@@ -181,16 +182,16 @@ public abstract class TargetLoginStage extends TargetStage {
 
     /**
      * Sends a Login Response PDU sequence containing the specified <i>key-value</i> pairs.
-     * 
+     *
      * @param keyValuePairs contains <i>key-value</i> pairs to send
-     * @param nextStage indicates if the target is willing to transition to a different stage
+     * @param nextStage     indicates if the target is willing to transition to a different stage
      * @throws SettingsException
      * @throws InterruptedException
      * @throws IOException
      * @throws InternetSCSIException
      * @throws DigestException
      */
-    protected final void sendPduSequence (final String keyValuePairs, final LoginStage nextStage) throws SettingsException , InterruptedException , IOException , InternetSCSIException , DigestException {
+    protected final void sendPduSequence(final String keyValuePairs, final LoginStage nextStage) throws SettingsException, InterruptedException, IOException, InternetSCSIException, DigestException {
 
         // some variables
         ProtocolDataUnit pdu;
@@ -241,13 +242,13 @@ public abstract class TargetLoginStage extends TargetStage {
     /**
      * Sends a Login Response PDU informing the initiator that an error has occurred and that the connection must be
      * closed.
-     * 
+     *
      * @param errorStatus hints to the cause of the error
      * @throws InterruptedException
      * @throws IOException
      * @throws InternetSCSIException
      */
-    protected final void sendRejectPdu (final LoginStatus errorStatus) throws InterruptedException , IOException , InternetSCSIException {
+    protected final void sendRejectPdu(final LoginStatus errorStatus) throws InterruptedException, IOException, InternetSCSIException {
         final ProtocolDataUnit rejectPDU = TargetPduFactory.createLoginResponsePdu(false,// transit flag
                 false,// continueFlag
                 stageNumber,// currentStage
@@ -263,10 +264,10 @@ public abstract class TargetLoginStage extends TargetStage {
     /**
      * Returns a stage number describing which stage of phase must follow this stage, or <code>null</code> if the
      * initiator is not allowed to transition any further.
-     * 
+     *
      * @return an identifier of the next stage/phase or <code>null</code>
      */
-    public final LoginStage getNextStageNumber () {
+    public final LoginStage getNextStageNumber() {
         return nextStageNumber;
     }
 }

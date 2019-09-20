@@ -1,11 +1,6 @@
 package org.jscsi.target.connection.phase;
 
 
-import java.io.IOException;
-import java.security.DigestException;
-
-import javax.naming.OperationNotSupportedException;
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.BasicHeaderSegment;
 import org.jscsi.parser.ProtocolDataUnit;
@@ -32,12 +27,16 @@ import org.jscsi.target.settings.SettingsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.naming.OperationNotSupportedException;
+import java.io.IOException;
+import java.security.DigestException;
+
 
 /**
  * Objects of this class represent the Target Full Feature Phase of a connection.
- * 
- * @see TargetPhase
+ *
  * @author Andreas Ergenzinger
+ * @see TargetPhase
  */
 public final class TargetFullFeaturePhase extends TargetPhase {
 
@@ -56,26 +55,26 @@ public final class TargetFullFeaturePhase extends TargetPhase {
 
     /**
      * The constructor.
-     * 
+     *
      * @param connection {@inheritDoc}
      */
-    public TargetFullFeaturePhase (Connection connection) {
+    public TargetFullFeaturePhase(Connection connection) {
         super(connection);
 
     }
 
     /**
      * Starts the full feature phase.
-     * 
+     *
      * @return {@inheritDoc}
      * @throws OperationNotSupportedException {@inheritDoc}
-     * @throws IOException {@inheritDoc}
-     * @throws InterruptedException {@inheritDoc}
-     * @throws InternetSCSIException {@inheritDoc}
-     * @throws DigestException {@inheritDoc}
-     * @throws SettingsException {@inheritDoc}
+     * @throws IOException                    {@inheritDoc}
+     * @throws InterruptedException           {@inheritDoc}
+     * @throws InternetSCSIException          {@inheritDoc}
+     * @throws DigestException                {@inheritDoc}
+     * @throws SettingsException              {@inheritDoc}
      */
-    public boolean execute () throws DigestException , IOException , InterruptedException , InternetSCSIException , SettingsException {
+    public boolean execute() throws DigestException, IOException, InterruptedException, InternetSCSIException, SettingsException {
 
         running = true;
         while (running) {
@@ -85,58 +84,58 @@ public final class TargetFullFeaturePhase extends TargetPhase {
             // identify desired stage
             switch (bhs.getOpCode()) {
 
-                case SCSI_COMMAND :
+                case SCSI_COMMAND:
                     if (connection.getTargetSession().isNormalSession()) {
                         final SCSICommandParser parser = (SCSICommandParser) bhs.getParser();
                         ScsiOperationCode scsiOpCode = ScsiOperationCode.valueOf(parser.getCDB().get(0));
 
                         LOGGER.debug("scsiOpCode = " + scsiOpCode);// log SCSI
-                                                                   // Operation Code
+                        // Operation Code
 
                         if (scsiOpCode != null) {
                             switch (scsiOpCode) {
-                                case TEST_UNIT_READY :
+                                case TEST_UNIT_READY:
                                     stage = new TestUnitReadyStage(this);
                                     break;
-                                case REQUEST_SENSE :
+                                case REQUEST_SENSE:
                                     stage = new RequestSenseStage(this);
                                     break;
-                                case FORMAT_UNIT :
+                                case FORMAT_UNIT:
                                     stage = new FormatUnitStage(this);
                                     break;
-                                case INQUIRY :
+                                case INQUIRY:
                                     stage = new InquiryStage(this);
                                     break;
-                                case MODE_SELECT_6 :
+                                case MODE_SELECT_6:
                                     stage = null;
                                     scsiOpCode = null;
                                     break;
-                                case MODE_SENSE_6 :
+                                case MODE_SENSE_6:
                                     stage = new ModeSenseStage(this);
                                     if (!((ModeSenseStage) stage).canHandle(pdu)) {
                                         stage = null;
                                         scsiOpCode = null;
                                     }
                                     break;
-                                case SEND_DIAGNOSTIC :
+                                case SEND_DIAGNOSTIC:
                                     stage = new SendDiagnosticStage(this);
                                     break;
-                                case READ_CAPACITY_10 :// use common read capacity stage
-                                case READ_CAPACITY_16 :
+                                case READ_CAPACITY_10:// use common read capacity stage
+                                case READ_CAPACITY_16:
                                     stage = new ReadCapacityStage(this);
                                     break;
-                                case WRITE_6 :// use common write stage
-                                case WRITE_10 :
+                                case WRITE_6:// use common write stage
+                                case WRITE_10:
                                     stage = new WriteStage(this);
                                     break;
-                                case READ_6 :// use common read stage
-                                case READ_10 :
+                                case READ_6:// use common read stage
+                                case READ_10:
                                     stage = new ReadStage(this);
                                     break;
-                                case REPORT_LUNS :
+                                case REPORT_LUNS:
                                     stage = new ReportLunsStage(this);
                                     break;
-                                default :
+                                default:
                                     scsiOpCode = null;
 
                             }
@@ -151,20 +150,20 @@ public final class TargetFullFeaturePhase extends TargetPhase {
                     }
                     break; // SCSI_COMMAND
 
-                case SCSI_TM_REQUEST :
+                case SCSI_TM_REQUEST:
                     stage = new TMStage(this);
                     break;
-                case NOP_OUT :
+                case NOP_OUT:
                     stage = new PingStage(this);
                     break;
-                case TEXT_REQUEST :
+                case TEXT_REQUEST:
                     stage = new TextNegotiationStage(this);
                     break;
-                case LOGOUT_REQUEST :
+                case LOGOUT_REQUEST:
                     stage = new LogoutStage(this);
                     running = false;
                     break;
-                default :
+                default:
                     LOGGER.error("Received unsupported opcode for " + pdu.getBasicHeaderSegment().getOpCode());
                     stage = new UnsupportedOpCodeStage(this);
             }
@@ -175,11 +174,11 @@ public final class TargetFullFeaturePhase extends TargetPhase {
 
         return false;
     }
-    
+
     /**
      * Stopping this phases execution
      */
-    public void stop(){
+    public void stop() {
         this.running = false;
     }
 }

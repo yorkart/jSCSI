@@ -11,7 +11,7 @@ import org.jscsi.target.scsi.cdb.InquiryCDB;
  * To find out which page was requested, first create a new {@link PageCode} object using the value provided in the
  * command descriptor block's PAGE CODE field, and then call its {@link #getVitalProductDataPageName()} method. This
  * complicated approach is necessary, since some VPD pages are associated with more than just one page code.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public class PageCode {
@@ -23,28 +23,28 @@ public class PageCode {
 
     /**
      * Creates a new {@link PageCode} object.
-     * 
+     *
      * @param value the value of the PAGE CODE field
      */
-    public PageCode (final byte value) {
+    public PageCode(final byte value) {
         this.value = 255 & value;
     }
 
     /**
      * Returns the value of the PAGE CODE field.
-     * 
+     *
      * @return the value of the PAGE CODE field
      */
-    public final byte getValue () {
+    public final byte getValue() {
         return (byte) value;
     }
 
     /**
      * Returns the VPD page name associated with the PAGE CODE {@link #value}.
-     * 
+     *
      * @return the VPD page name associated with the PAGE CODE {@link #value}
      */
-    public final VitalProductDataPageName getVitalProductDataPageName () {
+    public final VitalProductDataPageName getVitalProductDataPageName() {
         if (value == 0x00) return VitalProductDataPageName.SUPPORTED_VPD_PAGES;// mandatory
         if (0x01 <= value && value <= 0x7f) return VitalProductDataPageName.ASCII_INFORMATION;
         if (value == 0x80) return VitalProductDataPageName.UNIT_SERIAL_NUMBER;
@@ -64,7 +64,7 @@ public class PageCode {
 
     /**
      * An enumeration of unique identifiers for Vital Product Data Pages.
-     * 
+     *
      * @author Andreas Ergenzinger
      */
     public enum VitalProductDataPageName {
@@ -123,7 +123,7 @@ public class PageCode {
     }
 
     @Override
-    public String toString () {
+    public String toString() {
         return "0x" + Integer.toHexString(value);
     }
 }

@@ -11,7 +11,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * <p>
  * A {@link BinaryLock} knows only two states, locked and unlocked. Attempts by the lock-holder to lock a
  * {@link BinaryLock} when locked or to unlock it when unlocked, will have no effect.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public class BinaryLock {
@@ -29,10 +29,10 @@ public class BinaryLock {
      * <p>
      * If the caller is already holding the lock, the method will immediately return <code>true</code> without any
      * changes.
-     * 
+     *
      * @return <code>true</code> if and only if the lock has been acquired
      */
-    public boolean lock () {
+    public boolean lock() {
         try {
             lock.lockInterruptibly();
             return true;
@@ -44,7 +44,7 @@ public class BinaryLock {
     /**
      * Releases the lock when called by the current lock holder;
      */
-    public void unlock () {
+    public void unlock() {
         if (lock.isHeldByCurrentThread()) {
             while (lock.getHoldCount() > 0)
                 lock.unlock();

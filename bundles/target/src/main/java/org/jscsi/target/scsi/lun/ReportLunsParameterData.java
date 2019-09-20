@@ -1,10 +1,10 @@
 package org.jscsi.target.scsi.lun;
 
 
-import java.nio.ByteBuffer;
-
 import org.jscsi.target.scsi.IResponseData;
 import org.jscsi.target.util.ReadWrite;
+
+import java.nio.ByteBuffer;
 
 
 /**
@@ -12,7 +12,7 @@ import org.jscsi.target.util.ReadWrite;
  * a zero or more logical unit numbers (LUNs) that identify some or all of the target's logical units, depending on the
  * <code>REPORT
  * LUNS</code> parameters.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public final class ReportLunsParameterData implements IResponseData {
@@ -34,15 +34,17 @@ public final class ReportLunsParameterData implements IResponseData {
 
     /**
      * The constructor.
-     * 
+     *
      * @param luns the LUNs to report
      */
-    public ReportLunsParameterData (LogicalUnitNumber... luns) {
+    public ReportLunsParameterData(LogicalUnitNumber... luns) {
         this.luns = luns;
-        if (luns != null) lunListLength = LogicalUnitNumber.SIZE * luns.length;
+        if (luns != null) {
+            lunListLength = LogicalUnitNumber.SIZE * luns.length;
+        }
     }
 
-    public void serialize (ByteBuffer byteBuffer, int index) {
+    public void serialize(ByteBuffer byteBuffer, int index) {
 
         // LUN list length
         ReadWrite.writeInt(lunListLength, byteBuffer, index);
@@ -55,7 +57,7 @@ public final class ReportLunsParameterData implements IResponseData {
         }
     }
 
-    public int size () {
+    public int size() {
         return HEADER_LENGTH + lunListLength;
     }
 }

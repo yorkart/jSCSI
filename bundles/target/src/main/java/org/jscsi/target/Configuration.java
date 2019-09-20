@@ -1,26 +1,6 @@
 package org.jscsi.target;
 
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.XMLConstants;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.dom.DOMResult;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
-import javax.xml.validation.Validator;
-
 import org.jscsi.target.scsi.lun.LogicalUnitNumber;
 import org.jscsi.target.settings.TextKeyword;
 import org.jscsi.target.storage.IStorageModule;
@@ -34,26 +14,45 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
 
+import javax.xml.XMLConstants;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.dom.DOMResult;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * Instances of {@link Configuration} provides access target-wide parameters, variables that are the same across all
  * sessions and connections that do not change after initialization and which play a role during text parameter
  * negotiation. Some of these parameters are provided or can be overridden by the content of an XML file -
  * <code>jscsi-target.xml</code>.
- * 
+ *
  * @author Andreas Ergenzinger, University of Konstanz
  */
 public class Configuration {
 
     public static final String ELEMENT_TARGET_LIST = "TargetList"; // Name of
-                                                                   // node that
-                                                                   // contains
-                                                                   // list of
+    // node that
+    // contains
+    // list of
     // targets
 
     public static final String ELEMENT_TARGET = "Target"; // Name for nodes
-                                                          // that contain a
-                                                          // target
+    // that contain a
+    // target
     // Target configuration elements
     public static final String ELEMENT_SYNCFILESTORAGE = "SyncFileStorage";
     public static final String ELEMENT_ASYNCFILESTORAGE = "AsyncFileStorage";
@@ -81,7 +80,9 @@ public class Configuration {
      */
     public static final File CONFIGURATION_SCHEMA_FILE = new File(CONFIG_DIR, "jscsi-target.xsd");
 
-    /** The file name, which contains all global settings. */
+    /**
+     * The file name, which contains all global settings.
+     */
     public static final File CONFIGURATION_CONFIG_FILE = new File(CONFIG_DIR, "jscsi-target.xml");
 
     // --------------------------------------------------------------------------
@@ -125,7 +126,7 @@ public class Configuration {
      * <code>true</code> in the configuration file. The default is <code>false</code>.
      */
     protected boolean allowSloppyNegotiation;// TODO fix in jSCSI Initiator and
-                                             // remove
+    // remove
 
     /**
      * The <code>TargetPortalGroupTag</code> parameter.
@@ -168,76 +169,75 @@ public class Configuration {
         targets = new ArrayList<>();
     }
 
-    public Configuration (final String pTargetAddress) throws IOException {
+    public Configuration(final String pTargetAddress) throws IOException {
         this(defaultTargetAddress(pTargetAddress), defaultTargetAddress(pTargetAddress), 3260);
     }
 
     private static String defaultTargetAddress(String pTargetAddress) throws UnknownHostException {
         if (pTargetAddress.equals("")) {
             return InetAddress.getLocalHost().getHostAddress();
-
         } else {
             return pTargetAddress;
         }
     }
 
-    public int getInMaxRecvTextPduSequenceLength () {
+    public int getInMaxRecvTextPduSequenceLength() {
         return maxRecvTextPduSequenceLength;
     }
 
-    public int getOutMaxRecvDataSegmentLength () {
+    public int getOutMaxRecvDataSegmentLength() {
         return outMaxRecvDataSegmentLength;
     }
 
-    public String getTargetAddress () {
+    public String getTargetAddress() {
         return targetAddress;
     }
 
-    public int getPort () {
+    public int getPort() {
         return port;
     }
 
-    public boolean getAllowSloppyNegotiation () {
+    public boolean getAllowSloppyNegotiation() {
         return allowSloppyNegotiation;
     }
 
-    public int getTargetPortalGroupTag () {
+    public int getTargetPortalGroupTag() {
         return targetPortalGroupTag;
     }
 
-    public LogicalUnitNumber getLogicalUnitNumber () {
+    public LogicalUnitNumber getLogicalUnitNumber() {
         return logicalUnitNumber;
     }
 
-    public List<Target> getTargets () {
+    public List<Target> getTargets() {
         return targets;
     }
 
-    public static Configuration create (final String pTargetAddress) throws SAXException , ParserConfigurationException , IOException {
+    public static Configuration create(final String pTargetAddress) throws SAXException, ParserConfigurationException, IOException {
         return create(CONFIGURATION_SCHEMA_FILE, CONFIGURATION_CONFIG_FILE, pTargetAddress);
     }
 
     /**
      * Reads the given configuration file in memory and creates a DOM representation.
      *
-     * @throws SAXException If this operation is supported but failed for some reason.
+     * @throws SAXException                 If this operation is supported but failed for some reason.
      * @throws ParserConfigurationException If a {@link DocumentBuilder} cannot be created which satisfies the
-     *             configuration requested.
-     * @throws IOException If any IO errors occur.
+     *                                      configuration requested.
+     * @throws IOException                  If any IO errors occur.
      */
-    public static Configuration create (final File schemaLocation, final File configFile, final String pTargetAddress) throws SAXException , ParserConfigurationException , IOException {
+    public static Configuration create(final File schemaLocation, final File configFile, final String pTargetAddress) throws SAXException, ParserConfigurationException, IOException {
         return create(new FileInputStream(schemaLocation), new FileInputStream(configFile), pTargetAddress);
     }
 
     /**
      * Reads the given configuration file in memory and creates a DOM representation.
      *
-     * @throws SAXException If this operation is supported but failed for some reason.
+     * @throws SAXException                 If this operation is supported but failed for some reason.
      * @throws ParserConfigurationException If a {@link DocumentBuilder} cannot be created which satisfies the
-     *             configuration requested.
-     * @throws IOException If any IO errors occur.
+     *                                      configuration requested.
+     * @throws IOException                  If any IO errors occur.
      */
-    public static Configuration create (final InputStream schemaLocation, final InputStream configFile, final String pTargetAddress) throws SAXException , ParserConfigurationException , IOException {
+    public static Configuration create(final InputStream schemaLocation, final InputStream configFile, final String pTargetAddress) throws SAXException, ParserConfigurationException, IOException {
         final SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         final Schema schema = schemaFactory.newSchema(new StreamSource(schemaLocation));
 
@@ -264,7 +264,6 @@ public class Configuration {
             synchronized (returnConfiguration.targets) {
                 returnConfiguration.targets.add(curTargetInfo);
             }
-
         }
 
         // else it is null
@@ -297,16 +296,17 @@ public class Configuration {
 
         // support sloppy text parameter negotiation (i.e. the jSCSI Initiator)?
         final Node allowSloppyNegotiationNode = root.getElementsByTagName(ELEMENT_ALLOWSLOPPYNEGOTIATION).item(0);
-        if (allowSloppyNegotiationNode == null)
+        if (allowSloppyNegotiationNode == null) {
             returnConfiguration.allowSloppyNegotiation = false;
-        else
+        } else {
             returnConfiguration.allowSloppyNegotiation = Boolean.parseBoolean(allowSloppyNegotiationNode.getTextContent());
+        }
 
         return returnConfiguration;
 
     }
 
-    protected static Target parseTargetElement (Element targetElement) throws IOException {
+    protected static Target parseTargetElement(Element targetElement) throws IOException {
         // TargetName
         // TargetName
         Node nextNode = chopWhiteSpaces(targetElement.getFirstChild());
@@ -325,13 +325,13 @@ public class Configuration {
         // Finding out the concrete storage
         Class<? extends IStorageModule> kind = null;
         switch (nextNode.getLocalName()) {
-            case ELEMENT_SYNCFILESTORAGE :
+            case ELEMENT_SYNCFILESTORAGE:
                 kind = SynchronizedRandomAccessStorageModule.class;
                 break;
-            case ELEMENT_ASYNCFILESTORAGE :
+            case ELEMENT_ASYNCFILESTORAGE:
                 kind = RandomAccessStorageModule.class;
                 break;
-            case ELEMENT_JCLOUDSSTORAGE :
+            case ELEMENT_JCLOUDSSTORAGE:
                 kind = JCloudsStorageModule.class;
                 break;
         }
@@ -357,10 +357,9 @@ public class Configuration {
         final IStorageModule module = RandomAccessStorageModule.open(new File(storageFilePath), storageLength, create, kind);
 
         return new Target(targetName, targetAlias, module);
-
     }
 
-    protected static Node chopWhiteSpaces (final Node node) {
+    private static Node chopWhiteSpaces(final Node node) {
         Node toIterate = node;
         while (toIterate instanceof Text && toIterate.getTextContent().trim().length() == 0) {
             toIterate = toIterate.getNextSibling();

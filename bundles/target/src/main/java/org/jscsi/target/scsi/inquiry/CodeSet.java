@@ -2,7 +2,7 @@ package org.jscsi.target.scsi.inquiry;
 
 /**
  * The CODE SET field indicates the code set used for the IDENTIFIER field.
- * 
+ *
  * <table border="1">
  * <tr>
  * <th>Code</th>
@@ -30,11 +30,11 @@ package org.jscsi.target.scsi.inquiry;
  * <td>RESERVED</td>
  * </tr>
  * </table>
- * 
+ * <p>
  * The CODE SET field has a length of four bits.
- * 
- * @see IdentificationDescriptor
+ *
  * @author Andreas Ergenzinger
+ * @see IdentificationDescriptor
  */
 public enum CodeSet {
     /**
@@ -54,7 +54,7 @@ public enum CodeSet {
      */
     UTF8_CODES((byte) 0x3);
 
-    private CodeSet (final byte value) {
+    private CodeSet(final byte value) {
         this.value = value;
     }
 
@@ -65,10 +65,10 @@ public enum CodeSet {
 
     /**
      * Returns serialized value of this object.
-     * 
+     *
      * @return serialized value of this object
      */
-    public final byte getValue () {
+    public final byte getValue() {
         return value;
     }
 }

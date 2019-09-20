@@ -2,7 +2,7 @@ package org.jscsi.target.scsi.sense;
 
 /**
  * Describes the type of error that makes it necessary to send of sense data to the initiator.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public enum ErrorType {

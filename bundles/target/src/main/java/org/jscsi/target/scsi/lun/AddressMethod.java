@@ -5,7 +5,7 @@ package org.jscsi.target.scsi.lun;
  * ADDRESSING) defines the contents of the ADDRESS METHOD SPECIFIC field.
  * <p>
  * This field is two bits long.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public enum AddressMethod {
@@ -39,28 +39,30 @@ public enum AddressMethod {
      */
     private final byte value;
 
-    private AddressMethod (final byte value) {
+    private AddressMethod(final byte value) {
         this.value = value;
     }
 
     /**
      * Returns the serialized value of the object.
-     * 
+     *
      * @return the serialized value of the object
      */
-    public byte getValue () {
+    public byte getValue() {
         return value;
     }
 
     /**
      * Returns the {@link AddressMethod} with a matching {@link #value} or <code>null</code> if no such
      * {@link AddressMethod} exists.
-     * 
+     *
      * @param value the value from a serialized ADDRESS METHOD field
      * @return the {@link AddressMethod} with a matching {@link #value} or or <code>null</code>
      */
-    public static AddressMethod getValue (int value) {
-        if (0 <= value && value <= 3) return values()[value];
+    public static AddressMethod getValue(int value) {
+        if (0 <= value && value <= 3) {
+            return values()[value];
+        }
         return null;
     }
 }

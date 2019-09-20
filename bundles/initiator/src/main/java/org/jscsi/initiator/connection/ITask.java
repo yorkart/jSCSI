@@ -1,13 +1,13 @@
 /**
  * Copyright (c) 2012, University of Konstanz, Distributed Systems Group All rights reserved.
- * 
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
  * following conditions are met: * Redistributions of source code must retain the above copyright notice, this list of
  * conditions and the following disclaimer. * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation and/or other materials provided with the
  * distribution. * Neither the name of the University of Konstanz nor the names of its contributors may be used to
  * endorse or promote products derived from this software without specific prior written permission.
- * 
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
  * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -19,17 +19,17 @@
 package org.jscsi.initiator.connection;
 
 
+import org.jscsi.initiator.connection.phase.IPhase;
+
 import java.nio.ByteBuffer;
 import java.util.concurrent.Callable;
-
-import org.jscsi.initiator.connection.phase.IPhase;
 
 
 /**
  * <h1>ITask</h1>
  * <p/>
  * This interface defines all methods, which a task has to support.
- * 
+ *
  * @author Sebastian Graf, University of Konstanz
  */
 public interface ITask {
@@ -37,11 +37,11 @@ public interface ITask {
     /**
      * This method is call, when this <code>ITask</code> instance is polled from the head of the <code>taskQueue</code>
      * to start a task.
-     * 
+     *
      * @return Void nothing at all
      * @throws Exception if any error occurs.
      */
-    public Void call () throws Exception;
+    public Void call() throws Exception;
 
 }
 
@@ -55,7 +55,7 @@ public interface ITask {
  * <h1>AbstractTask</h1>
  * <p/>
  * This abstract class defines all common methods, for the implementing Tasks.
- * 
+ *
  * @author Volker Wildi
  */
 abstract class AbstractTask implements ITask {
@@ -75,11 +75,11 @@ abstract class AbstractTask implements ITask {
     /**
      * Constructor to create a new, empty <code>AbstractTask</code> subclass instance, which is initialized with the
      * given values.
-     * 
+     *
      * @param initCaller The invoking caller of this task.
      * @param referenceSession The session, where this task is executed in.
      */
-    AbstractTask (final Session referenceSession) {
+    AbstractTask(final Session referenceSession) {
 
         session = referenceSession;
         phase = referenceSession.phase;
@@ -90,7 +90,7 @@ abstract class AbstractTask implements ITask {
 
     /** {@inheritDoc} */
     @Override
-    public final String toString () {
+    public final String toString() {
 
         return getClass().getSimpleName();
     }
@@ -102,11 +102,12 @@ abstract class AbstractTask implements ITask {
 // --------------------------------------------------------------------------
 // --------------------------------------------------------------------------
 // --------------------------------------------------------------------------
+
 /**
  * <h1>LoginTask</h1>
  * <p/>
  * This defines a LoginTask.
- * 
+ *
  * @author Volker Wildi
  */
 
@@ -117,11 +118,11 @@ final class LoginTask extends AbstractTask {
 
     /**
      * Constructor to create a new, empty <code>LoginTask</code> instance, which is initialized with the given values.
-     * 
-     * 
+     *
+     *
      * @param referenceSession The session, where this task is executed in.
      */
-    LoginTask (final Session referenceSession) {
+    LoginTask(final Session referenceSession) {
 
         super(referenceSession);
     }
@@ -130,7 +131,7 @@ final class LoginTask extends AbstractTask {
     // --------------------------------------------------------------------------
 
     /** {@inheritDoc} */
-    public final Void call () throws Exception {
+    public final Void call() throws Exception {
 
         if (phase.login(session)) {
             session.finishedTask(this);
@@ -145,11 +146,12 @@ final class LoginTask extends AbstractTask {
 // --------------------------------------------------------------------------
 // --------------------------------------------------------------------------
 // --------------------------------------------------------------------------
+
 /**
  * <h1>LogoutTask</h1>
  * <p/>
  * This defines a LogoutTask.
- * 
+ *
  * @author Volker Wildi
  */
 final class LogoutTask extends AbstractTask {
@@ -159,11 +161,11 @@ final class LogoutTask extends AbstractTask {
 
     /**
      * Constructor to create a new, empty <code>LogoutTask</code> instance, which is initialized with the given values.
-     * 
-     * 
+     *
+     *
      * @param referenceSession The session, where this task is executed in.
      */
-    LogoutTask (final Session referenceSession) {
+    LogoutTask(final Session referenceSession) {
 
         super(referenceSession);
     }
@@ -172,7 +174,7 @@ final class LogoutTask extends AbstractTask {
     // --------------------------------------------------------------------------
 
     /** {@inheritDoc} */
-    public final Void call () throws Exception {
+    public final Void call() throws Exception {
 
         if (phase.logoutSession(this, session)) {
             session.finishedTask(this);
@@ -186,11 +188,12 @@ final class LogoutTask extends AbstractTask {
 // --------------------------------------------------------------------------
 // --------------------------------------------------------------------------
 // --------------------------------------------------------------------------
+
 /**
  * <h1>IOTask</h1>
  * <p/>
  * This defines a IOTask.
- * 
+ *
  * @author Sebastian Graf, University of Konstanz
  */
 abstract class IOTask extends AbstractTask implements Callable<Void> {
@@ -212,14 +215,14 @@ abstract class IOTask extends AbstractTask implements Callable<Void> {
 
     /**
      * Constructor to create a new, empty <code>IOTask</code> instance, which is initialized with the given values.
-     * 
-     * 
+     *
+     *
      * @param referenceSession The session, where this task is executed in.
      * @param dst Destination ByteBuffer.
      * @param initLogicalBlockAddress Initial logical Block Address.
      * @param initLength length of buffer
      */
-    IOTask (final Session referenceSession, final ByteBuffer dst, final int initLogicalBlockAddress, final long initLength) {
+    IOTask(final Session referenceSession, final ByteBuffer dst, final int initLogicalBlockAddress, final long initLength) {
 
         super(referenceSession);
         buffer = dst;
@@ -237,7 +240,7 @@ abstract class IOTask extends AbstractTask implements Callable<Void> {
  * <h1>ReadTask</h1>
  * <p/>
  * This defines a ReadTask.
- * 
+ *
  * @author Volker Wildi
  */
 final class ReadTask extends IOTask {
@@ -247,13 +250,13 @@ final class ReadTask extends IOTask {
 
     /**
      * Constructor to create a new, empty <code>ReadTask</code> instance, which is initialized with the given values.
-     * 
+     *
      * @param referenceSession The session, where this task is executed in.
      * @param dst Destination ByteBuffer.
      * @param initLogicalBlockAddress Initial logical Block Address.
      * @param initLength length of buffer
      */
-    ReadTask (final Session referenceSession, final ByteBuffer dst, final int initLogicalBlockAddress, final long initLength) {
+    ReadTask(final Session referenceSession, final ByteBuffer dst, final int initLogicalBlockAddress, final long initLength) {
 
         super(referenceSession, dst, initLogicalBlockAddress, initLength);
     }
@@ -262,7 +265,7 @@ final class ReadTask extends IOTask {
     // --------------------------------------------------------------------------
 
     /** {@inheritDoc} */
-    public final Void call () throws Exception {
+    public final Void call() throws Exception {
 
         if (phase.read(this, session, buffer, logicalBlockAddress, length)) {
             session.finishedTask(this);
@@ -276,11 +279,12 @@ final class ReadTask extends IOTask {
 // --------------------------------------------------------------------------
 // --------------------------------------------------------------------------
 // --------------------------------------------------------------------------
+
 /**
  * <h1>WriteTask</h1>
  * <p/>
  * This defines a WriteTask.
- * 
+ *
  * @author Volker Wildi
  */
 final class WriteTask extends IOTask {
@@ -290,14 +294,14 @@ final class WriteTask extends IOTask {
 
     /**
      * Constructor to create a new, empty <code>WriteTask</code> instance, which is initialized with the given values.
-     * 
-     * 
+     *
+     *
      * @param referenceSession The session, where this task is executed in.
      * @param src Source ByteBuffer.
      * @param initLogicalBlockAddress Initial logical Block Address.
      * @param initLength length of buffer
      */
-    WriteTask (final Session referenceSession, final ByteBuffer src, final int initLogicalBlockAddress, final long initLength) {
+    WriteTask(final Session referenceSession, final ByteBuffer src, final int initLogicalBlockAddress, final long initLength) {
 
         super(referenceSession, src, initLogicalBlockAddress, initLength);
     }
@@ -306,7 +310,7 @@ final class WriteTask extends IOTask {
     // --------------------------------------------------------------------------
 
     /** {@inheritDoc} */
-    public final Void call () throws Exception {
+    public final Void call() throws Exception {
 
         if (phase.write(this, session, buffer, logicalBlockAddress, length)) {
             session.finishedTask(this);

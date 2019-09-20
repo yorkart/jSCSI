@@ -1,9 +1,6 @@
 package org.jscsi.target.connection.stage.fullfeature;
 
 
-import java.io.IOException;
-import java.security.DigestException;
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.BasicHeaderSegment;
 import org.jscsi.parser.ProtocolDataUnit;
@@ -26,23 +23,26 @@ import org.jscsi.target.scsi.sense.senseDataDescriptor.SenseDataDescriptor;
 import org.jscsi.target.scsi.sense.senseDataDescriptor.senseKeySpecific.FieldPointerSenseKeySpecificData;
 import org.jscsi.target.settings.SettingsException;
 
+import java.io.IOException;
+import java.security.DigestException;
+
 
 /**
  * A stage for processing <code>REQUEST SENSE</code> SCSI commands.
  * <p>
  * The <code>REQUEST SENSE</code> command requests that the device server transfer {@link SenseData} to the application
  * client.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public class RequestSenseStage extends TargetFullFeatureStage {
 
-    public RequestSenseStage (TargetFullFeaturePhase targetFullFeaturePhase) {
+    public RequestSenseStage(TargetFullFeaturePhase targetFullFeaturePhase) {
         super(targetFullFeaturePhase);
     }
 
     @Override
-    public void execute (ProtocolDataUnit pdu) throws IOException , InterruptedException , InternetSCSIException , DigestException , SettingsException {
+    public void execute(ProtocolDataUnit pdu) throws IOException, InterruptedException, InternetSCSIException, DigestException, SettingsException {
 
         final BasicHeaderSegment bhs = pdu.getBasicHeaderSegment();
         final SCSICommandParser parser = (SCSICommandParser) bhs.getParser();
@@ -62,35 +62,35 @@ public class RequestSenseStage extends TargetFullFeatureStage {
                 // descriptor format sense data has been requested
 
                 senseData = new DescriptorFormatSenseData(ErrorType.CURRENT,// errorType
-                SenseKey.ILLEGAL_REQUEST,// sense key
-                AdditionalSenseCodeAndQualifier.INVALID_FIELD_IN_CDB,// additional
-                                                                     // sense
-                                                                     // code
-                                                                     // and
-                                                                     // qualifier
-                new SenseDataDescriptor[0]);// sense data descriptors
+                        SenseKey.ILLEGAL_REQUEST,// sense key
+                        AdditionalSenseCodeAndQualifier.INVALID_FIELD_IN_CDB,// additional
+                        // sense
+                        // code
+                        // and
+                        // qualifier
+                        new SenseDataDescriptor[0]);// sense data descriptors
 
             } else {
                 // fixed format sense data has been requested
 
                 senseData = new FixedFormatSenseData(false,// valid
-                ErrorType.CURRENT,// error type
-                false,// file mark
-                false,// end of medium
-                false,// incorrect length indicator
-                SenseKey.ILLEGAL_REQUEST,// sense key
-                new FourByteInformation(),// information
-                new FourByteInformation(),// command specific
-                                          // information
-                AdditionalSenseCodeAndQualifier.INVALID_FIELD_IN_CDB,// additional
-                                                                     // sense
-                                                                     // code
-                                                                     // and
-                                                                     // qualifier
-                (byte) 0,// field replaceable unit code
-                illegalFieldPointers[0],// sense key specific data, only
-                                        // report first problem
-                new AdditionalSenseBytes());// additional sense bytes
+                        ErrorType.CURRENT,// error type
+                        false,// file mark
+                        false,// end of medium
+                        false,// incorrect length indicator
+                        SenseKey.ILLEGAL_REQUEST,// sense key
+                        new FourByteInformation(),// information
+                        new FourByteInformation(),// command specific
+                        // information
+                        AdditionalSenseCodeAndQualifier.INVALID_FIELD_IN_CDB,// additional
+                        // sense
+                        // code
+                        // and
+                        // qualifier
+                        (byte) 0,// field replaceable unit code
+                        illegalFieldPointers[0],// sense key specific data, only
+                        // report first problem
+                        new AdditionalSenseBytes());// additional sense bytes
             }
 
             responsePDU = TargetPduFactory.createSCSIResponsePdu(false,// bidirectionalReadResidualOverflow
@@ -105,7 +105,7 @@ public class RequestSenseStage extends TargetFullFeatureStage {
                     0,// bidirectionalReadResidualCount
                     0,// residualCount
                     new ScsiResponseDataSegment(senseData, parser.getExpectedDataTransferLength()));// data
-                                                                                                    // segment
+            // segment
 
         } else {
             /*
@@ -124,27 +124,27 @@ public class RequestSenseStage extends TargetFullFeatureStage {
                 // descriptor format sense data has been requested
 
                 senseData = new DescriptorFormatSenseData(ErrorType.CURRENT,// errorType
-                senseKey,// sense key
-                additionalSense,// additional sense code and qualifier
-                new SenseDataDescriptor[0]);// sense data descriptors
+                        senseKey,// sense key
+                        additionalSense,// additional sense code and qualifier
+                        new SenseDataDescriptor[0]);// sense data descriptors
 
             } else {
                 // fixed format sense data has been requested
 
                 senseData = new FixedFormatSenseData(false,// valid
-                ErrorType.CURRENT,// error type
-                false,// file mark
-                false,// end of medium
-                false,// incorrect length indicator
-                senseKey,// sense key
-                new FourByteInformation(),// information
-                new FourByteInformation(),// command specific
-                                          // information
-                additionalSense,// additional sense code and qualifier
-                (byte) 0,// field replaceable unit code
-                null,// sense key specific data, only report first
-                     // problem
-                null);// additional sense bytes
+                        ErrorType.CURRENT,// error type
+                        false,// file mark
+                        false,// end of medium
+                        false,// incorrect length indicator
+                        senseKey,// sense key
+                        new FourByteInformation(),// information
+                        new FourByteInformation(),// command specific
+                        // information
+                        additionalSense,// additional sense code and qualifier
+                        (byte) 0,// field replaceable unit code
+                        null,// sense key specific data, only report first
+                        // problem
+                        null);// additional sense bytes
             }
 
             responsePDU = TargetPduFactory.createSCSIResponsePdu(false,// bidirectionalReadResidualOverflow
@@ -159,7 +159,7 @@ public class RequestSenseStage extends TargetFullFeatureStage {
                     0,// bidirectionalReadResidualCount
                     0,// residualCount
                     new ScsiResponseDataSegment(senseData, parser.getExpectedDataTransferLength()));// data
-                                                                                                    // segment
+            // segment
         }
 
         // send response

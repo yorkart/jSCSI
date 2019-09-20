@@ -1,18 +1,18 @@
 package org.jscsi.target.scsi.modeSense;
 
 
-import java.nio.ByteBuffer;
-
 import org.jscsi.target.util.BitManip;
 import org.jscsi.target.util.ReadWrite;
+
+import java.nio.ByteBuffer;
 
 
 /**
  * A {@link ModeParameterHeader} sub-class. Instances of this class are sent in response to <code>MODE SENSE (10)</code>
  * SCSI commands and have a serialized length of 8 bytes.
- * 
- * @see LongLogicalBlockDescriptor
+ *
  * @author Andreas Ergenzinger
+ * @see LongLogicalBlockDescriptor
  */
 public final class ModeParameterHeader10 extends ModeParameterHeader {
 
@@ -35,19 +35,19 @@ public final class ModeParameterHeader10 extends ModeParameterHeader {
 
     /**
      * The constructor.
-     * 
-     * @param modeDataLength the total length in bytes of all MODE DATA list elements
+     *
+     * @param modeDataLength        the total length in bytes of all MODE DATA list elements
      * @param blockDescriptorLength the total length in bytes of all BLOCK DESCRIPTOR list elements
-     * @param longLba if <code>true</code> then the LONG LBA MODE PAREMETER LOGICAL BLOCK DESCRIPTOR format will be used
+     * @param longLba               if <code>true</code> then the LONG LBA MODE PAREMETER LOGICAL BLOCK DESCRIPTOR format will be used
      * @see LongLogicalBlockDescriptor
      * @see ShortLogicalBlockDescriptor
      */
-    public ModeParameterHeader10 (final int modeDataLength, final int blockDescriptorLength, final boolean longLba) {
+    public ModeParameterHeader10(final int modeDataLength, final int blockDescriptorLength, final boolean longLba) {
         super(modeDataLength, blockDescriptorLength);
         this.longLba = longLba;
     }
 
-    public void serialize (final ByteBuffer byteBuffer, final int index) {
+    public void serialize(final ByteBuffer byteBuffer, final int index) {
         ReadWrite.writeTwoByteInt(byteBuffer,// buffer
                 modeDataLength,// value
                 index);// index
@@ -62,7 +62,7 @@ public final class ModeParameterHeader10 extends ModeParameterHeader {
                 index + 6);// index
     }
 
-    public int size () {
+    public int size() {
         return SIZE;
     }
 

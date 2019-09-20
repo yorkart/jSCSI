@@ -10,7 +10,7 @@ import org.jscsi.target.scsi.sense.SenseData;
  * <p>
  * Vendor specific sense data descriptors types (values 0x80 to 0xff) and respective {@link SenseDataDescriptor}s are
  * not implemented!
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public enum SenseDataDescriptorType {
@@ -66,11 +66,11 @@ public enum SenseDataDescriptorType {
 
     private final byte value;
 
-    private SenseDataDescriptorType (byte value) {
+    private SenseDataDescriptorType(byte value) {
         this.value = value;
     }
 
-    public final byte getValue () {
+    public final byte getValue() {
         return value;
     }
 }

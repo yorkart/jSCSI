@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
  * {@link NumericalValueRange} representing the interval [5,10]. Intersecting an interval with a single number would
  * return the number, but only if the number is part of the interval. Generally, both methods return <code>null</code>
  * if there is no overlap.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public abstract class NumericalValue {
@@ -72,40 +72,44 @@ public abstract class NumericalValue {
 
     /**
      * Parses a {@link NumericalValue} from a {@link String}.
-     * 
+     *
      * @param value the {@link String} to parse.
      * @return a {@link NumericalValue} or <code>null</code> if the parameter does not match any of the supported
-     *         patterns (specified by the iSCSI standard).
+     * patterns (specified by the iSCSI standard).
      */
-    public static final NumericalValue parseNumericalValue (final String value) {
+    public static final NumericalValue parseNumericalValue(final String value) {
         // return SingleNumericalValue ...
         final Matcher singleValueMatcher = SINGLE_CONSTANT_PATTERN.matcher(value);
-        if (singleValueMatcher.matches()) return SingleNumericalValue.parseSingleNumericValue(value);
+        if (singleValueMatcher.matches()) {
+            return SingleNumericalValue.parseSingleNumericValue(value);
+        }
         // ... NumericalValueRange ...
         final Matcher rangeMatcher = NUMERICAL_RANGE_PATTERN.matcher(value);
-        if (rangeMatcher.matches()) return NumericalValueRange.parseNumericalValueRange(value);
+        if (rangeMatcher.matches()) {
+            return NumericalValueRange.parseNumericalValueRange(value);
+        }
         // ... or null
         return null;
     }
 
     /**
      * Returns a {@link NumericalValue} spanning the overlap of this {@link NumericalValue} and the parameter.
-     * 
+     *
      * @param value the {@link NumericalValue} to be intersected with this object
      * @return a {@link NumericalValue} representing the intersection of this {@link NumericalValue} with the parameter
      */
-    public NumericalValue intersect (final NumericalValue value) {
+    public NumericalValue intersect(final NumericalValue value) {
         return intersect(this, value);
     }
 
     /**
      * Returns a {@link NumericalValue} representing the intersection of the two parameters
-     * 
+     *
      * @param a the first {@link NumericalValue}
      * @param b the second {@link NumericalValue}
      * @return a {@link NumericalValue} representing the intersection of the two parameters
      */
-    public static NumericalValue intersect (final NumericalValue a, final NumericalValue b) {
+    public static NumericalValue intersect(final NumericalValue a, final NumericalValue b) {
         // early exit
         if (a == null || b == null) return null;
         // get ranges of a and b
@@ -131,28 +135,29 @@ public abstract class NumericalValue {
         // intersect ranges
         final int min = Math.max(aMin, bMin);
         final int max = Math.min(aMax, bMax);
-        if (min == max)
+        if (min == max) {
             return SingleNumericalValue.create(min);
-        else
+        } else {
             return NumericalValueRange.create(min, max);
+        }
     }
 
     /**
      * Returns true if the passed {@link Integer} or {@link NumericalValue} lies completely inside the interval
      * represented by this {@link NumericalValue} . If the parameter is not an {@link Integer} or a
      * {@link NumericalValue}, the method will return <code>false</code>.
-     * 
+     *
      * @param value the {@link Integer} or {@link NumericalValue} to check
      * @return <code>true</code> if the value is complete contained, <code>false</code> if it is not
      */
-    public abstract boolean contains (Object value);
+    public abstract boolean contains(Object value);
 
     /**
      * Returns true if the passed integer lies completely inside the interval represented by this {@link NumericalValue}
      * .
-     * 
+     *
      * @param value the integer to check
      * @return <code>true</code> if the value is complete contained, <code>false</code> if it is not
      */
-    public abstract boolean contains (int value);
+    public abstract boolean contains(int value);
 }

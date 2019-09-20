@@ -1,15 +1,15 @@
 package org.jscsi.target.scsi.cdb;
 
 
-import java.nio.ByteBuffer;
-
 import org.jscsi.target.util.BitManip;
 import org.jscsi.target.util.ReadWrite;
+
+import java.nio.ByteBuffer;
 
 
 /**
  * This class represents Command Descriptor Blocks for the <code>WRITE (6)</code> SCSI command.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public class Write10Cdb extends WriteCdb {
@@ -85,7 +85,7 @@ public class Write10Cdb extends WriteCdb {
      * The FUA ({@link #forceUnitAccess}) and FUA_NV ( {@link #forceUnitAccessNonVolatileCache}) bits together determine
      * where exactly the transmitted data shall be written (cache, non-volatile cache, or medium) before sending the
      * response.
-     * 
+     *
      * @see #forceUnitAccess
      */
     private final boolean forceUnitAccessNonVolatileCache;
@@ -101,11 +101,10 @@ public class Write10Cdb extends WriteCdb {
      * Support for the grouping function is indicated in the GROUP_SUP bit in the Extended INQUIRY Data VPD page (see
      * SPC-4).
      * <p>
-     * 
      */
     private final int groupNumber;
 
-    public Write10Cdb (ByteBuffer buffer) {
+    public Write10Cdb(ByteBuffer buffer) {
         super(buffer);// OPERATION CODE + CONTROL
 
         // RDPROTECT
@@ -127,42 +126,42 @@ public class Write10Cdb extends WriteCdb {
     }
 
     @Override
-    protected long deserializeLogicalBlockAddress (ByteBuffer buffer) {
+    protected long deserializeLogicalBlockAddress(ByteBuffer buffer) {
         return ReadWrite.readUnsignedInt(buffer, 2);
     }
 
     @Override
-    protected int deserializeTransferLength (ByteBuffer buffer) {
+    protected int deserializeTransferLength(ByteBuffer buffer) {
         return ReadWrite.readTwoByteInt(buffer, 7);
     }
 
-    public int getWriteProtect () {
+    public int getWriteProtect() {
         return writeProtect;
     }
 
-    public boolean disablePageOut () {
+    public boolean disablePageOut() {
         return disablePageOut;
     }
 
-    public boolean getForceUnitAccess () {
+    public boolean getForceUnitAccess() {
         return forceUnitAccess;
     }
 
-    public boolean getForceUnitAccessNonVolatile () {
+    public boolean getForceUnitAccessNonVolatile() {
         return forceUnitAccessNonVolatileCache;
     }
 
-    public int getGroupNumber () {
+    public int getGroupNumber() {
         return groupNumber;
     }
 
     @Override
-    protected int getLogicalBlockAddressFieldIndex () {
+    protected int getLogicalBlockAddressFieldIndex() {
         return 2;
     }
 
     @Override
-    protected int getTransferLengthFieldIndex () {
+    protected int getTransferLengthFieldIndex() {
         return 7;
     }
 

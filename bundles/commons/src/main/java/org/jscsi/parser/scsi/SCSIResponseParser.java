@@ -1,13 +1,13 @@
 /**
  * Copyright (c) 2012, University of Konstanz, Distributed Systems Group All rights reserved.
- * 
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
  * following conditions are met: * Redistributions of source code must retain the above copyright notice, this list of
  * conditions and the following disclaimer. * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation and/or other materials provided with the
  * distribution. * Neither the name of the University of Konstanz nor the names of its contributors may be used to
  * endorse or promote products derived from this software without specific prior written permission.
- * 
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
  * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -19,15 +19,15 @@
 package org.jscsi.parser.scsi;
 
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.Constants;
 import org.jscsi.parser.ProtocolDataUnit;
 import org.jscsi.parser.TargetMessageParser;
 import org.jscsi.parser.datasegment.DataSegmentFactory.DataSegmentFormat;
 import org.jscsi.utils.Utils;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -55,7 +55,7 @@ import org.jscsi.utils.Utils;
  * Segment MUST contain sense data for the failed command. <br/>
  * For some iSCSI responses, the response data segment MAY contain some response related information, (e.g., for a
  * target failure, it may contain a vendor specific detailed description of the failure).
- * 
+ *
  * @author Volker Wildi, University of Konstanz
  */
 public class SCSIResponseParser extends TargetMessageParser {
@@ -76,38 +76,38 @@ public class SCSIResponseParser extends TargetMessageParser {
 
         private final byte value;
 
-        private static Map<Byte , ServiceResponse> mapping;
+        private static Map<Byte, ServiceResponse> mapping;
 
         static {
-            ServiceResponse.mapping = new HashMap<Byte , ServiceResponse>();
+            ServiceResponse.mapping = new HashMap<Byte, ServiceResponse>();
             for (ServiceResponse s : values()) {
                 ServiceResponse.mapping.put(s.value, s);
             }
         }
 
-        private ServiceResponse (final byte newValue) {
+        private ServiceResponse(final byte newValue) {
 
             value = newValue;
         }
 
         /**
          * Returns the value of this enumeration.
-         * 
+         *
          * @return The value of this enumeration.
          */
-        public final byte value () {
+        public final byte value() {
 
             return value;
         }
 
         /**
          * Returns the constant defined for the given <code>value</code>.
-         * 
+         *
          * @param value The value to search for.
          * @return The constant defined for the given <code>value</code>. Or <code>null</code>, if this value is not
          *         defined by this enumeration.
          */
-        public static final ServiceResponse valueOf (final byte value) {
+        public static final ServiceResponse valueOf(final byte value) {
 
             return ServiceResponse.mapping.get(value);
         }
@@ -154,11 +154,11 @@ public class SCSIResponseParser extends TargetMessageParser {
 
     /**
      * Default constructor, creates a new, empty <code>SCSIResponseParser</code> object.
-     * 
+     *
      * @param initProtocolDataUnit The reference <code>ProtocolDataUnit</code> instance, which contains this
      *            <code>SCSIResponseParser</code> subclass object.
      */
-    public SCSIResponseParser (final ProtocolDataUnit initProtocolDataUnit) {
+    public SCSIResponseParser(final ProtocolDataUnit initProtocolDataUnit) {
 
         super(initProtocolDataUnit);
     }
@@ -168,7 +168,7 @@ public class SCSIResponseParser extends TargetMessageParser {
 
     /** {@inheritDoc} */
     @Override
-    public final String toString () {
+    public final String toString() {
 
         final StringBuilder sb = new StringBuilder(Constants.LOG_INITIAL_SIZE);
 
@@ -188,14 +188,14 @@ public class SCSIResponseParser extends TargetMessageParser {
 
     /** {@inheritDoc} */
     @Override
-    public final DataSegmentFormat getDataSegmentFormat () {
+    public final DataSegmentFormat getDataSegmentFormat() {
 
         return DataSegmentFormat.SCSI_RESPONSE;
     }
 
     /** {@inheritDoc} */
     @Override
-    public final void clear () {
+    public final void clear() {
 
         super.clear();
 
@@ -224,10 +224,10 @@ public class SCSIResponseParser extends TargetMessageParser {
      * initiator because the initiator’s Expected Bidirectional Read Transfer Length was not sufficient. If the u bit is
      * set, the Bidirectional Read Residual Count indicates the number of bytes that were not transferred to the
      * initiator out of the number of bytes expected to be transferred.
-     * 
+     *
      * @return The bidirectional read residual count of this <code>SCSIResponseParser</code> object.
      */
-    public final int getBidirectionalReadResidualCount () {
+    public final int getBidirectionalReadResidualCount() {
 
         return bidirectionalReadResidualCount;
     }
@@ -237,10 +237,10 @@ public class SCSIResponseParser extends TargetMessageParser {
      * <p>
      * This field MUST be <code>0</code> if the response code is not Command Completed at Target or the target sent no
      * Data-In PDUs for the command.
-     * 
+     *
      * @return The expected data sequence number of this <code>SCSIResponseParser</code> object.
      */
-    public final int getExpectedDataSequenceNumber () {
+    public final int getExpectedDataSequenceNumber() {
 
         return expectedDataSequenceNumber;
     }
@@ -249,10 +249,10 @@ public class SCSIResponseParser extends TargetMessageParser {
      * Returns the status of the Bidirectional Read Residual Overflow flag. In this case, the Bidirectional Read
      * Residual Count indicates the number of bytes that were not transferred to the initiator because the initiator’s
      * Expected Bidirectional Read Data Transfer Length was not sufficient.
-     * 
+     *
      * @return <code>true</code>, if it is set; else <code>false</code>.
      */
-    public final boolean isBidirectionalReadResidualOverflow () {
+    public final boolean isBidirectionalReadResidualOverflow() {
 
         return bidirectionalReadResidualOverflow;
     }
@@ -261,10 +261,10 @@ public class SCSIResponseParser extends TargetMessageParser {
      * Returns the status of the Bidirectional Read Residual Underflow flag. In this case, the Bidirectional Read
      * Residual Count indicates the number of bytes that were not transferred to the initiator out of the number of
      * bytes expected to be transferred.
-     * 
+     *
      * @return <code>true</code>, if it is set; else <code>false</code>.
      */
-    public final boolean isBidirectionalReadResidualUnderflow () {
+    public final boolean isBidirectionalReadResidualUnderflow() {
 
         return bidirectionalReadResidualUnderflow;
     }
@@ -276,10 +276,10 @@ public class SCSIResponseParser extends TargetMessageParser {
      * Residual Count indicates the number of bytes that were not transferred because the initiator’s Expected Data
      * Transfer Length was not sufficient. If the U bit is set, the Residual Count indicates the number of bytes that
      * were not transferred out of the number of bytes expected to be transferred.
-     * 
+     *
      * @return The residual count of this <code>SCSIResponseParser</code> object.
      */
-    public final int getResidualCount () {
+    public final int getResidualCount() {
 
         return residualCount;
     }
@@ -288,10 +288,10 @@ public class SCSIResponseParser extends TargetMessageParser {
      * Returns the status of the Residual Overflow flag. In this case, the Residual Count indicates the number of bytes
      * that were not transferred because the initiator’s Expected Data Transfer Length was not sufficient. For a
      * bidirectional operation, the Residual Count contains the residual for the write operation.
-     * 
+     *
      * @return <code>true</code>, if it is set; else <code>false</code>.
      */
-    public final boolean isResidualOverflow () {
+    public final boolean isResidualOverflow() {
 
         return residualOverflow;
     }
@@ -300,10 +300,10 @@ public class SCSIResponseParser extends TargetMessageParser {
      * Returns the status of the Residual Underflow flag. In this case, the Residual Count indicates the number of bytes
      * that were not transferred out of the number of bytes that were expected to be transferred. For a bidirectional
      * operation, the Residual Count contains the residual for the write operation.
-     * 
+     *
      * @return <code>true</code>, if it is set; else <code>false</code>.
      */
-    public final boolean isResidualUnderflow () {
+    public final boolean isResidualUnderflow() {
 
         return residualUnderflow;
     }
@@ -321,11 +321,11 @@ public class SCSIResponseParser extends TargetMessageParser {
      * If a PDU that includes SCSI status (Response PDU or Data-In PDU including status) does not arrive before the
      * session is terminated, the SCSI service response is SERVICE DELIVERY OR TARGET FAILURE. A non-zero Response field
      * indicates a failure to execute the command in which case the Status and Flag fields are undefined.
-     * 
+     *
      * @return The service response of this <code>SCSIResponseParser</code> object.
      * @see ServiceResponse
      */
-    public final ServiceResponse getResponse () {
+    public final ServiceResponse getResponse() {
 
         return response;
     }
@@ -339,10 +339,10 @@ public class SCSIResponseParser extends TargetMessageParser {
      * carrying the same SNACK Tag as the last issued R-Data SNACK for the SCSI command on the current connection.
      * <p>
      * For a detailed discussion on R-Data SNACK see Section 10.16 SNACK Request.
-     * 
+     *
      * @return The SNACK Tag of this <code>SCSIResponseParser</code> object.
      */
-    public final int getSNACKTag () {
+    public final int getSNACKTag() {
 
         return snackTag;
     }
@@ -350,52 +350,52 @@ public class SCSIResponseParser extends TargetMessageParser {
     /**
      * The Status field is used to report the SCSI status of the command (as specified in [SAM2]) and is only valid if
      * the Response Code is Command Completed at target.
-     * 
+     *
      * @return The status field of this <code>SCSIResponseParser</code> object.
      * @see org.jscsi.parser.scsi.SCSIStatus
      */
-    public final SCSIStatus getStatus () {
+    public final SCSIStatus getStatus() {
 
         return status;
     }
 
-    public final void setBidirectionalReadResidualCount (int bidirectionalReadResidualCount) {
+    public final void setBidirectionalReadResidualCount(int bidirectionalReadResidualCount) {
         this.bidirectionalReadResidualCount = bidirectionalReadResidualCount;
     }
 
-    public final void setBidirectionalReadResidualOverflow (boolean bidirectionalReadResidualOverflow) {
+    public final void setBidirectionalReadResidualOverflow(boolean bidirectionalReadResidualOverflow) {
         this.bidirectionalReadResidualOverflow = bidirectionalReadResidualOverflow;
     }
 
-    public final void setBidirectionalReadResidualUnderflow (boolean bidirectionalReadResidualUnderflow) {
+    public final void setBidirectionalReadResidualUnderflow(boolean bidirectionalReadResidualUnderflow) {
         this.bidirectionalReadResidualUnderflow = bidirectionalReadResidualUnderflow;
     }
 
-    public final void setExpectedDataSequenceNumber (int expectedDataSequenceNumber) {
+    public final void setExpectedDataSequenceNumber(int expectedDataSequenceNumber) {
         this.expectedDataSequenceNumber = expectedDataSequenceNumber;
     }
 
-    public final void setResidualCount (int residualCount) {
+    public final void setResidualCount(int residualCount) {
         this.residualCount = residualCount;
     }
 
-    public final void setResidualOverflow (boolean residualOverflow) {
+    public final void setResidualOverflow(boolean residualOverflow) {
         this.residualOverflow = residualOverflow;
     }
 
-    public final void setResidualUnderflow (boolean residualUnderflow) {
+    public final void setResidualUnderflow(boolean residualUnderflow) {
         this.residualUnderflow = residualUnderflow;
     }
 
-    public void setResponse (SCSIResponseParser.ServiceResponse response) {
+    public void setResponse(SCSIResponseParser.ServiceResponse response) {
         this.response = response;
     }
 
-    public final void setSNACKTag (int snackTag) {
+    public final void setSNACKTag(int snackTag) {
         this.snackTag = snackTag;
     }
 
-    public final void setStatus (SCSIStatus status) {
+    public final void setStatus(SCSIStatus status) {
         this.status = status;
     }
 
@@ -404,7 +404,7 @@ public class SCSIResponseParser extends TargetMessageParser {
 
     /** {@inheritDoc} */
     @Override
-    protected final void deserializeBytes1to3 (final int line) throws InternetSCSIException {
+    protected final void deserializeBytes1to3(final int line) throws InternetSCSIException {
 
         Utils.isReserved(line & RESERVED_FLAGS_MASK);
 
@@ -418,28 +418,28 @@ public class SCSIResponseParser extends TargetMessageParser {
 
     /** {@inheritDoc} */
     @Override
-    protected final void deserializeBytes20to23 (final int line) throws InternetSCSIException {
+    protected final void deserializeBytes20to23(final int line) throws InternetSCSIException {
 
         snackTag = line;
     }
 
     /** {@inheritDoc} */
     @Override
-    protected final void deserializeBytes36to39 (final int line) throws InternetSCSIException {
+    protected final void deserializeBytes36to39(final int line) throws InternetSCSIException {
 
         expectedDataSequenceNumber = line;
     }
 
     /** {@inheritDoc} */
     @Override
-    protected final void deserializeBytes40to43 (final int line) throws InternetSCSIException {
+    protected final void deserializeBytes40to43(final int line) throws InternetSCSIException {
 
         bidirectionalReadResidualCount = line;
     }
 
     /** {@inheritDoc} */
     @Override
-    protected final void deserializeBytes44to47 (final int line) throws InternetSCSIException {
+    protected final void deserializeBytes44to47(final int line) throws InternetSCSIException {
 
         residualCount = line;
     }
@@ -449,7 +449,7 @@ public class SCSIResponseParser extends TargetMessageParser {
 
     /** {@inheritDoc} */
     @Override
-    protected final void checkIntegrity () throws InternetSCSIException {
+    protected final void checkIntegrity() throws InternetSCSIException {
 
         String exceptionMessage;
         do {
@@ -504,7 +504,7 @@ public class SCSIResponseParser extends TargetMessageParser {
 
     /** {@inheritDoc} */
     @Override
-    protected final int serializeBytes1to3 () {
+    protected final int serializeBytes1to3() {
 
         int line = status.value();
         line |= response.value() << Constants.ONE_BYTE_SHIFT;
@@ -530,28 +530,28 @@ public class SCSIResponseParser extends TargetMessageParser {
 
     /** {@inheritDoc} */
     @Override
-    protected final int serializeBytes20to23 () {
+    protected final int serializeBytes20to23() {
 
         return snackTag;
     }
 
     /** {@inheritDoc} */
     @Override
-    protected final int serializeBytes36to39 () {
+    protected final int serializeBytes36to39() {
 
         return expectedDataSequenceNumber;
     }
 
     /** {@inheritDoc} */
     @Override
-    protected final int serializeBytes40to43 () {
+    protected final int serializeBytes40to43() {
 
         return bidirectionalReadResidualCount;
     }
 
     /** {@inheritDoc} */
     @Override
-    protected final int serializeBytes44to47 () {
+    protected final int serializeBytes44to47() {
 
         return residualCount;
     }

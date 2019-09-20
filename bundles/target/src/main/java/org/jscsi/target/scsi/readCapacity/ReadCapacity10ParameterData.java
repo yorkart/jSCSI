@@ -1,15 +1,15 @@
 package org.jscsi.target.scsi.readCapacity;
 
 
-import java.nio.ByteBuffer;
-
 import org.jscsi.target.util.ReadWrite;
+
+import java.nio.ByteBuffer;
 
 
 /**
  * <code>READ CAPACITY (10)</code> parameter data is sent in response to a successful <code> READ CAPACITY (10)</code>
  * SCSI command.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public final class ReadCapacity10ParameterData extends ReadCapacityParameterData {
@@ -28,11 +28,11 @@ public final class ReadCapacity10ParameterData extends ReadCapacityParameterData
      */
     private static final int SIZE = 8;
 
-    public ReadCapacity10ParameterData (final long returnedLogicalBlockAddress, final int logicalBlockLengthInBytes) {
+    public ReadCapacity10ParameterData(final long returnedLogicalBlockAddress, final int logicalBlockLengthInBytes) {
         super(returnedLogicalBlockAddress, logicalBlockLengthInBytes);
     }
 
-    public void serialize (ByteBuffer byteBuffer, int index) {
+    public void serialize(ByteBuffer byteBuffer, int index) {
         // returned logical block address
         // trim to size, and prevent overflow (initiator has to use READ
         // CAPACITY (16))
@@ -43,7 +43,7 @@ public final class ReadCapacity10ParameterData extends ReadCapacityParameterData
         ReadWrite.writeInt(logicalBlockLengthInBytes, byteBuffer, index + 4);
     }
 
-    public int size () {
+    public int size() {
         return SIZE;
     }
 

@@ -1,13 +1,13 @@
 /**
  * Copyright (c) 2012, University of Konstanz, Distributed Systems Group All rights reserved.
- * 
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
  * following conditions are met: * Redistributions of source code must retain the above copyright notice, this list of
  * conditions and the following disclaimer. * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation and/or other materials provided with the
  * distribution. * Neither the name of the University of Konstanz nor the names of its contributors may be used to
  * endorse or promote products derived from this software without specific prior written permission.
- * 
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
  * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -18,7 +18,6 @@
  */
 package org.jscsi.parser.text;
 
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.Constants;
 import org.jscsi.parser.InitiatorMessageParser;
@@ -26,46 +25,40 @@ import org.jscsi.parser.ProtocolDataUnit;
 import org.jscsi.parser.datasegment.DataSegmentFactory.DataSegmentFormat;
 import org.jscsi.utils.Utils;
 
-
 /**
  * <h1>TextRequestParser</h1>
  * <p>
  * This class parses a Text Request message defined in the iSCSI Standard (RFC3720).
- * 
+ *
  * @author Volker Wildi
  */
 public final class TextRequestParser extends InitiatorMessageParser {
 
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
-
-    /** Continue Flag. */
+    /**
+     * Continue Flag.
+     */
     private boolean continueFlag;
 
-    /** Target Transfer Tag. */
+    /**
+     * Target Transfer Tag.
+     */
     private int targetTransferTag;
-
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
 
     /**
      * Default constructor, creates a new, empty <code>TextRequestParser</code> object.
-     * 
+     *
      * @param initProtocolDataUnit The reference <code>ProtocolDataUnit</code> instance, which contains this
-     *            <code>TextRequestParser</code> subclass object.
+     *                             <code>TextRequestParser</code> subclass object.
      */
-    public TextRequestParser (final ProtocolDataUnit initProtocolDataUnit) {
-
+    public TextRequestParser(final ProtocolDataUnit initProtocolDataUnit) {
         super(initProtocolDataUnit);
     }
 
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
-
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public final String toString () {
-
+    public final String toString() {
         final StringBuilder sb = new StringBuilder(Constants.LOG_INITIAL_SIZE);
 
         Utils.printField(sb, "Continue Flag", continueFlag, 1);
@@ -76,50 +69,44 @@ public final class TextRequestParser extends InitiatorMessageParser {
         return sb.toString();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public final DataSegmentFormat getDataSegmentFormat () {
-
+    public final DataSegmentFormat getDataSegmentFormat() {
         return DataSegmentFormat.TEXT;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public final void clear () {
-
+    public final void clear() {
         super.clear();
 
         continueFlag = false;
         targetTransferTag = 0x00000000;
     }
 
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
-
     /**
      * Sets the Target Transfer Tag to a new one.
-     * 
+     *
      * @param newTargetTransferTag The new Target Transfer Tag.
      * @see #getTargetTransferTag()
      */
-    public final void setTargetTransferTag (final int newTargetTransferTag) {
-
+    public final void setTargetTransferTag(final int newTargetTransferTag) {
         targetTransferTag = newTargetTransferTag;
     }
-
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
 
     /**
      * When set to <code>1</code>, indicates that the text (set of key=value pairs) in this Text Request is not complete
      * (it will be continued on subsequent Text Requests); otherwise, it indicates that this Text Request ends a set of
      * key=value pairs. A Text Request with the <code>C</code> bit set to <code>1</code> MUST have the F bit set to
      * <code>0</code>.
-     * 
+     *
      * @return <code>True</code>, if the Continue Flag is set. Else <code>false</code>.
      */
-    public final boolean isContinueFlag () {
-
+    public final boolean isContinueFlag() {
         return continueFlag;
     }
 
@@ -142,39 +129,35 @@ public final class TextRequestParser extends InitiatorMessageParser {
      * SendTargets=All (F=1,TTT=0xffffffff) T->I Text &lt;part 1&gt; (F=0,TTT=0x12345678) I->T Text &lt;empty&gt; (F=1,
      * TTT=0x12345678) T->I Text &lt;part 2&gt; (F=0, TTT=0x12345678) I->T Text &lt;empty&gt; (F=1, TTT=0x12345678) ...
      * T->I Text &lt;part n&gt; (F=1, TTT=0xffffffff)
-     * 
+     *
      * @return The <em>Target Transfer Tag</em> of this <code>TextRequestParser</code> object.
      */
-    public final int getTargetTransferTag () {
-
+    public final int getTargetTransferTag() {
         return targetTransferTag;
     }
 
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
-
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    protected final void deserializeBytes1to3 (final int line) throws InternetSCSIException {
-
+    protected final void deserializeBytes1to3(final int line) throws InternetSCSIException {
         continueFlag = Utils.isBitSet(line & Constants.CONTINUE_FLAG_MASK);
         Utils.isReserved(line & ~Constants.CONTINUE_FLAG_MASK);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    protected final void deserializeBytes20to23 (final int line) throws InternetSCSIException {
-
+    protected final void deserializeBytes20to23(final int line) throws InternetSCSIException {
         targetTransferTag = line;
     }
 
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
-
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    protected final void checkIntegrity () throws InternetSCSIException {
-
+    protected final void checkIntegrity() throws InternetSCSIException {
         String exceptionMessage;
 
         do {
@@ -190,13 +173,11 @@ public final class TextRequestParser extends InitiatorMessageParser {
         throw new InternetSCSIException(exceptionMessage);
     }
 
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
-
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    protected final int serializeBytes1to3 () {
-
+    protected final int serializeBytes1to3() {
         int line = 0;
         if (continueFlag) {
             line |= Constants.CONTINUE_FLAG_MASK;
@@ -205,16 +186,12 @@ public final class TextRequestParser extends InitiatorMessageParser {
         return line;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    protected final int serializeBytes20to23 () {
-
+    protected final int serializeBytes20to23() {
         return targetTransferTag;
     }
-
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
 
 }

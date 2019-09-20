@@ -1,13 +1,13 @@
 /**
  * Copyright (c) 2012, University of Konstanz, Distributed Systems Group All rights reserved.
- * 
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
  * following conditions are met: * Redistributions of source code must retain the above copyright notice, this list of
  * conditions and the following disclaimer. * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation and/or other materials provided with the
  * distribution. * Neither the name of the University of Konstanz nor the names of its contributors may be used to
  * endorse or promote products derived from this software without specific prior written permission.
- * 
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
  * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -18,14 +18,12 @@
  */
 package org.jscsi.parser.login;
 
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.Constants;
 import org.jscsi.parser.ProtocolDataUnit;
 import org.jscsi.parser.TargetMessageParser;
 import org.jscsi.parser.datasegment.DataSegmentFactory.DataSegmentFormat;
 import org.jscsi.utils.Utils;
-
 
 /**
  * <h1>LoginResponseParser</h1>
@@ -59,15 +57,14 @@ import org.jscsi.utils.Utils;
  * negotiation keys). All keys in Chapter 12, except for the X extension formats, MUST be supported by iSCSI initiators
  * and targets. Keys in Chapter 11, only need to be supported when the function to which they refer is mandatory to
  * implement.
- * 
+ *
  * @author Volker Wildi
  */
 public final class LoginResponseParser extends TargetMessageParser {
 
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
-
-    /** The Continue Flag. */
+    /**
+     * The Continue Flag.
+     */
     private boolean continueFlag;
 
     /**
@@ -87,51 +84,57 @@ public final class LoginResponseParser extends TargetMessageParser {
      * <p>
      * If the target wishes to reject the Login Request for more than one reason, it should return the primary reason
      * for the rejection.
-     * 
+     *
      * @see LoginStatus
      */
     private LoginStatus status;
 
-    /** Current stage. */
+    /**
+     * Current stage.
+     */
     private LoginStage currentStageNumber;
 
-    /** Next stage. */
+    /**
+     * Next stage.
+     */
     private LoginStage nextStageNumber;
 
-    /** The maximum version. */
+    /**
+     * The maximum version.
+     */
     private int maxVersion;
 
-    /** The active version. */
+    /**
+     * The active version.
+     */
     private int activeVersion;
 
-    /** Initiator Session ID (ISID). */
+    /**
+     * Initiator Session ID (ISID).
+     */
     private ISID initiatorSessionID;
 
-    /** Target Session Identifying Handle (TSIH). */
+    /**
+     * Target Session Identifying Handle (TSIH).
+     */
     private short targetSessionIdentifyingHandle;
-
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
 
     /**
      * Default constructor, creates a new, empty <code>LoginResponseParser</code> object.
-     * 
+     *
      * @param initProtocolDataUnit The reference <code>ProtocolDataUnit</code> instance, which contains this
-     *            <code>LoginResponseParser</code> subclass object.
+     *                             <code>LoginResponseParser</code> subclass object.
      */
-    public LoginResponseParser (final ProtocolDataUnit initProtocolDataUnit) {
-
+    public LoginResponseParser(final ProtocolDataUnit initProtocolDataUnit) {
         super(initProtocolDataUnit);
         initiatorSessionID = new ISID();
     }
 
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
-
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public final String toString () {
-
+    public final String toString() {
         final StringBuilder sb = new StringBuilder(Constants.LOG_INITIAL_SIZE);
 
         Utils.printField(sb, "Continue Flag", continueFlag, 1);
@@ -147,10 +150,11 @@ public final class LoginResponseParser extends TargetMessageParser {
         return sb.toString();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public final void clear () {
-
+    public final void clear() {
         super.clear();
 
         continueFlag = false;
@@ -166,22 +170,21 @@ public final class LoginResponseParser extends TargetMessageParser {
         targetSessionIdentifyingHandle = 0;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public final DataSegmentFormat getDataSegmentFormat () {
-
+    public final DataSegmentFormat getDataSegmentFormat() {
         return DataSegmentFormat.TEXT;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public final boolean canHaveDigests () {
-
+    public final boolean canHaveDigests() {
         return false;
     }
-
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
 
     /**
      * The Status returned in a Login Response indicates the execution status of the Login Phase. The status includes:
@@ -195,11 +198,10 @@ public final class LoginResponseParser extends TargetMessageParser {
      * A non-zero Status-Class indicates an exception. In this case, Status-Class is sufficient for a simple initiator
      * to use when handling exceptions, without having to look at the Status-Detail. The Status-Detail allows
      * finer-grained exception handling for more sophisticated initiators and for better information for logging.
-     * 
+     *
      * @return The status of this LoginResponseParser object.
      */
-    public final LoginStatus getStatus () {
-
+    public final LoginStatus getStatus() {
         return status;
     }
 
@@ -208,33 +210,30 @@ public final class LoginResponseParser extends TargetMessageParser {
      * complete (it will be continued on subsequent Login Responses); otherwise, it indicates that this Login Response
      * ends a set of key=value pairs. A Login Response with the <code>C</code> bit set to <code>1</code> MUST have the
      * <code>T</code> bit set to <code>0</code>.
-     * 
+     *
      * @return The status of the Continue Flag of this <code>LoginResponseParser</code> object.
      */
-    public final boolean isContinueFlag () {
-
+    public final boolean isContinueFlag() {
         return continueFlag;
     }
 
     /**
      * Returns the <em>Current Stage Number</em> of this Login Response Message.
-     * 
+     *
      * @return Number of the Current Stage.
      * @see org.jscsi.parser.login.LoginStage
      */
-    public final LoginStage getCurrentStageNumber () {
-
+    public final LoginStage getCurrentStageNumber() {
         return currentStageNumber;
     }
 
     /**
      * Returns the Initiator Session ID (ISID) of this LoginResponseParser object.
-     * 
+     *
      * @return Returns the Initiator Session ID (ISID) of this LoginResponseParser object.
      * @see ISID
      */
-    public final ISID getInitiatorSessionID () {
-
+    public final ISID getInitiatorSessionID() {
         return initiatorSessionID;
     }
 
@@ -244,11 +243,10 @@ public final class LoginResponseParser extends TargetMessageParser {
      * All Login Responses within the Login Phase MUST carry the same Version-max.
      * <p>
      * The initiator MUST use the value presented as a response to the first Login Request.
-     * 
+     *
      * @return The maximum version of this login request message.
      */
-    public final int getMaxVersion () {
-
+    public final int getMaxVersion() {
         return maxVersion;
     }
 
@@ -261,22 +259,20 @@ public final class LoginResponseParser extends TargetMessageParser {
      * All Login Responses within the Login Phase MUST carry the same Version-active.
      * <p>
      * The initiator MUST use the value presented as a response to the first Login Request.
-     * 
+     *
      * @return The active version of this <code>LoginResponseParser</code> object.
      */
-    public final int getActiveVersion () {
-
+    public final int getActiveVersion() {
         return activeVersion;
     }
 
     /**
      * Returns the <em> Next Stage Number</em> of this Login Response Message.
-     * 
+     *
      * @return The Number of the Next Stage.
      * @see org.jscsi.parser.login.LoginStage
      */
-    public final LoginStage getNextStageNumber () {
-
+    public final LoginStage getNextStageNumber() {
         return nextStageNumber;
     }
 
@@ -286,45 +282,42 @@ public final class LoginResponseParser extends TargetMessageParser {
      * Final-Response in a new session, this field should be set to the TSIH provided by the initiator in the Login
      * Request. For a new session, the target MUST generate a non-zero TSIH and ONLY return it in the Login
      * Final-Response (see Section 5.3 Login Phase).
-     * 
+     *
      * @return Returns the Target Session Identifying Handle of this <code>LoginResponseParser</code> object.
      */
-    public final short getTargetSessionIdentifyingHandle () {
-
+    public final short getTargetSessionIdentifyingHandle() {
         return targetSessionIdentifyingHandle;
     }
 
-    public void setStatus (LoginStatus status) {
+    public void setStatus(LoginStatus status) {
         this.status = status;
     }
 
-    public void setContinueFlag (boolean continueFlag) {
+    public void setContinueFlag(boolean continueFlag) {
         this.continueFlag = continueFlag;
     }
 
-    public void setCurrentStageNumber (LoginStage currentStage) {
+    public void setCurrentStageNumber(LoginStage currentStage) {
         this.currentStageNumber = currentStage;
     }
 
-    public void setNextStageNumber (LoginStage nextStage) {
+    public void setNextStageNumber(LoginStage nextStage) {
         this.nextStageNumber = nextStage;
     }
 
-    public void setInitiatorSessionID (ISID initiatorSessionID) {
+    public void setInitiatorSessionID(ISID initiatorSessionID) {
         this.initiatorSessionID = initiatorSessionID;
     }
 
-    public void setTargetSessionIdentifyingHandle (short targetSessionIdentifyingHandle) {
+    public void setTargetSessionIdentifyingHandle(short targetSessionIdentifyingHandle) {
         this.targetSessionIdentifyingHandle = targetSessionIdentifyingHandle;
     }
 
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
-
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    protected final void deserializeBytes1to3 (final int line) throws InternetSCSIException {
-
+    protected final void deserializeBytes1to3(final int line) throws InternetSCSIException {
         continueFlag = Utils.isBitSet(line & Constants.CONTINUE_FLAG_MASK);
 
         Utils.isReserved(line & LoginConstants.BIT_11_AND_12_FLAG_MASK);
@@ -336,10 +329,11 @@ public final class LoginResponseParser extends TargetMessageParser {
         activeVersion = line & Constants.FOURTH_BYTE_MASK;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    protected final void deserializeBytes12to15 (final int line) throws InternetSCSIException {
-
+    protected final void deserializeBytes12to15(final int line) throws InternetSCSIException {
         // use the logicalUnitNumber variable as temporary storage
         logicalUnitNumber |= Utils.getUnsignedLong(line);
         initiatorSessionID.deserialize(logicalUnitNumber);
@@ -347,21 +341,20 @@ public final class LoginResponseParser extends TargetMessageParser {
         targetSessionIdentifyingHandle = (short) (line & Constants.LAST_TWO_BYTES_MASK);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    protected final void deserializeBytes36to39 (final int line) throws InternetSCSIException {
-
+    protected final void deserializeBytes36to39(final int line) throws InternetSCSIException {
         status = LoginStatus.valueOf((short) ((line & Constants.FIRST_TWO_BYTES_MASK) >>> Constants.TWO_BYTES_SHIFT));
         Utils.isReserved(line & Constants.LAST_TWO_BYTES_MASK);
     }
 
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
-
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    protected final void checkIntegrity () throws InternetSCSIException {
-
+    protected final void checkIntegrity() throws InternetSCSIException {
         String exceptionMessage;
         do {
             if (status != LoginStatus.SUCCESS && statusSequenceNumber != 0) {
@@ -376,13 +369,11 @@ public final class LoginResponseParser extends TargetMessageParser {
         throw new InternetSCSIException(exceptionMessage);
     }
 
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
-
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    protected final int serializeBytes1to3 () {
-
+    protected final int serializeBytes1to3() {
         int line = activeVersion;
         line |= maxVersion << Constants.ONE_BYTE_SHIFT;
         line |= nextStageNumber.value() << Constants.TWO_BYTES_SHIFT;
@@ -394,7 +385,9 @@ public final class LoginResponseParser extends TargetMessageParser {
         return line;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected final int serializeBytes8to11() {
         try {
@@ -406,9 +399,11 @@ public final class LoginResponseParser extends TargetMessageParser {
         return 0;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    protected final int serializeBytes12to15 () {
+    protected final int serializeBytes12to15() {
         try {
             return ((int) (initiatorSessionID.serialize()) & 0xffff0000) | this.targetSessionIdentifyingHandle;
         } catch (InternetSCSIException e) {
@@ -418,17 +413,15 @@ public final class LoginResponseParser extends TargetMessageParser {
         return 0;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    protected final int serializeBytes36to39 () {
-
+    protected final int serializeBytes36to39() {
         int line = 0;
         line |= status.value() << Constants.TWO_BYTES_SHIFT;
 
         return line;
     }
-
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
 
 }

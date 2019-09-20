@@ -1,14 +1,14 @@
 package org.jscsi.target.scsi.cdb;
 
 
-import java.nio.ByteBuffer;
-
 import org.jscsi.parser.scsi.SCSICommandParser;
 import org.jscsi.target.scsi.sense.AdditionalSenseCodeAndQualifier;
 import org.jscsi.target.scsi.sense.SenseData;
 import org.jscsi.target.scsi.sense.SenseKey;
 import org.jscsi.target.scsi.sense.senseDataDescriptor.senseKeySpecific.FieldPointerSenseKeySpecificData;
 import org.jscsi.target.util.BitManip;
+
+import java.nio.ByteBuffer;
 
 
 /**
@@ -20,7 +20,7 @@ import org.jscsi.target.util.BitManip;
  * <p>
  * Since all fields in the Control byte except for the Normal ACA bit are either reserved, obsolete, or vendor specific,
  * the NACA bit can be accessed directly from this class.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public abstract class CommandDescriptorBlock {
@@ -53,14 +53,14 @@ public abstract class CommandDescriptorBlock {
      * The passed {@link ByteBuffer} parameter <b>must</b> have a capacity &ge; the length of the specific command
      * descriptor block. Since this is assured by the {@link SCSICommandParser#getCDB()} method, which always returns
      * {@link ByteBuffer} objects with capacity 16, no checks will be performed.
-     * 
+     *
      * @param buffer contains the serialized CDB starting at index position zero
      */
-    public CommandDescriptorBlock (ByteBuffer buffer) {
+    public CommandDescriptorBlock(ByteBuffer buffer) {
         // SCSI OpCode
         scsiOperationCode = ScsiOperationCode.valueOf(buffer.get(0));
         if (scsiOperationCode == null) // unsupported OpCode
-        addIllegalFieldPointer(0);
+            addIllegalFieldPointer(0);
         /*
          * The above if block should never be entered, since unsupported operation codes in the CDB would have been
          * discovered during TargetFullFeatureStage selection in TargetFullFeaturePhase.execute().
@@ -72,19 +72,19 @@ public abstract class CommandDescriptorBlock {
         int controlByteIndex;
 
         switch (cdbType) {
-            case SIX_BYTE_COMMANDS :
+            case SIX_BYTE_COMMANDS:
                 controlByteIndex = 5;
                 break;
-            case TEN_BYTE_COMMANDS :
+            case TEN_BYTE_COMMANDS:
                 controlByteIndex = 9;
                 break;
-            case TWELVE_BYTE_COMMANDS :
+            case TWELVE_BYTE_COMMANDS:
                 controlByteIndex = 11;
                 break;
-            case SIXTEEN_BYTE_COMMANDS :
+            case SIXTEEN_BYTE_COMMANDS:
                 controlByteIndex = 15;
                 break;
-            default :
+            default:
                 controlByteIndex = -1;
                 /*
                  * Would lead to ArrayOutOfBoundsException, however, this will not happen, since unsupported group codes
@@ -98,7 +98,7 @@ public abstract class CommandDescriptorBlock {
         }
     }
 
-    public final ScsiOperationCode getScsiOperationCode () {
+    public final ScsiOperationCode getScsiOperationCode() {
         return scsiOperationCode;
     }
 
@@ -106,52 +106,52 @@ public abstract class CommandDescriptorBlock {
      * The NACA (Normal ACA) bit specifies whether an auto contingent allegiance (ACA) is established if the command
      * terminates with CHECK CONDITION status. A NACA bit set to one specifies that an ACA shall be established. A NACA
      * bit set to zero specifies that an ACA shall not be established.
-     * 
+     *
      * @return <code>true</code> if the Normal ACA bit in the CDB's Control byte is set and <code>false</code> if it is
-     *         not.
+     * not.
      */
-    public final boolean isNormalACA () {
+    public final boolean isNormalACA() {
         return normalAutoContingentAllegiance;
     }
 
     /**
      * Adds an instance {@link FieldPointerSenseKeySpecificData}, which specifies an illegal field by the position of
      * its first byte, to {@link #illegalFieldPointers}.
-     * 
+     *
      * @param byteNumber index of the first byte of the illegal field
      */
-    protected final void addIllegalFieldPointer (int byteNumber) {
+    protected final void addIllegalFieldPointer(int byteNumber) {
         final FieldPointerSenseKeySpecificData fp = new FieldPointerSenseKeySpecificData(true,// senseKeySpecificDataValid
-        true,// commandData (i.e. invalid field in CDB)
-        false,// bitPointerValid
-        0,// bitPointer
-        byteNumber);// fieldPointer
+                true,// commandData (i.e. invalid field in CDB)
+                false,// bitPointerValid
+                0,// bitPointer
+                byteNumber);// fieldPointer
         addIllegalFieldPointer(fp);
     }
 
     /**
      * Adds an instance {@link FieldPointerSenseKeySpecificData}, which specifies an illegal field by the position of
      * its first byte and its first bit, to {@link #illegalFieldPointers}.
-     * 
+     *
      * @param byteNumber index of the first byte of the illegal field
-     * @param bitNumber index of the first bit of the illegal field
+     * @param bitNumber  index of the first bit of the illegal field
      */
-    protected final void addIllegalFieldPointer (int byteNumber, int bitNumber) {
+    protected final void addIllegalFieldPointer(int byteNumber, int bitNumber) {
         FieldPointerSenseKeySpecificData fp = new FieldPointerSenseKeySpecificData(true,// senseKeySpecificDataValid
-        true,// commandData (i.e. invalid field in CDB)
-        true,// bitPointerValid
-        bitNumber,// bitPointer
-        byteNumber);// fieldPointer
+                true,// commandData (i.e. invalid field in CDB)
+                true,// bitPointerValid
+                bitNumber,// bitPointer
+                byteNumber);// fieldPointer
         addIllegalFieldPointer(fp);
     }
 
     /**
      * Adds a {@link FieldPointerSenseKeySpecificData} object to {@link #illegalFieldPointers}. Initializes and grows
      * the array if necessary.
-     * 
+     *
      * @param illegalFieldPointer the object to add
      */
-    private final void addIllegalFieldPointer (final FieldPointerSenseKeySpecificData illegalFieldPointer) {
+    private final void addIllegalFieldPointer(final FieldPointerSenseKeySpecificData illegalFieldPointer) {
         // grow array?
         if (illegalFieldPointers == null) illegalFieldPointers = new FieldPointerSenseKeySpecificData[10];
         final int size = getIllegalFieldPointerSize();
@@ -169,10 +169,10 @@ public abstract class CommandDescriptorBlock {
 
     /**
      * Returns the number of elements stored in {@link #illegalFieldPointers}.
-     * 
+     *
      * @return the number of elements stored in {@link #illegalFieldPointers}
      */
-    private final int getIllegalFieldPointerSize () {
+    private final int getIllegalFieldPointerSize() {
         if (illegalFieldPointers == null) return 0;
         int size = 0;
         while (size < illegalFieldPointers.length) {
@@ -189,10 +189,10 @@ public abstract class CommandDescriptorBlock {
      * array of appropriate {@link FieldPointerSenseKeySpecificData}, that have to be enclosed in the {@link SenseData}
      * returned to the initiator (with sense key {@link SenseKey#ILLEGAL_REQUEST} and additional sense code and sense
      * code qualifier {@link AdditionalSenseCodeAndQualifier#INVALID_FIELD_IN_CDB}).
-     * 
+     *
      * @return <code>null</code> or an array of appropriate {@link FieldPointerSenseKeySpecificData}
      */
-    public final FieldPointerSenseKeySpecificData[] getIllegalFieldPointers () {
+    public final FieldPointerSenseKeySpecificData[] getIllegalFieldPointers() {
         if (illegalFieldPointers == null) return null;
         // returned trimmed array without null values
         final int size = getIllegalFieldPointerSize();

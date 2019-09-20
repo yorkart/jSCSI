@@ -1,13 +1,13 @@
 /**
  * Copyright (c) 2012, University of Konstanz, Distributed Systems Group All rights reserved.
- * 
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
  * following conditions are met: * Redistributions of source code must retain the above copyright notice, this list of
  * conditions and the following disclaimer. * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation and/or other materials provided with the
  * distribution. * Neither the name of the University of Konstanz nor the names of its contributors may be used to
  * endorse or promote products derived from this software without specific prior written permission.
- * 
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
  * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -19,8 +19,6 @@
 package org.jscsi.initiator.connection.phase;
 
 
-import java.nio.ByteBuffer;
-
 import org.jscsi.initiator.connection.ITask;
 import org.jscsi.initiator.connection.Session;
 import org.jscsi.initiator.connection.TargetCapacityInformations;
@@ -28,10 +26,12 @@ import org.jscsi.parser.login.LoginStage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.nio.ByteBuffer;
+
 
 /**
  * A State Pattern. Each phase of the iSCSI Protocol must implement this interface.
- * 
+ *
  * @author Volker Wildi
  */
 public interface IPhase {
@@ -41,37 +41,37 @@ public interface IPhase {
 
     /**
      * This method handles the login of a connection (if possible).
-     * 
+     *
      * @param session The context object of the current session.
      * @throws Exception if any error occurs.
      * @return true if task is finished
      */
-    public boolean login (final Session session) throws Exception;
+    public boolean login(final Session session) throws Exception;
 
     /**
      * This method handles the logout of a connection (if possible) (if possible in the current phase).
-     * 
+     *
      * @param session The context object of the current session.
      * @param connectionID The ID of the connection to close.
      * @return true if task is finished
      * @throws Exception if any error occurs.
      */
-    public boolean logoutConnection (final Session session, final short connectionID) throws Exception;
+    public boolean logoutConnection(final Session session, final short connectionID) throws Exception;
 
     /**
      * This method handles the logout of the whole session (with all its connections) (if possible in the current
      * phase).
-     * 
+     *
      * @param task The calling Task
      * @param session The context object of the current session.
      * @return true if task is finished
      * @throws Exception if any error occurs.
      */
-    public boolean logoutSession (final ITask task, final Session session) throws Exception;
+    public boolean logoutSession(final ITask task, final Session session) throws Exception;
 
     /**
      * This method handles a read operation within this session (if possible in the current phase).
-     * 
+     *
      * @param task The calling Task
      * @param session The context object of the current session.
      * @param dst The buffer to store the read data.
@@ -80,11 +80,11 @@ public interface IPhase {
      * @return true if task is finished
      * @throws Exception if any error occurs.
      */
-    public boolean read (final ITask task, final Session session, final ByteBuffer dst, final int logicalBlockAddress, final long length) throws Exception;
+    public boolean read(final ITask task, final Session session, final ByteBuffer dst, final int logicalBlockAddress, final long length) throws Exception;
 
     /**
      * This method handles a write operation within this session (if possible in the current phase).
-     * 
+     *
      * @param task The calling Task
      * @param session The context object of the current session.
      * @param src Write the remaining bytes to the iSCSI Target.
@@ -93,26 +93,26 @@ public interface IPhase {
      * @return true if task is finished
      * @throws Exception if any error occurs.
      */
-    public boolean write (final ITask task, final Session session, final ByteBuffer src, final int logicalBlockAddress, final long length) throws Exception;
+    public boolean write(final ITask task, final Session session, final ByteBuffer src, final int logicalBlockAddress, final long length) throws Exception;
 
     /**
      * This method handles the <code>TargetCapacityInformations</code> within this session (if possible in the current
      * phase).
-     * 
+     *
      * @param session The context object of the current session.
      * @param capacityInformation A <code>TargetCapacityInformations</code> instance to store these informations.
      * @return true if task is finished
      * @throws Exception if any error occurs.
      */
-    public boolean getCapacity (final Session session, final TargetCapacityInformations capacityInformation) throws Exception;
+    public boolean getCapacity(final Session session, final TargetCapacityInformations capacityInformation) throws Exception;
 
     /**
      * Returns the current stage.
-     * 
+     *
      * @return The current stage.
      * @see LoginStage
      */
-    public LoginStage getStage ();
+    public LoginStage getStage();
 
     // --------------------------------------------------------------------------
     // --------------------------------------------------------------------------
@@ -124,7 +124,7 @@ public interface IPhase {
 /**
  * This abstract class contains the basic implementation of a phase. Each method should throw an
  * <code>UnsupportedOperationException</code> to indicate incomplete behavior.
- * 
+ *
  * @author Volker Wildi
  */
 abstract class AbstractPhase implements IPhase {
@@ -141,7 +141,7 @@ abstract class AbstractPhase implements IPhase {
     /**
      * Default constructor to create a new, empty <code>AbstractPhase</code> object.
      */
-    protected AbstractPhase () {
+    protected AbstractPhase() {
 
     }
 
@@ -149,38 +149,38 @@ abstract class AbstractPhase implements IPhase {
     // --------------------------------------------------------------------------
 
     /** {@inheritDoc} */
-    public boolean login (final Session session) throws Exception {
+    public boolean login(final Session session) throws Exception {
 
         throw new UnsupportedOperationException("This operation is not possible in the current phase.");
     }
 
     /** {@inheritDoc} */
-    public boolean logoutConnection (final Session session, final short connectionID) throws Exception {
+    public boolean logoutConnection(final Session session, final short connectionID) throws Exception {
 
         throw new UnsupportedOperationException("This operation is not possible in the current phase.");
     }
 
     /** {@inheritDoc} */
-    public boolean logoutSession (final ITask task, final Session session) throws Exception {
+    public boolean logoutSession(final ITask task, final Session session) throws Exception {
 
         throw new UnsupportedOperationException("This operation is not possible in the current phase.");
     }
 
     /** {@inheritDoc} */
-    public boolean read (final ITask task, final Session session, final ByteBuffer dst, final int logicalBlockAddress, final long length) throws Exception {
+    public boolean read(final ITask task, final Session session, final ByteBuffer dst, final int logicalBlockAddress, final long length) throws Exception {
 
         throw new UnsupportedOperationException("This operation is not possible in the current phase.");
 
     }
 
     /** {@inheritDoc} */
-    public boolean write (final ITask task, final Session session, final ByteBuffer src, final int logicalBlockAddress, final long length) throws Exception {
+    public boolean write(final ITask task, final Session session, final ByteBuffer src, final int logicalBlockAddress, final long length) throws Exception {
 
         throw new UnsupportedOperationException("This operation is not possible in the current phase.");
     }
 
     /** {@inheritDoc} */
-    public boolean getCapacity (final Session session, final TargetCapacityInformations capacityInformation) throws Exception {
+    public boolean getCapacity(final Session session, final TargetCapacityInformations capacityInformation) throws Exception {
 
         throw new UnsupportedOperationException("This operation is not possible in the current phase.");
     }
@@ -189,7 +189,7 @@ abstract class AbstractPhase implements IPhase {
     // --------------------------------------------------------------------------
 
     /** {@inheritDoc} */
-    public LoginStage getStage () {
+    public LoginStage getStage() {
 
         throw new UnsupportedOperationException();
     }

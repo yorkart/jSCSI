@@ -4,9 +4,9 @@ package org.jscsi.target.scsi.inquiry;
  * The IDENTIFIER TYPE field indicates the format and assignment authority for the IDENTIFIER.
  * <p>
  * The IDENTIFIER TYPE field has a length of four bits.
- * 
- * @see Identifier
+ *
  * @author Andreas Ergenzinger
+ * @see Identifier
  */
 public enum IdentifierType {
 
@@ -15,11 +15,11 @@ public enum IdentifierType {
 
     private final byte value;
 
-    private IdentifierType (byte value) {
+    private IdentifierType(byte value) {
         this.value = value;
     }
 
-    public final byte getValue () {
+    public final byte getValue() {
         return value;
     }
 }

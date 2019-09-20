@@ -1,18 +1,18 @@
 package org.jscsi.target.scsi.cdb;
 
 
-import java.nio.ByteBuffer;
-
 import org.jscsi.target.scsi.inquiry.PageCode;
 import org.jscsi.target.scsi.inquiry.PageCode.VitalProductDataPageName;
 import org.jscsi.target.scsi.inquiry.SupportedVpdPages;
 import org.jscsi.target.util.BitManip;
 import org.jscsi.target.util.ReadWrite;
 
+import java.nio.ByteBuffer;
+
 
 /**
  * This class represents Command Descriptor Blocks for the <code>INQUIRY</code> SCSI command.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public class InquiryCDB extends CommandDescriptorBlock {
@@ -56,7 +56,7 @@ public class InquiryCDB extends CommandDescriptorBlock {
      */
     private final PageCode pageCode;
 
-    public InquiryCDB (ByteBuffer buffer) {
+    public InquiryCDB(ByteBuffer buffer) {
         super(buffer);
 
         // EVPD
@@ -82,15 +82,15 @@ public class InquiryCDB extends CommandDescriptorBlock {
         }
     }
 
-    public boolean getEnableVitalProductData () {
+    public boolean getEnableVitalProductData() {
         return enableVitalProductData;
     }
 
-    public PageCode getPageCode () {
+    public PageCode getPageCode() {
         return pageCode;
     }
 
-    public int getAllocationLength () {
+    public int getAllocationLength() {
         return allocationLength;
     }
 }

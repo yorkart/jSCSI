@@ -18,7 +18,7 @@ import org.jscsi.target.connection.stage.login.LoginOperationalParameterNegotiat
  * <li>if the <i>key-value</i> pair relating to the parameter was part of the first {@link ProtocolDataUnit} sent over
  * the connection</i>
  * </ul>
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public enum Use {
@@ -54,35 +54,30 @@ public enum Use {
     /**
      * This method can be used for checking if a specified {@link Use} permits negotiating its associated parameter
      * given a situation described by several parameters.
-     * 
-     * @param use describes the conditions
-     * @param loginStage specifies the stage of phase
+     *
+     * @param use               describes the conditions
+     * @param loginStage        specifies the stage of phase
      * @param leadingConnection <code>true</code> if and only if the connection is the leading connection of its session
-     * @param initialPdu <code>true</code> if and only if the {@link ProtocolDataUnit} is the first PDU sent over the
-     *            connection
+     * @param initialPdu        <code>true</code> if and only if the {@link ProtocolDataUnit} is the first PDU sent over the
+     *                          connection
      * @return <code>true</code> if and only if all requirements of the <i>use</i> parameter have been met
      */
-    private static boolean checkUse (final Use use, final LoginStage loginStage, final boolean leadingConnection, final boolean initialPdu) {
+    private static boolean checkUse(final Use use, final LoginStage loginStage, final boolean leadingConnection, final boolean initialPdu) {
         switch (use) {
-            case LEADING_LOPNS :
-                if (leadingConnection && loginStage == LoginStage.LOGIN_OPERATIONAL_NEGOTIATION) return true;
-                return false;
-            case LOPNS :
-                if (loginStage == LoginStage.LOGIN_OPERATIONAL_NEGOTIATION) return true;
-                return false;
-            case LOPNS_AND_FFP :
-                if (loginStage == LoginStage.LOGIN_OPERATIONAL_NEGOTIATION || loginStage == LoginStage.FULL_FEATURE_PHASE) return true;
-                return false;
-            case FFP :
-                if (loginStage == LoginStage.FULL_FEATURE_PHASE) return true;
-                return false;
-            case INITIAL_AND_FFP :
+            case LEADING_LOPNS:
+                return leadingConnection && loginStage == LoginStage.LOGIN_OPERATIONAL_NEGOTIATION;
+            case LOPNS:
+                return loginStage == LoginStage.LOGIN_OPERATIONAL_NEGOTIATION;
+            case LOPNS_AND_FFP:
+                return loginStage == LoginStage.LOGIN_OPERATIONAL_NEGOTIATION || loginStage == LoginStage.FULL_FEATURE_PHASE;
+            case FFP:
+                return loginStage == LoginStage.FULL_FEATURE_PHASE;
+            case INITIAL_AND_FFP:
                 if (initialPdu && loginStage == LoginStage.FULL_FEATURE_PHASE) return true;
                 // fall through
-            case INITIAL :
-                if (initialPdu && (loginStage == LoginStage.SECURITY_NEGOTIATION || loginStage == LoginStage.LOGIN_OPERATIONAL_NEGOTIATION)) return true;
-                return false;
-            default :
+            case INITIAL:
+                return initialPdu && (loginStage == LoginStage.SECURITY_NEGOTIATION || loginStage == LoginStage.LOGIN_OPERATIONAL_NEGOTIATION);
+            default:
                 return false;// unreachable
         }
     }
@@ -90,14 +85,14 @@ public enum Use {
     /**
      * This method can be used for checking if this {@link Use} instance permits negotiating its associated parameter
      * given a situation described by the passed parameters.
-     * 
-     * @param loginStage specifies the stage of phase
+     *
+     * @param loginStage        specifies the stage of phase
      * @param leadingConnection <code>true</code> if and only if the connection is the leading connection of its session
-     * @param initialPdu <code>true</code> if and only if the {@link ProtocolDataUnit} is the first PDU sent over the
-     *            connection
+     * @param initialPdu        <code>true</code> if and only if the {@link ProtocolDataUnit} is the first PDU sent over the
+     *                          connection
      * @return <code>true</code> if and only if all requirements of this {@link Use} instance have been met
      */
-    public boolean checkUse (final LoginStage loginStage, final boolean leadingConnection, final boolean initialPdu) {
+    public boolean checkUse(final LoginStage loginStage, final boolean leadingConnection, final boolean initialPdu) {
         return checkUse(this, loginStage, leadingConnection, initialPdu);
     }
 }

@@ -1,9 +1,9 @@
 package org.jscsi.target.scsi.modeSense;
 
 
-import java.nio.ByteBuffer;
-
 import org.jscsi.target.scsi.IResponseData;
+
+import java.nio.ByteBuffer;
 
 
 /**
@@ -12,7 +12,7 @@ import org.jscsi.target.scsi.IResponseData;
  * <p>
  * This class uses the builder pattern to minimize the number of constructors and to avoid constructor use with a lot of
  * <code>null</code> parameters.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public final class ModeParameterList implements IResponseData {
@@ -35,11 +35,11 @@ public final class ModeParameterList implements IResponseData {
     /**
      * Returns a new {@link ModeParameterList} instance based the variables of the <i>builder</i> object. If these
      * variables are mutually exclusive, then this method will return <code>null</code> instead.
-     * 
+     *
      * @param builder contains all necessary information to create a {@link ModeParameterList} object
      * @return a new {@link ModeParameterList} or <code>null</code>
      */
-    public static ModeParameterList build (final ModeParameterListBuilder builder) {
+    public static ModeParameterList build(final ModeParameterListBuilder builder) {
         if (!builder.checkIntegrity()) return null;
         // everything is okay, so
         // - calculate block descriptor length
@@ -83,13 +83,13 @@ public final class ModeParameterList implements IResponseData {
         return new ModeParameterList(modeParameterHeader, builder.logicalBlockDescriptors, builder.modePages);
     }
 
-    private ModeParameterList (final ModeParameterHeader modeParameterHeader, final LogicalBlockDescriptor[] logicalBlockDescriptors, final ModePage[] modePages) {
+    private ModeParameterList(final ModeParameterHeader modeParameterHeader, final LogicalBlockDescriptor[] logicalBlockDescriptors, final ModePage[] modePages) {
         this.modeParameterHeader = modeParameterHeader;
         this.logicalBlockDescriptors = logicalBlockDescriptors;
         this.modePages = modePages;
     }
 
-    public void serialize (ByteBuffer byteBuffer, int index) {
+    public void serialize(ByteBuffer byteBuffer, int index) {
 
         int offset = 0;
 
@@ -110,14 +110,15 @@ public final class ModeParameterList implements IResponseData {
         }
     }
 
-    public int size () {
+    public int size() {
         // size = header + logical block descriptors + mode pages
         int size = modeParameterHeader.size();
-        if (logicalBlockDescriptors != null && logicalBlockDescriptors.length > 0) size += logicalBlockDescriptors[0].size() * logicalBlockDescriptors.length;// all
-                                                                                                                                                              // have
-                                                                                                                                                              // the
-                                                                                                                                                              // same
-                                                                                                                                                              // size
+        if (logicalBlockDescriptors != null && logicalBlockDescriptors.length > 0)
+            size += logicalBlockDescriptors[0].size() * logicalBlockDescriptors.length;// all
+        // have
+        // the
+        // same
+        // size
         if (modePages != null) for (ModePage mp : modePages)
             size += mp.size();
         return size;

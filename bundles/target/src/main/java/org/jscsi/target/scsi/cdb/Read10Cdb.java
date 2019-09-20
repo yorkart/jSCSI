@@ -1,10 +1,10 @@
 package org.jscsi.target.scsi.cdb;
 
 
-import java.nio.ByteBuffer;
-
 import org.jscsi.target.util.BitManip;
 import org.jscsi.target.util.ReadWrite;
+
+import java.nio.ByteBuffer;
 
 
 /**
@@ -17,7 +17,7 @@ import org.jscsi.target.util.ReadWrite;
  * Each logical block read includes user data and, if the medium is formatted with protection information enabled,
  * protection information. Each logical block transferred includes user data and may include protection information,
  * based on the RDPROTECT field and the medium format.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public final class Read10Cdb extends ReadCdb {
@@ -92,7 +92,7 @@ public final class Read10Cdb extends ReadCdb {
      * The FUA ({@link #forceUnitAccess}) and FUA_NV ( {@link #forceUnitAccessNonVolatileCache}) bits together determine
      * from exactly the requested data shall be retrieved (cache, non-volatile cache, or medium) and whether or not the
      * returned data has to be transferred to the medium before sending the response.
-     * 
+     *
      * @see #forceUnitAccess
      */
     private final boolean forceUnitAccessNonVolatileCache;
@@ -108,11 +108,10 @@ public final class Read10Cdb extends ReadCdb {
      * Support for the grouping function is indicated in the GROUP_SUP bit in the Extended INQUIRY Data VPD page (see
      * SPC-4).
      * <p>
-     * 
      */
     private final int groupNumber;
 
-    public Read10Cdb (final ByteBuffer buffer) {
+    public Read10Cdb(final ByteBuffer buffer) {
         super(buffer);// OPERATION CODE + CONTROL
 
         // RDPROTECT
@@ -134,42 +133,42 @@ public final class Read10Cdb extends ReadCdb {
     }
 
     @Override
-    protected long deserializeLogicalBlockAddress (ByteBuffer buffer) {
+    protected long deserializeLogicalBlockAddress(ByteBuffer buffer) {
         return ReadWrite.readUnsignedInt(buffer, 2);
     }
 
     @Override
-    protected int deserializeTransferLength (ByteBuffer buffer) {
+    protected int deserializeTransferLength(ByteBuffer buffer) {
         return ReadWrite.readTwoByteInt(buffer, 7);
     }
 
-    public int getReadProtect () {
+    public int getReadProtect() {
         return readProtect;
     }
 
-    public boolean disablePageOut () {
+    public boolean disablePageOut() {
         return disablePageOut;
     }
 
-    public boolean getForceUnitAccess () {
+    public boolean getForceUnitAccess() {
         return forceUnitAccess;
     }
 
-    public boolean getForceUnitAccessNonVolatile () {
+    public boolean getForceUnitAccessNonVolatile() {
         return forceUnitAccessNonVolatileCache;
     }
 
-    public int getGroupNumber () {
+    public int getGroupNumber() {
         return groupNumber;
     }
 
     @Override
-    protected int getLogicalBlockAddressFieldIndex () {
+    protected int getLogicalBlockAddressFieldIndex() {
         return 2;
     }
 
     @Override
-    protected int getTransferLengthFieldIndex () {
+    protected int getTransferLengthFieldIndex() {
         return 7;
     }
 }

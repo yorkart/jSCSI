@@ -1,13 +1,13 @@
 /**
  * Copyright (c) 2012, University of Konstanz, Distributed Systems Group All rights reserved.
- * 
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
  * following conditions are met: * Redistributions of source code must retain the above copyright notice, this list of
  * conditions and the following disclaimer. * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation and/or other materials provided with the
  * distribution. * Neither the name of the University of Konstanz nor the names of its contributors may be used to
  * endorse or promote products derived from this software without specific prior written permission.
- * 
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
  * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -19,9 +19,6 @@
 package org.jscsi.parser.reject;
 
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.Constants;
 import org.jscsi.parser.ProtocolDataUnit;
@@ -29,12 +26,15 @@ import org.jscsi.parser.TargetMessageParser;
 import org.jscsi.parser.datasegment.DataSegmentFactory.DataSegmentFormat;
 import org.jscsi.utils.Utils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 /**
  * <h1>RejectParser</h1>
  * <p>
  * This class parses a Reject message defined in the iSCSI Standard (RFC3720).
- * 
+ *
  * @author Volker Wildi
  */
 public final class RejectParser extends TargetMessageParser {
@@ -155,38 +155,38 @@ public final class RejectParser extends TargetMessageParser {
 
         private final byte value;
 
-        private static Map<Byte , ReasonCode> mapping;
+        private static Map<Byte, ReasonCode> mapping;
 
         static {
-            ReasonCode.mapping = new HashMap<Byte , ReasonCode>();
+            ReasonCode.mapping = new HashMap<Byte, ReasonCode>();
             for (ReasonCode s : values()) {
                 ReasonCode.mapping.put(s.value, s);
             }
         }
 
-        private ReasonCode (final byte newValue) {
+        private ReasonCode(final byte newValue) {
 
             value = newValue;
         }
 
         /**
          * Returns the value of this enumeration.
-         * 
+         *
          * @return The value of this enumeration.
          */
-        public final byte value () {
+        public final byte value() {
 
             return value;
         }
 
         /**
          * Returns the constant defined for the given <code>value</code>.
-         * 
+         *
          * @param value The value to search for.
          * @return The constant defined for the given <code>value</code>. Or <code>null</code>, if this value is not
          *         defined by this enumeration.
          */
-        public static final ReasonCode valueOf (final byte value) {
+        public static final ReasonCode valueOf(final byte value) {
 
             return ReasonCode.mapping.get(value);
         }
@@ -206,11 +206,11 @@ public final class RejectParser extends TargetMessageParser {
 
     /**
      * Default constructor, creates a new, empty <code>RejectParser</code> object.
-     * 
+     *
      * @param initProtocolDataUnit The reference <code>ProtocolDataUnit</code> instance, which contains this
      *            <code>RejectParser</code> subclass object.
      */
-    public RejectParser (final ProtocolDataUnit initProtocolDataUnit) {
+    public RejectParser(final ProtocolDataUnit initProtocolDataUnit) {
 
         super(initProtocolDataUnit);
     }
@@ -222,20 +222,20 @@ public final class RejectParser extends TargetMessageParser {
      * This field is only valid if the rejected PDU is a Data/R2T SNACK and the Reject reasonCode code is
      * "Protocol error" (see Section 10.16 SNACK Request). The DataSN/R2TSN is the next Data/R2T sequence number that
      * the target would send for the task, if any.
-     * 
+     *
      * @return The data sequence number of this <code>RejectParser</code> object.
      */
-    public final int getDataSequenceNumber () {
+    public final int getDataSequenceNumber() {
 
         return dataSequenceNumber;
     }
 
     /**
      * Returns the reject reasonCode code of this <code>RejectParser</code> object.
-     * 
+     *
      * @return The reasonCode code of this <code>RejectParser</code> object.
      */
-    public final ReasonCode getReasonCode () {
+    public final ReasonCode getReasonCode() {
 
         return reasonCode;
     }
@@ -245,7 +245,7 @@ public final class RejectParser extends TargetMessageParser {
 
     /** {@inheritDoc} */
     @Override
-    public final String toString () {
+    public final String toString() {
 
         final StringBuilder sb = new StringBuilder(Constants.LOG_INITIAL_SIZE);
 
@@ -258,14 +258,14 @@ public final class RejectParser extends TargetMessageParser {
 
     /** {@inheritDoc} */
     @Override
-    public final DataSegmentFormat getDataSegmentFormat () {
+    public final DataSegmentFormat getDataSegmentFormat() {
 
         return DataSegmentFormat.BINARY;
     }
 
     /** {@inheritDoc} */
     @Override
-    public final void clear () {
+    public final void clear() {
 
         super.clear();
 
@@ -278,7 +278,7 @@ public final class RejectParser extends TargetMessageParser {
 
     /** {@inheritDoc} */
     @Override
-    protected final void deserializeBytes1to3 (final int line) throws InternetSCSIException {
+    protected final void deserializeBytes1to3(final int line) throws InternetSCSIException {
 
         Utils.isReserved(line & Constants.SECOND_BYTE_MASK);
         reasonCode = ReasonCode.valueOf((byte) ((line & Constants.THIRD_BYTE_MASK) >> Constants.ONE_BYTE_SHIFT));
@@ -288,7 +288,7 @@ public final class RejectParser extends TargetMessageParser {
 
     /** {@inheritDoc} */
     @Override
-    protected final void deserializeBytes36to39 (final int line) throws InternetSCSIException {
+    protected final void deserializeBytes36to39(final int line) throws InternetSCSIException {
 
         dataSequenceNumber = line;
     }
@@ -298,7 +298,7 @@ public final class RejectParser extends TargetMessageParser {
 
     /** {@inheritDoc} */
     @Override
-    protected final void checkIntegrity () throws InternetSCSIException {
+    protected final void checkIntegrity() throws InternetSCSIException {
 
         String exceptionMessage;
 
@@ -320,14 +320,14 @@ public final class RejectParser extends TargetMessageParser {
 
     /** {@inheritDoc} */
     @Override
-    protected final int serializeBytes1to3 () {
+    protected final int serializeBytes1to3() {
 
         return reasonCode.value << Constants.ONE_BYTE_SHIFT;
     }
 
     /** {@inheritDoc} */
     @Override
-    protected final int serializeBytes36to39 () {
+    protected final int serializeBytes36to39() {
 
         return dataSequenceNumber;
     }

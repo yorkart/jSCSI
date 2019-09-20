@@ -1,9 +1,6 @@
 package org.jscsi.target.connection.stage.fullfeature;
 
 
-import java.io.IOException;
-import java.security.DigestException;
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.BasicHeaderSegment;
 import org.jscsi.parser.ProtocolDataUnit;
@@ -17,23 +14,26 @@ import org.jscsi.target.scsi.cdb.SendDiagnosticCdb;
 import org.jscsi.target.scsi.sense.senseDataDescriptor.senseKeySpecific.FieldPointerSenseKeySpecificData;
 import org.jscsi.target.settings.SettingsException;
 
+import java.io.IOException;
+import java.security.DigestException;
+
 
 /**
  * A stage for processing <code>SEND DIAGNOSTIC</code> SCSI commands.
  * <p>
  * Only support for the default self-test feature, as required by SPC-3, is implemented. Request for other types of
  * self-test operations will be declined.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public class SendDiagnosticStage extends TargetFullFeatureStage {
 
-    public SendDiagnosticStage (TargetFullFeaturePhase targetFullFeaturePhase) {
+    public SendDiagnosticStage(TargetFullFeaturePhase targetFullFeaturePhase) {
         super(targetFullFeaturePhase);
     }
 
     @Override
-    public void execute (ProtocolDataUnit pdu) throws IOException , InterruptedException , InternetSCSIException , DigestException , SettingsException {
+    public void execute(ProtocolDataUnit pdu) throws IOException, InterruptedException, InternetSCSIException, DigestException, SettingsException {
 
         final BasicHeaderSegment bhs = pdu.getBasicHeaderSegment();
         final SCSICommandParser parser = (SCSICommandParser) bhs.getParser();
@@ -74,7 +74,7 @@ public class SendDiagnosticStage extends TargetFullFeatureStage {
                     0,// bidirectionalReadResidualCount
                     0,// residualCount
                     ScsiResponseDataSegment.EMPTY_DATA_SEGMENT);// data
-                                                                // segment
+            // segment
         }
 
         // send response

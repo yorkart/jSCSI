@@ -1,11 +1,10 @@
 package org.jscsi.target.settings;
 
 
-import java.util.Collection;
+import org.jscsi.target.settings.entry.Entry;
 
 import javax.naming.OperationNotSupportedException;
-
-import org.jscsi.target.settings.entry.Entry;
+import java.util.Collection;
 
 
 /**
@@ -14,9 +13,9 @@ import org.jscsi.target.settings.entry.Entry;
  * <p>
  * {@link ConnectionSettingsBuilderComponent} objects provide all connection-specific parameters managed by the
  * connection's {@link ConnectionSettingsNegotiator}.
- * 
- * @see Settings#Settings(ConnectionSettingsBuilderComponent, SessionSettingsBuilderComponent)
+ *
  * @author Andreas Ergenzinger
+ * @see Settings#Settings(ConnectionSettingsBuilderComponent, SessionSettingsBuilderComponent)
  */
 final class ConnectionSettingsBuilderComponent {
 
@@ -64,10 +63,10 @@ final class ConnectionSettingsBuilderComponent {
      * The {@link ConnectionSettingsBuilderComponent} constructor. The passed {@link Collection} must contain all
      * connection-specific {@link Entry} objects, since the constructor will try to locate a specific {@link Entry} for
      * each member variable and copy its current value.
-     * 
+     *
      * @param entries a {@link Collection} containing all connection-specific {@link Entry} objects
      */
-    ConnectionSettingsBuilderComponent (final Collection<Entry> entries) {
+    ConnectionSettingsBuilderComponent(final Collection<Entry> entries) {
         try {
             targetName = SettingsNegotiator.getEntry(TextKeyword.TARGET_NAME, entries).getStringValue();
             dataDigest = SettingsNegotiator.getEntry(TextKeyword.DATA_DIGEST, entries).getStringValue();

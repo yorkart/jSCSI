@@ -1,9 +1,6 @@
 package org.jscsi.target.connection.stage.fullfeature;
 
 
-import java.io.IOException;
-import java.security.DigestException;
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.BasicHeaderSegment;
 import org.jscsi.parser.ProtocolDataUnit;
@@ -17,20 +14,23 @@ import org.jscsi.target.scsi.cdb.TestUnitReadyCdb;
 import org.jscsi.target.scsi.sense.senseDataDescriptor.senseKeySpecific.FieldPointerSenseKeySpecificData;
 import org.jscsi.target.settings.SettingsException;
 
+import java.io.IOException;
+import java.security.DigestException;
+
 
 /**
  * A stage for processing <code>TEST UNIT READY</code> SCSI commands.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public class TestUnitReadyStage extends TargetFullFeatureStage {
 
-    public TestUnitReadyStage (TargetFullFeaturePhase targetFullFeaturePhase) {
+    public TestUnitReadyStage(TargetFullFeaturePhase targetFullFeaturePhase) {
         super(targetFullFeaturePhase);
     }
 
     @Override
-    public void execute (ProtocolDataUnit pdu) throws IOException , InterruptedException , InternetSCSIException , DigestException , SettingsException {
+    public void execute(ProtocolDataUnit pdu) throws IOException, InterruptedException, InternetSCSIException, DigestException, SettingsException {
 
         final BasicHeaderSegment bhs = pdu.getBasicHeaderSegment();
         final SCSICommandParser parser = (SCSICommandParser) bhs.getParser();
@@ -64,7 +64,7 @@ public class TestUnitReadyStage extends TargetFullFeatureStage {
                     0,// bidirectionalReadResidualCount
                     0,// residualCount
                     ScsiResponseDataSegment.EMPTY_DATA_SEGMENT);// data
-                                                                // segment
+            // segment
         }
 
         // send response

@@ -10,7 +10,7 @@ import org.jscsi.target.settings.entry.Entry;
  * <p>
  * The only legal transitions of an {@link Entry} object's {@link NegotiationStatus} are from {@link #NOT_NEGOTIATED} or
  * {@link #DEFAULT} to {@link #ACCEPTED} or {@link #REJECTED}. A status of {@link #IRRELEVANT} must never change.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public enum NegotiationStatus {

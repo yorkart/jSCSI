@@ -1,20 +1,20 @@
 package org.jscsi.target.scsi.sense;
 
 
-import java.nio.ByteBuffer;
-
 import org.jscsi.target.scsi.cdb.ScsiOperationCode;
 import org.jscsi.target.scsi.sense.information.FourByteInformation;
 import org.jscsi.target.scsi.sense.senseDataDescriptor.senseKeySpecific.SenseKeySpecificData;
 import org.jscsi.target.util.BitManip;
 import org.jscsi.target.util.ReadWrite;
 
+import java.nio.ByteBuffer;
+
 
 /**
  * Instances of this class represent sense data using the fixed format.
- * 
- * @see SenseDataFormat#FIXED
+ *
  * @author Andreas Ergenzinger
+ * @see SenseDataFormat#FIXED
  */
 public class FixedFormatSenseData extends SenseData {
 
@@ -104,7 +104,7 @@ public class FixedFormatSenseData extends SenseData {
 
     /**
      * The SenseKeySpecificData sub-class MUST match the senseKey.
-     * 
+     *
      * @see SenseKeySpecificData
      */
     private final SenseKeySpecificData senseKeySpecificData;
@@ -127,9 +127,9 @@ public class FixedFormatSenseData extends SenseData {
     /**
      * The constructor. All parameters without additional description are used to initialize the member variables with
      * the same name.
-     * 
+     *
      * @param valid
-     * @param errorType the type of error that necessitated the sending of sense data
+     * @param errorType                       the type of error that necessitated the sending of sense data
      * @param fileMark
      * @param endOfMedium
      * @param incorrectLengthIndicator
@@ -141,7 +141,7 @@ public class FixedFormatSenseData extends SenseData {
      * @param senseKeySpecificData
      * @param additionalSenseBytes
      */
-    public FixedFormatSenseData (final boolean valid, final ErrorType errorType, final boolean fileMark, final boolean endOfMedium, final boolean incorrectLengthIndicator, final SenseKey senseKey, final FourByteInformation information, final FourByteInformation commandSpecificInformation, final AdditionalSenseCodeAndQualifier additionalSenseCodeAndQualifier, final byte fieldReplaceableUnitCode, final SenseKeySpecificData senseKeySpecificData, final AdditionalSenseBytes additionalSenseBytes) {
+    public FixedFormatSenseData(final boolean valid, final ErrorType errorType, final boolean fileMark, final boolean endOfMedium, final boolean incorrectLengthIndicator, final SenseKey senseKey, final FourByteInformation information, final FourByteInformation commandSpecificInformation, final AdditionalSenseCodeAndQualifier additionalSenseCodeAndQualifier, final byte fieldReplaceableUnitCode, final SenseKeySpecificData senseKeySpecificData, final AdditionalSenseBytes additionalSenseBytes) {
         super(errorType, SenseDataFormat.FIXED, senseKey, additionalSenseCodeAndQualifier);
         this.valid = valid;
         this.fileMark = fileMark;
@@ -158,7 +158,7 @@ public class FixedFormatSenseData extends SenseData {
         additionalSenseLength = asl;
     }
 
-    public void serialize (ByteBuffer byteBuffer, int index) {
+    public void serialize(ByteBuffer byteBuffer, int index) {
 
         byteBuffer.position(index);
 
@@ -194,7 +194,8 @@ public class FixedFormatSenseData extends SenseData {
         byteBuffer.put(index + ADDITIONAL_SENSE_LENGTH_INDEX, (byte) additionalSenseLength);
 
         // command specific information
-        if (commandSpecificInformation != null) commandSpecificInformation.serialize(byteBuffer, index + COMMAND_SPECIFIC_INFORMATION_FIELD_INDEX);
+        if (commandSpecificInformation != null)
+            commandSpecificInformation.serialize(byteBuffer, index + COMMAND_SPECIFIC_INFORMATION_FIELD_INDEX);
 
         // additional sense code and additional sense code qualifier
         ReadWrite.writeTwoByteInt(byteBuffer, additionalSenseCodeAndQualifier.getValue(), index + ADDITIONAL_SENSE_CODE_INDEX);
@@ -203,17 +204,18 @@ public class FixedFormatSenseData extends SenseData {
         byteBuffer.put(FIELD_REPLACEABLE_UNIT_CODE_INDEX, fieldReplaceableUnitCode);
 
         // sense key specific data
-        if (senseKeySpecificData != null) senseKeySpecificData.serialize(byteBuffer, index + SENSE_KEY_SPECIFIC_DATA_INDEX);
+        if (senseKeySpecificData != null)
+            senseKeySpecificData.serialize(byteBuffer, index + SENSE_KEY_SPECIFIC_DATA_INDEX);
 
         // additional sense bytes
         if (additionalSenseBytes != null) additionalSenseBytes.serialize(byteBuffer, index + MIN_SIZE);
     }
 
-    public final int getAdditionalSenseLength () {
+    public final int getAdditionalSenseLength() {
         return additionalSenseLength;
     }
 
-    public int size () {
+    public int size() {
         int size = MIN_SIZE;
         if (additionalSenseBytes != null) size += additionalSenseBytes.size();
         return size;

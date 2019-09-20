@@ -1,16 +1,16 @@
 package org.jscsi.target.scsi.sense.senseDataDescriptor;
 
 
-import java.nio.ByteBuffer;
-
 import org.jscsi.target.scsi.sense.SenseData;
 import org.jscsi.target.scsi.sense.senseDataDescriptor.senseKeySpecific.SenseKeySpecificData;
+
+import java.nio.ByteBuffer;
 
 
 /**
  * The sense key specific sense data descriptor provides additional information about the exception condition. The
  * format and content of the sense-key specific data depends on the value in the {@link SenseData#senseKey} field.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public final class SenseKeySpecificSenseDataDescriptor extends SenseDataDescriptor {
@@ -27,17 +27,17 @@ public final class SenseKeySpecificSenseDataDescriptor extends SenseDataDescript
 
     /**
      * The constructor
-     * 
+     *
      * @param senseKeySpecificData provides more detailed information
      */
-    public SenseKeySpecificSenseDataDescriptor (final SenseKeySpecificData senseKeySpecificData) {
+    public SenseKeySpecificSenseDataDescriptor(final SenseKeySpecificData senseKeySpecificData) {
         super(SenseDataDescriptorType.SENSE_KEY_SPECIFIC, 0x06);// additional
-                                                                // length
+        // length
         this.senseKeySpecificData = senseKeySpecificData;
     }
 
     @Override
-    protected final void serializeSpecificFields (final ByteBuffer byteBuffer, final int index) {
+    protected final void serializeSpecificFields(final ByteBuffer byteBuffer, final int index) {
 
         senseKeySpecificData.serialize(byteBuffer, index + SENSE_KEY_SPECIFIC_DATA_INDEX);
     }

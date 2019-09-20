@@ -3,7 +3,7 @@ package org.jscsi.target.scsi.inquiry;
 /**
  * The ASSOCIATION field is part of DEVICE IDENTIFICATION VPD PAGEs and IDENTIFICATION DESCRIPTORs. It indicates the
  * entity with which the IDENTIFIER field is associated, as described in the following table.
- * 
+ *
  * <table border="1">
  * <tr>
  * <th>Code</th>
@@ -28,12 +28,12 @@ package org.jscsi.target.scsi.inquiry;
  * <td>Reserved</td>
  * <tr>
  * </table>
- * 
+ * <p>
  * The ASSOCIATION field has a length of 2 bits.
- * 
+ *
+ * @author Andreas Ergenzinger
  * @see IdentificationDescriptor
  * @see DeviceIdentificationVpdPage
- * @author Andreas Ergenzinger
  */
 public enum Association {
 
@@ -44,11 +44,11 @@ public enum Association {
      */
     private final byte value;
 
-    private Association (final byte value) {
+    private Association(final byte value) {
         this.value = value;
     }
 
-    public final byte getValue () {
+    public final byte getValue() {
         return value;
     }
 }

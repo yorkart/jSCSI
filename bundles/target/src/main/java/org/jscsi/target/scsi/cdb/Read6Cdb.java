@@ -1,9 +1,9 @@
 package org.jscsi.target.scsi.cdb;
 
 
-import java.nio.ByteBuffer;
-
 import org.jscsi.target.util.ReadWrite;
+
+import java.nio.ByteBuffer;
 
 
 /**
@@ -20,17 +20,17 @@ import org.jscsi.target.util.ReadWrite;
  * initialization routines should migrate from the READ (6) command to the READ (10) command, which is capable of
  * addressing 4,294,947,295 logical blocks, or the READ (16) command, which is capable of addressing
  * 18,446,744,073,709,551,615 logical blocks.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public class Read6Cdb extends ReadCdb {
 
-    public Read6Cdb (ByteBuffer buffer) {
+    public Read6Cdb(ByteBuffer buffer) {
         super(buffer);
     }
 
     @Override
-    protected long deserializeLogicalBlockAddress (ByteBuffer buffer) {
+    protected long deserializeLogicalBlockAddress(ByteBuffer buffer) {
         // the first three bits of byte 1 are reserved i.e. must be 0
         // check that
         final byte b = buffer.get(1);
@@ -41,7 +41,7 @@ public class Read6Cdb extends ReadCdb {
     }
 
     @Override
-    protected int deserializeTransferLength (ByteBuffer buffer) {
+    protected int deserializeTransferLength(ByteBuffer buffer) {
         /*
          * A TRANSFER LENGTH field set to zero specifies that 256 logical blocks shall be read. Any other value
          * specifies the number of logical blocks that shall be read.
@@ -52,12 +52,12 @@ public class Read6Cdb extends ReadCdb {
     }
 
     @Override
-    protected int getLogicalBlockAddressFieldIndex () {
+    protected int getLogicalBlockAddressFieldIndex() {
         return 1;
     }
 
     @Override
-    protected int getTransferLengthFieldIndex () {
+    protected int getTransferLengthFieldIndex() {
         return 4;
     }
 

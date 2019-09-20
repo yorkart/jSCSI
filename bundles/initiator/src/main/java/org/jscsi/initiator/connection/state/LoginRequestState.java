@@ -1,13 +1,13 @@
 /**
  * Copyright (c) 2012, University of Konstanz, Distributed Systems Group All rights reserved.
- * 
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
  * following conditions are met: * Redistributions of source code must retain the above copyright notice, this list of
  * conditions and the following disclaimer. * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation and/or other materials provided with the
  * distribution. * Neither the name of the University of Konstanz nor the names of its contributors may be used to
  * endorse or promote products derived from this software without specific prior written permission.
- * 
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
  * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -18,9 +18,6 @@
  */
 package org.jscsi.initiator.connection.state;
 
-
-import java.util.LinkedList;
-import java.util.Queue;
 
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.initiator.connection.Connection;
@@ -37,12 +34,15 @@ import org.jscsi.parser.login.ISID;
 import org.jscsi.parser.login.LoginRequestParser;
 import org.jscsi.parser.login.LoginStage;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 
 /**
  * <h1>LoginRequestState</h1>
  * <p/>
  * This state handles a Login Request.
- * 
+ *
  * @author Volker Wildi
  */
 public final class LoginRequestState extends AbstractState {
@@ -72,11 +72,11 @@ public final class LoginRequestState extends AbstractState {
     /**
      * Constructor to create a <code>LoginRequestState</code> instance, which uses the given connection for
      * transmission.
-     * 
+     *
      * @param initConnection The context connection, which is used for the network transmission.
      * @param initNextStage The next stage to which should transfered to.
      */
-    public LoginRequestState (final Connection initConnection, final LoginStage initNextStage) {
+    public LoginRequestState(final Connection initConnection, final LoginStage initNextStage) {
 
         super(initConnection);
         nextStage = initNextStage;
@@ -86,7 +86,7 @@ public final class LoginRequestState extends AbstractState {
     // --------------------------------------------------------------------------
 
     /** {@inheritDoc} */
-    public final void execute () throws InternetSCSIException {
+    public final void execute() throws InternetSCSIException {
 
         final SettingsMap loginParameters = connection.getSettings();
         LOGGER.info("Sending these login parameters:\n" + loginParameters);

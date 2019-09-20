@@ -1,17 +1,17 @@
 package org.jscsi.target.example;
 
 
-import java.io.File;
-
 import org.jscsi.target.Configuration;
 import org.jscsi.target.TargetServer;
+
+import java.io.File;
 
 
 public class MethodStart {
 
     private static File CONFIGPATH = Configuration.CONFIGURATION_CONFIG_FILE;
 
-    public static void main (final String[] args) throws Exception {
+    public static void main(final String[] args) throws Exception {
         // Getting the config path
         final File configFile = CONFIGPATH;
         // Creating the Configuration

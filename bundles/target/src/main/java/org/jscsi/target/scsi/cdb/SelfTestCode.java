@@ -7,9 +7,9 @@ package org.jscsi.target.scsi.cdb;
  * operation specified by the {@link SendDiagnosticCdb#selfTestCode} field.
  * <p>
  * The {@link SelfTestCode} field has a length of three bits.
- * 
- * @see SendDiagnosticCdb
+ *
  * @author Andreas Ergenzinger
+ * @see SendDiagnosticCdb
  */
 public enum SelfTestCode {
     /**
@@ -52,21 +52,21 @@ public enum SelfTestCode {
      */
     private final byte value;
 
-    private SelfTestCode (final byte value) {
+    private SelfTestCode(final byte value) {
         this.value = value;
     }
 
-    public byte getValue () {
+    public byte getValue() {
         return value;
     }
 
     /**
      * Returns the {@link SelfTestCode} corresponding to the passed value.
-     * 
+     *
      * @param value the value of a SELF-TEST CODE field
      * @return the {@link SelfTestCode} corresponding to the passed value or <code>null</code> if none exists
      */
-    public static SelfTestCode getValue (int value) {
+    public static SelfTestCode getValue(int value) {
         SelfTestCode[] values = values();
         for (int i = 0; i < values.length; ++i)
             if (value == values[i].getValue()) return values[i];

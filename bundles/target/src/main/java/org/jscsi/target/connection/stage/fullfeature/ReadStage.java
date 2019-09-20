@@ -1,8 +1,5 @@
 package org.jscsi.target.connection.stage.fullfeature;
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.BasicHeaderSegment;
 import org.jscsi.parser.ProtocolDataUnit;
@@ -20,22 +17,25 @@ import org.jscsi.target.settings.SettingsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.nio.ByteBuffer;
+
 
 /**
  * A stage for processing <code>READ (6)</code> and <code>READ (10)</code> SCSI commands.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public class ReadStage extends ReadOrWriteStage {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReadStage.class);
 
-    public ReadStage (final TargetFullFeaturePhase targetFullFeaturePhase) {
+    public ReadStage(final TargetFullFeaturePhase targetFullFeaturePhase) {
         super(targetFullFeaturePhase);
     }
 
     @Override
-    public void execute (ProtocolDataUnit pdu) throws IOException , InterruptedException , InternetSCSIException , SettingsException {
+    public void execute(ProtocolDataUnit pdu) throws IOException, InterruptedException, InternetSCSIException, SettingsException {
 
         // get relevant variables ...
         // ... from settings
@@ -116,13 +116,13 @@ public class ReadStage extends ReadOrWriteStage {
 
             // create and send PDU
             responsePdu = TargetPduFactory.createDataInPdu(false,// finalFlag,
-                                                                 // not the last
-                                                                 // PDU with
-                                                                 // data payload
-                                                                 // in the
-                                                                 // sequence
+                    // not the last
+                    // PDU with
+                    // data payload
+                    // in the
+                    // sequence
                     false,// acknowledgeFlag, ErrorRecoveryLevel == 0, so we
-                          // never do that
+                    // never do that
                     false,// residualOverflowFlag
                     false,// residualUnderflowFlag
                     false,// statusFlag
@@ -156,11 +156,11 @@ public class ReadStage extends ReadOrWriteStage {
 
         // create and send PDU (with or without status)
         responsePdu = TargetPduFactory.createDataInPdu(true,// finalFlag, last
-                                                            // PDU in the
-                                                            // sequence with
-                                                            // data payload
+                // PDU in the
+                // sequence with
+                // data payload
                 false,// acknowledgeFlag, ErrorRecoveryLevel == 0, so we never
-                      // do that
+                // do that
                 false,// residualOverflowFlag
                 false,// residualUnderflowFlag
                 immediateData,// statusFlag
@@ -190,7 +190,7 @@ public class ReadStage extends ReadOrWriteStage {
                     0,// bidirectionalReadResidualCount
                     0,// residualCount
                     ScsiResponseDataSegment.EMPTY_DATA_SEGMENT);// empty
-                                                                // ScsiResponseDataSegment
+            // ScsiResponseDataSegment
 
             LOGGER.debug("sending SCSI Response PDU");
             connection.sendPdu(responsePdu);

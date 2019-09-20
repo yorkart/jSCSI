@@ -1,17 +1,17 @@
 package org.jscsi.target.scsi.modeSense;
 
 
-import java.nio.ByteBuffer;
-
 import org.jscsi.target.scsi.ISerializable;
 import org.jscsi.target.util.BitManip;
+
+import java.nio.ByteBuffer;
 
 
 /**
  * MODE PAGEs are sent in response to successful <code>MODE SENSE</code> SCSI commands. There are two different,
  * command-specific formats for MODE PAGEs - the PAGE_0 FORMAT and the SUB-PAGE FORMAT, represented by the non-abstract
  * children of this class, {@link Page_0FormatModePage} and {@link SubPageFormatModePage}, respectively.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public abstract class ModePage implements ISerializable {
@@ -57,13 +57,13 @@ public abstract class ModePage implements ISerializable {
 
     /**
      * The abstract constructor.
-     * 
+     *
      * @param parametersSaveable value of the PARAMETERS SAVEABLE bit
-     * @param subPageFormat <code>true</code> if and only if the SUB-PAGE FORMAT is to be used
-     * @param pageCode specifies the kind of information is contained in the MODE PAGE
-     * @param pageLength the value of the PAGE LENGTH field
+     * @param subPageFormat      <code>true</code> if and only if the SUB-PAGE FORMAT is to be used
+     * @param pageCode           specifies the kind of information is contained in the MODE PAGE
+     * @param pageLength         the value of the PAGE LENGTH field
      */
-    public ModePage (final boolean parametersSaveable, final boolean subPageFormat, final int pageCode, final int pageLength) {
+    public ModePage(final boolean parametersSaveable, final boolean subPageFormat, final int pageCode, final int pageLength) {
         this.parametersSaveable = parametersSaveable;
         this.subPageFormat = subPageFormat;
         if (subPageFormat)
@@ -74,7 +74,7 @@ public abstract class ModePage implements ISerializable {
         this.pageLength = pageLength;
     }
 
-    public final void serialize (final ByteBuffer byteBuffer, final int index) {
+    public final void serialize(final ByteBuffer byteBuffer, final int index) {
         // serialize first byte
         // (for convenience reasons from least significant to most significant
         // field)
@@ -92,27 +92,27 @@ public abstract class ModePage implements ISerializable {
     /**
      * This method serializes the SUBPAGE CODE field, if the mode page format says this field exists (only for the
      * sub_page mode page format).
-     * 
+     *
      * @param buffer where to insert the serialized object representation
-     * @param index the position of the first byte of the serialized object in the {@link ByteBuffer}
+     * @param index  the position of the first byte of the serialized object in the {@link ByteBuffer}
      */
-    protected abstract void serializeSubPageCode (final ByteBuffer buffer, final int index);
+    protected abstract void serializeSubPageCode(final ByteBuffer buffer, final int index);
 
     /**
      * Serializes the PAGE LENGTH field.
-     * 
+     *
      * @param buffer where to insert the serialized object representation
-     * @param index the position of the first byte of the serialized object in the {@link ByteBuffer}
+     * @param index  the position of the first byte of the serialized object in the {@link ByteBuffer}
      */
-    protected abstract void serializePageLength (final ByteBuffer buffer, final int index);
+    protected abstract void serializePageLength(final ByteBuffer buffer, final int index);
 
     /**
      * @param buffer where to insert the serialized object representation
-     * @param index the position of the first byte of the serialized object in the {@link ByteBuffer}
+     * @param index  the position of the first byte of the serialized object in the {@link ByteBuffer}
      */
-    protected abstract void serializeModeParameters (final ByteBuffer buffer, final int index);
+    protected abstract void serializeModeParameters(final ByteBuffer buffer, final int index);
 
-    public final int size () {
+    public final int size() {
         return pageLength + pageLengthModifier;
     }
 }

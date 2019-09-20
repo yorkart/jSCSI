@@ -1,15 +1,15 @@
 package org.jscsi.target.scsi.cdb;
 
 
-import java.nio.ByteBuffer;
-
 import org.jscsi.target.util.BitManip;
+
+import java.nio.ByteBuffer;
 
 
 /**
  * This class represents Command Descriptor Blocks for the <code>REQUEST SENSE</code> SCSI command, which requests that
  * the device server transfers sense data to the application client.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public final class RequestSenseCdb extends CommandDescriptorBlock {
@@ -27,7 +27,7 @@ public final class RequestSenseCdb extends CommandDescriptorBlock {
      */
     private final int allocationLength;
 
-    public RequestSenseCdb (ByteBuffer buffer) {
+    public RequestSenseCdb(ByteBuffer buffer) {
         super(buffer);
 
         // descriptor format
@@ -37,11 +37,11 @@ public final class RequestSenseCdb extends CommandDescriptorBlock {
         allocationLength = buffer.get(4) & 255;
     }
 
-    public final boolean getDescriptorFormat () {
+    public final boolean getDescriptorFormat() {
         return descriptorFormat;
     }
 
-    public final int getAllocationLength () {
+    public final int getAllocationLength() {
         return allocationLength;
     }
 }

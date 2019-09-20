@@ -1,17 +1,17 @@
 package org.jscsi.target.scsi.cdb;
 
 
-import java.nio.ByteBuffer;
-
 import org.jscsi.target.scsi.modeSense.ModePageCode;
 import org.jscsi.target.scsi.modeSense.PageControl;
 import org.jscsi.target.util.BitManip;
 import org.jscsi.target.util.ReadWrite;
 
+import java.nio.ByteBuffer;
+
 
 /**
  * This class represents Command Descriptor Blocks for the <code>MODE SENSE (6)</code> SCSI command.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public final class ModeSense6Cdb extends CommandDescriptorBlock {
@@ -30,14 +30,14 @@ public final class ModeSense6Cdb extends CommandDescriptorBlock {
 
     /**
      * The PAGE CODE and SUBPAGE CODE fields specify which mode pages and subpages to return.
-     * 
+     *
      * @see #subpageCode
      */
     private final int pageCode;
 
     /**
      * The PAGE CODE and SUBPAGE CODE fields specify which mode pages and subpages to return
-     * 
+     *
      * @see #pageCode
      */
     private final int subpageCode;
@@ -48,7 +48,7 @@ public final class ModeSense6Cdb extends CommandDescriptorBlock {
      */
     private final int allocationLength;
 
-    public ModeSense6Cdb (ByteBuffer buffer) {
+    public ModeSense6Cdb(ByteBuffer buffer) {
         super(buffer);// SCSI Operation Code + Control
 
         // DBD
@@ -69,27 +69,27 @@ public final class ModeSense6Cdb extends CommandDescriptorBlock {
         allocationLength = ReadWrite.readOneByteInt(buffer, 4);
     }
 
-    public boolean getDisableBlockDescriptors () {
+    public boolean getDisableBlockDescriptors() {
         return disableBlockDescriptors;
     }
 
-    public PageControl getPageControl () {
+    public PageControl getPageControl() {
         return pageControl;
     }
 
-    public int getPageCode () {
+    public int getPageCode() {
         return pageCode;
     }
 
-    public int getSubpageCode () {
+    public int getSubpageCode() {
         return subpageCode;
     }
 
-    public int getAllocationLength () {
+    public int getAllocationLength() {
         return allocationLength;
     }
 
-    public ModePageCode getModePage () {
+    public ModePageCode getModePage() {
         return ModePageCode.getModePage(pageCode, subpageCode);
     }
 }

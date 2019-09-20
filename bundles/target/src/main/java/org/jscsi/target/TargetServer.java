@@ -1,6 +1,18 @@
 package org.jscsi.target;
 
 
+import org.jscsi.exception.InternetSCSIException;
+import org.jscsi.parser.OperationCode;
+import org.jscsi.parser.ProtocolDataUnit;
+import org.jscsi.parser.login.ISID;
+import org.jscsi.parser.login.LoginRequestParser;
+import org.jscsi.target.connection.Connection.TargetConnection;
+import org.jscsi.target.connection.TargetSession;
+import org.jscsi.target.scsi.inquiry.DeviceIdentificationVpdPage;
+import org.jscsi.target.settings.SettingsException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,24 +35,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.jscsi.exception.InternetSCSIException;
-import org.jscsi.parser.OperationCode;
-import org.jscsi.parser.ProtocolDataUnit;
-import org.jscsi.parser.login.ISID;
-import org.jscsi.parser.login.LoginRequestParser;
-import org.jscsi.target.connection.Connection;
-import org.jscsi.target.connection.Connection.TargetConnection;
-import org.jscsi.target.connection.TargetSession;
-import org.jscsi.target.scsi.inquiry.DeviceIdentificationVpdPage;
-import org.jscsi.target.settings.SettingsException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 
 /**
  * The central class of the jSCSI Target, which keeps track of all active {@link TargetSession}s, stores target-wide
  * parameters and variables, and which contains the {@link #main(String[])} method for starting the program.
- * 
+ *
  * @author Andreas Ergenzinger, University of Konstanz
  * @author Sebastian Graf, University of Konstanz
  */
@@ -64,14 +63,14 @@ public class TargetServer implements Callable<Void> {
     private Configuration config;
 
     /**
-     * 
+     *
      */
     private DeviceIdentificationVpdPage deviceIdentificationVpdPage;
 
     /**
      * The table of targets
      */
-    protected HashMap<String , Target> targets = new HashMap<>();
+    protected HashMap<String, Target> targets = new HashMap<>();
 
     /**
      * The thread pool.
@@ -89,7 +88,7 @@ public class TargetServer implements Callable<Void> {
      */
     private boolean running = true;
 
-    public TargetServer (final Configuration conf) {
+    public TargetServer(final Configuration conf) {
         this.config = conf;
 
         LOGGER.debug("Starting jSCSI-target: ");
@@ -101,7 +100,6 @@ public class TargetServer implements Callable<Void> {
         // open the storage medium
         List<Target> targetInfo = getConfig().getTargets();
         for (Target curTargetInfo : targetInfo) {
-
             targets.put(curTargetInfo.getTargetName(), curTargetInfo);
             // print configuration and medium details
             LOGGER.debug("   target name:    " + curTargetInfo.getTargetName() + " loaded.");
@@ -114,12 +112,12 @@ public class TargetServer implements Callable<Void> {
     /**
      * Gets and increments the value to use in the next unreserved <code>Target Transfer Tag</code> field of the next
      * PDU to be sent by the jSCSI Target.
-     * 
-     * @see #nextTargetTransferTag
+     *
      * @return the value to use in the next unreserved <code>Target Transfer Tag
      * </code> field
+     * @see #nextTargetTransferTag
      */
-    public static int getNextTargetTransferTag () {
+    public static int getNextTargetTransferTag() {
         // value 0xffffffff is reserved
         int tag;
         do {
@@ -130,11 +128,11 @@ public class TargetServer implements Callable<Void> {
 
     /**
      * Starts the jSCSI target.
-     * 
+     *
      * @param args all command line arguments are ignored
      * @throws IOException
      */
-    public static void main (String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
         TargetServer target;
 
         System.out.println("This system provides more than one IP Address to advertise.\n");
@@ -175,13 +173,13 @@ public class TargetServer implements Callable<Void> {
 
         String targetAddress = addresses.get(chosenIndex).getHostAddress();
         System.out.println("Using ip address " + addresses.get(chosenIndex).getHostAddress());
-        
-        
+
+
         switch (args.length) {
-            case 0 :
+            case 0:
                 target = new TargetServer(Configuration.create(targetAddress));
                 break;
-            case 1 :
+            case 1:
 
                 // Checking if the schema file is at the default location
                 target = new TargetServer(
@@ -190,17 +188,17 @@ public class TargetServer implements Callable<Void> {
                                         TargetServer.class.getResourceAsStream("/jscsi-target.xsd"),
                                 new FileInputStream(args[0]), targetAddress));
                 break;
-            case 2 :
+            case 2:
                 target = new TargetServer(Configuration.create(new File(args[0]), new File(args[1]), targetAddress));
                 break;
-            default :
+            default:
                 throw new IllegalArgumentException("Only zero or one Parameter (Path to Configuration-File) allowed!");
         }
 
         target.call();
     }
 
-    private class ConnectionHandler implements Callable {
+    private class ConnectionHandler implements Callable<Void> {
 
         private final TargetConnection targetConnection;
 
@@ -236,7 +234,7 @@ public class TargetServer implements Callable<Void> {
         }
     }
 
-    public Void call () throws Exception {
+    public Void call() throws Exception {
 
         // Create a blocking server socket and check for connections
         try {
@@ -261,9 +259,11 @@ public class TargetServer implements Callable<Void> {
                 try {
                     final ProtocolDataUnit pdu = newConnection.receivePdu();
                     // confirm OpCode-
-                    if (pdu.getBasicHeaderSegment().getOpCode() != OperationCode.LOGIN_REQUEST) throw new InternetSCSIException();
+                    if (pdu.getBasicHeaderSegment().getOpCode() != OperationCode.LOGIN_REQUEST) {
+                        throw new InternetSCSIException();
+                    }
                     // get initiatorSessionID
-                    
+
                     LoginRequestParser parser = (LoginRequestParser) pdu.getBasicHeaderSegment().getParser();
                     ISID initiatorSessionID = parser.getInitiatorSessionID();
 
@@ -272,14 +272,14 @@ public class TargetServer implements Callable<Void> {
                      * MaxConnections=1, we can just create a new one.
                      */
                     TargetSession session = new TargetSession(this, newConnection, initiatorSessionID, parser.getCommandSequenceNumber(),// set
-                                                                                                                                      // ExpCmdSN
-                                                                                                                                      // (PDU
-                                                                                                                                      // is
-                                                                                                                                      // immediate,
-                                                                                                                                      // hence
-                                                                                                                                      // no
-                                                                                                                                      // ++)
-                    parser.getExpectedStatusSequenceNumber());
+                            // ExpCmdSN
+                            // (PDU
+                            // is
+                            // immediate,
+                            // hence
+                            // no
+                            // ++)
+                            parser.getExpectedStatusSequenceNumber());
 
                     sessions.add(session);
                     // threadPool.submit(connection);// ignore returned Future
@@ -296,22 +296,22 @@ public class TargetServer implements Callable<Void> {
 
         System.out.println("Closing socket channel.");
         serverSocketChannel.close();
-        for(TargetSession session: sessions){
+        for (TargetSession session : sessions) {
             System.out.println("Commiting uncommited changes.");
             session.getStorageModule().close();
         }
         return null;
     }
 
-    public Configuration getConfig () {
+    public Configuration getConfig() {
         return config;
     }
 
-    public DeviceIdentificationVpdPage getDeviceIdentificationVpdPage () {
+    public DeviceIdentificationVpdPage getDeviceIdentificationVpdPage() {
         return deviceIdentificationVpdPage;
     }
 
-    public Target getTarget (String targetName) {
+    public Target getTarget(String targetName) {
         synchronized (targets) {
             return targets.get(targetName);
         }
@@ -319,14 +319,14 @@ public class TargetServer implements Callable<Void> {
 
     /**
      * Removes a session from the jSCSI Target's list of active sessions.
-     * 
+     *
      * @param session the session to remove from the list of active sessions
      */
-    public synchronized void removeTargetSession (TargetSession session) {
+    public synchronized void removeTargetSession(TargetSession session) {
         sessions.remove(session);
     }
 
-    public String[] getTargetNames () {
+    public String[] getTargetNames() {
         String[] returnNames = new String[targets.size()];
         returnNames = targets.keySet().toArray(returnNames);
         return returnNames;
@@ -334,21 +334,21 @@ public class TargetServer implements Callable<Void> {
 
     /**
      * Checks to see if this target name is valid.
-     * 
+     *
      * @param checkTargetName
      * @return true if the the target name is configured
      */
-    public boolean isValidTargetName (String checkTargetName) {
+    public boolean isValidTargetName(String checkTargetName) {
         return targets.containsKey(checkTargetName);
     }
-    
+
     /**
      * Stop this target server
      */
-    public void stop(){
+    public void stop() {
         this.running = false;
-        for(TargetSession session : sessions){
-            if(!session.getConnection().stop()){
+        for (TargetSession session : sessions) {
+            if (!session.getConnection().stop()) {
                 this.running = true;
                 LOGGER.error("Unable to stop session for " + session.getTargetName());
             }

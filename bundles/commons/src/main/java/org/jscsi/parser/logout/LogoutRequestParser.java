@@ -1,13 +1,13 @@
 /**
  * Copyright (c) 2012, University of Konstanz, Distributed Systems Group All rights reserved.
- * 
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
  * following conditions are met: * Redistributions of source code must retain the above copyright notice, this list of
  * conditions and the following disclaimer. * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation and/or other materials provided with the
  * distribution. * Neither the name of the University of Konstanz nor the names of its contributors may be used to
  * endorse or promote products derived from this software without specific prior written permission.
- * 
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
  * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -19,15 +19,15 @@
 package org.jscsi.parser.logout;
 
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.Constants;
 import org.jscsi.parser.InitiatorMessageParser;
 import org.jscsi.parser.ProtocolDataUnit;
 import org.jscsi.parser.datasegment.DataSegmentFactory.DataSegmentFormat;
 import org.jscsi.utils.Utils;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -125,7 +125,7 @@ import org.jscsi.utils.Utils;
  * nexus with the status of CHECK CONDITION, and the ASC/ASCQ value of 47h/7Fh -
  * "SOME COMMANDS CLEARED BY ISCSI PROTOCOL EVENT" - etc. - see [SAM2] and [SPC3]).
  * <p>
- * 
+ *
  * @author Volker Wildi
  */
 public final class LogoutRequestParser extends InitiatorMessageParser {
@@ -160,38 +160,38 @@ public final class LogoutRequestParser extends InitiatorMessageParser {
 
         private final byte value;
 
-        private static Map<Byte , LogoutReasonCode> mapping;
+        private static Map<Byte, LogoutReasonCode> mapping;
 
         static {
-            LogoutReasonCode.mapping = new HashMap<Byte , LogoutReasonCode>();
+            LogoutReasonCode.mapping = new HashMap<Byte, LogoutReasonCode>();
             for (LogoutReasonCode s : values()) {
                 LogoutReasonCode.mapping.put(s.value, s);
             }
         }
 
-        private LogoutReasonCode (final byte newValue) {
+        private LogoutReasonCode(final byte newValue) {
 
             value = newValue;
         }
 
         /**
          * Returns the value of this enumeration.
-         * 
+         *
          * @return The value of this enumeration.
          */
-        public final byte value () {
+        public final byte value() {
 
             return value;
         }
 
         /**
          * Returns the constant defined for the given <code>value</code>.
-         * 
+         *
          * @param value The value to search for.
          * @return The constant defined for the given <code>value</code>. Or <code>null</code>, if this value is not
          *         defined by this enumeration.
          */
-        public static final LogoutReasonCode valueOf (final byte value) {
+        public static final LogoutReasonCode valueOf(final byte value) {
 
             return LogoutReasonCode.mapping.get(value);
         }
@@ -212,11 +212,11 @@ public final class LogoutRequestParser extends InitiatorMessageParser {
 
     /**
      * Default constructor, creates a new, empty <code>LogoutRequestParser</code> object.
-     * 
+     *
      * @param initProtocolDataUnit The reference <code>ProtocolDataUnit</code> instance, which contains this
      *            <code>LogoutRequestParser</code> subclass object.
      */
-    public LogoutRequestParser (final ProtocolDataUnit initProtocolDataUnit) {
+    public LogoutRequestParser(final ProtocolDataUnit initProtocolDataUnit) {
 
         super(initProtocolDataUnit);
     }
@@ -226,7 +226,7 @@ public final class LogoutRequestParser extends InitiatorMessageParser {
 
     /** {@inheritDoc} */
     @Override
-    public final String toString () {
+    public final String toString() {
 
         final StringBuilder sb = new StringBuilder(Constants.LOG_INITIAL_SIZE);
 
@@ -239,14 +239,14 @@ public final class LogoutRequestParser extends InitiatorMessageParser {
 
     /** {@inheritDoc} */
     @Override
-    public final DataSegmentFormat getDataSegmentFormat () {
+    public final DataSegmentFormat getDataSegmentFormat() {
 
         return DataSegmentFormat.BINARY;
     }
 
     /** {@inheritDoc} */
     @Override
-    public final void clear () {
+    public final void clear() {
 
         super.clear();
 
@@ -260,41 +260,41 @@ public final class LogoutRequestParser extends InitiatorMessageParser {
     /**
      * This is the <em>Connection ID</em> of the connection to be closed (including closing the TCP stream). This field
      * is only valid if the reason code is not "close the session".
-     * 
+     *
      * @return The <em>Connection ID</em> of this <code>LogoutRequestParser</code> object.
      */
-    public final short getConnectionID () {
+    public final short getConnectionID() {
 
         return connectionID;
     }
 
     /**
      * Returns the reason for the logout.
-     * 
+     *
      * @return The reason code for this logout request.
      * @see LogoutReasonCode
      */
-    public final LogoutReasonCode getReasonCode () {
+    public final LogoutReasonCode getReasonCode() {
 
         return reasonCode;
     }
 
     /**
      * Sets the new <code>Connection ID</code> of this <code>LogoutRequestParser</code> object.
-     * 
+     *
      * @param newCID The new <code>Connection ID</code>.
      */
-    public final void setConnectionID (final short newCID) {
+    public final void setConnectionID(final short newCID) {
 
         connectionID = newCID;
     }
 
     /**
      * Sets the <code>Reason Code</code> of this <code>LogoutRequestParser</code> object.
-     * 
+     *
      * @param newReasonCode The new <code> Reason Code</code>.
      */
-    public final void setReasonCode (final LogoutReasonCode newReasonCode) {
+    public final void setReasonCode(final LogoutReasonCode newReasonCode) {
 
         reasonCode = newReasonCode;
     }
@@ -304,7 +304,7 @@ public final class LogoutRequestParser extends InitiatorMessageParser {
 
     /** {@inheritDoc} */
     @Override
-    protected final void deserializeBytes1to3 (final int line) throws InternetSCSIException {
+    protected final void deserializeBytes1to3(final int line) throws InternetSCSIException {
 
         reasonCode = LogoutReasonCode.valueOf((byte) ((line & Constants.SECOND_BYTE_MASK) >>> Constants.TWO_BYTES_SHIFT));
         Utils.isReserved(line & Constants.LAST_TWO_BYTES_MASK);
@@ -312,7 +312,7 @@ public final class LogoutRequestParser extends InitiatorMessageParser {
 
     /** {@inheritDoc} */
     @Override
-    protected final void deserializeBytes20to23 (final int line) throws InternetSCSIException {
+    protected final void deserializeBytes20to23(final int line) throws InternetSCSIException {
 
         connectionID = (short) ((line & Constants.FIRST_TWO_BYTES_MASK) >>> Constants.TWO_BYTES_SHIFT);
         Utils.isReserved(line & Constants.LAST_TWO_BYTES_MASK);
@@ -323,7 +323,7 @@ public final class LogoutRequestParser extends InitiatorMessageParser {
 
     /** {@inheritDoc} */
     @Override
-    protected final void checkIntegrity () throws InternetSCSIException {
+    protected final void checkIntegrity() throws InternetSCSIException {
 
         String exceptionMessage;
         do {
@@ -357,14 +357,14 @@ public final class LogoutRequestParser extends InitiatorMessageParser {
 
     /** {@inheritDoc} */
     @Override
-    protected final int serializeBytes1to3 () {
+    protected final int serializeBytes1to3() {
 
         return reasonCode.value() << Constants.TWO_BYTES_SHIFT;
     }
 
     /** {@inheritDoc} */
     @Override
-    protected final int serializeBytes20to23 () {
+    protected final int serializeBytes20to23() {
 
         return connectionID << Constants.TWO_BYTES_SHIFT;
     }

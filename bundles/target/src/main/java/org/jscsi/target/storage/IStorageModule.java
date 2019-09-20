@@ -1,12 +1,12 @@
 /**
- * 
+ *
  */
 package org.jscsi.target.storage;
 
 
-import java.io.IOException;
-
 import org.jscsi.target.scsi.cdb.CommandDescriptorBlock;
+
+import java.io.IOException;
 
 
 /**
@@ -15,7 +15,7 @@ import org.jscsi.target.scsi.cdb.CommandDescriptorBlock;
  * <p>
  * All index and length parameters used by the read and write methods are referring to bytes, unlike the values sent in
  * {@link CommandDescriptorBlock} s.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public interface IStorageModule {
@@ -51,44 +51,44 @@ public interface IStorageModule {
      * </table>
      * <p>
      * Note that the parameters of this method are referring to blocks, not to byte indices.
-     * 
+     *
      * @param logicalBlockAddress the index of the first block of data to be read or written
      * @param transferLengthInBlocks the total number of consecutive blocks about to be read or written
      * @return see table in description
      */
-    int checkBounds (final long logicalBlockAddress, final int transferLengthInBlocks);
+    int checkBounds(final long logicalBlockAddress, final int transferLengthInBlocks);
 
     /**
      * Returns the storage space size in bytes divided by the block size in bytes (rounded down).
-     * 
+     *
      * @return the virtual amount of storage blocks available
      */
-    long getSizeInBlocks ();
+    long getSizeInBlocks();
 
     /**
      * Copies bytes from storage to the passed byte array.
-     * 
+     *
      * @param bytes the array into which the data will be copied will be filled with data from storage
      * @param storageIndex the position of the first byte to be copied
      * @throws IOException
      */
-    void read (byte[] bytes, long storageIndex) throws IOException;
+    void read(byte[] bytes, long storageIndex) throws IOException;
 
     /**
      * Saves part of the passed byte array's content.
-     * 
+     *
      * @param bytes the source of the data to be stored
      * @param storageIndex byte offset in the storage area
      * @throws IOException
      */
-    void write (byte[] bytes, long storageIndex) throws IOException;
+    void write(byte[] bytes, long storageIndex) throws IOException;
 
     /**
      * Closing the storage.
-     * 
+     *
      * @throws IOException to be closed
      */
-    void close () throws IOException;
+    void close() throws IOException;
 
     /**
      * Get block size of underlying storage medium.

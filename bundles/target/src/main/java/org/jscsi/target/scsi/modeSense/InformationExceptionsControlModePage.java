@@ -1,15 +1,15 @@
 package org.jscsi.target.scsi.modeSense;
 
 
-import java.nio.ByteBuffer;
-
 import org.jscsi.target.util.BitManip;
 import org.jscsi.target.util.ReadWrite;
+
+import java.nio.ByteBuffer;
 
 
 /**
  * INFORMATION EXCEPTIONS CONTROL MODE PAGEs carry information about recent INFORMATION EXCEPTION SCSI errors.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public class InformationExceptionsControlModePage extends Page_0FormatModePage {
@@ -94,10 +94,10 @@ public class InformationExceptionsControlModePage extends Page_0FormatModePage {
      */
     private final int reportCount;
 
-    public InformationExceptionsControlModePage (boolean parametersSaveable, final boolean performance, final boolean enableBackgroundFunction, final boolean enableWarning, final boolean disableExceptionControl, final boolean test, final boolean logErrors, final int methodOfReportingInformationalExceptionConditions, final int intervalTimer, final int reportCount) {
+    public InformationExceptionsControlModePage(boolean parametersSaveable, final boolean performance, final boolean enableBackgroundFunction, final boolean enableWarning, final boolean disableExceptionControl, final boolean test, final boolean logErrors, final int methodOfReportingInformationalExceptionConditions, final int intervalTimer, final int reportCount) {
         super(parametersSaveable,// PS
-        0x1c,// page code
-        0x0a);// page length
+                0x1c,// page code
+                0x0a);// page length
         this.performance = performance;
         this.enableBackgroundFunction = enableBackgroundFunction;
         this.enableWarning = enableWarning;
@@ -111,7 +111,7 @@ public class InformationExceptionsControlModePage extends Page_0FormatModePage {
     }
 
     @Override
-    protected void serializeModeParameters (ByteBuffer buffer, int index) {
+    protected void serializeModeParameters(ByteBuffer buffer, int index) {
 
         // byte 2 flags
         buffer.position(index + 2);

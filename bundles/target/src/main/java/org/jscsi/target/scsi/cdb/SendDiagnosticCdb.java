@@ -1,15 +1,15 @@
 package org.jscsi.target.scsi.cdb;
 
 
-import java.nio.ByteBuffer;
-
 import org.jscsi.target.util.BitManip;
 import org.jscsi.target.util.ReadWrite;
+
+import java.nio.ByteBuffer;
 
 
 /**
  * This class represents Command Descriptor Blocks for the <code>SEND DIAGNOSTIC</code> SCSI command.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public final class SendDiagnosticCdb extends CommandDescriptorBlock {
@@ -18,7 +18,7 @@ public final class SendDiagnosticCdb extends CommandDescriptorBlock {
      * If the {@link #selfTest} bit is set to one, the {@link #selfTestCode} field shall contain 000b (
      * {@link SelfTestCode#ALL_ZEROS}. If the SELFTEST bit is set to zero, the contents of SELF-TEST CODE specifies
      * which diagnostic operation the device server shall perform.
-     * 
+     *
      * @see SelfTestCode
      */
     private final SelfTestCode selfTestCode;
@@ -77,7 +77,7 @@ public final class SendDiagnosticCdb extends CommandDescriptorBlock {
      */
     private final short parameterListLength;
 
-    public SendDiagnosticCdb (ByteBuffer buffer) {
+    public SendDiagnosticCdb(ByteBuffer buffer) {
         super(buffer);
 
         // deserialize specific fields
@@ -86,7 +86,7 @@ public final class SendDiagnosticCdb extends CommandDescriptorBlock {
         // self test
         selfTest = BitManip.getBit(b, 2);
         if (!selfTest) addIllegalFieldPointer(1, 2);// only the default self-test feature
-                                                    // is supported
+        // is supported
 
         // self test code
         selfTestCode = SelfTestCode.getValue(b >>> 5);
@@ -95,7 +95,7 @@ public final class SendDiagnosticCdb extends CommandDescriptorBlock {
         // page format
         pageFormat = BitManip.getBit(b, 4);
         if (pageFormat) addIllegalFieldPointer(1, 4);// The implementation of the PF bit is
-                                                     // optional.
+        // optional.
 
         // device offline
         deviceOffline = BitManip.getBit(b, 1);
@@ -107,27 +107,27 @@ public final class SendDiagnosticCdb extends CommandDescriptorBlock {
         parameterListLength = (short) ReadWrite.readTwoByteInt(buffer, 3);
     }
 
-    public final boolean getSelfTest () {
+    public final boolean getSelfTest() {
         return selfTest;
     }
 
-    public final SelfTestCode getSelfTestCode () {
+    public final SelfTestCode getSelfTestCode() {
         return selfTestCode;
     }
 
-    public final boolean getPageFormat () {
+    public final boolean getPageFormat() {
         return pageFormat;
     }
 
-    public final boolean getUnitOffline () {
+    public final boolean getUnitOffline() {
         return unitOffline;
     }
 
-    public final boolean getDeviceOffline () {
+    public final boolean getDeviceOffline() {
         return deviceOffline;
     }
 
-    public final short getParameterListLength () {
+    public final short getParameterListLength() {
         return parameterListLength;
     }
 

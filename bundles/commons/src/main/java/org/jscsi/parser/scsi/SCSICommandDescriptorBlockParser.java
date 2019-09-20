@@ -1,13 +1,13 @@
 /**
  * Copyright (c) 2012, University of Konstanz, Distributed Systems Group All rights reserved.
- * 
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
  * following conditions are met: * Redistributions of source code must retain the above copyright notice, this list of
  * conditions and the following disclaimer. * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation and/or other materials provided with the
  * distribution. * Neither the name of the University of Konstanz nor the names of its contributors may be used to
  * endorse or promote products derived from this software without specific prior written permission.
- * 
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
  * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -26,7 +26,7 @@ import java.nio.ByteBuffer;
  * <h1>SCSICommandDescriptorBlockParser</h1>
  * <p/>
  * This class generates a SCSI Command Descriptor Block.
- * 
+ *
  * @author Volker Wildi
  */
 public final class SCSICommandDescriptorBlockParser {
@@ -119,7 +119,7 @@ public final class SCSICommandDescriptorBlockParser {
     // --------------------------------------------------------------------------
     // --------------------------------------------------------------------------
 
-    private SCSICommandDescriptorBlockParser () {
+    private SCSICommandDescriptorBlockParser() {
 
         super();
     }
@@ -307,35 +307,35 @@ public final class SCSICommandDescriptorBlockParser {
 
     /**
      * Creates the Command Descriptor Block for a Read Message.
-     * 
+     *
      * @param logicalBlockAddress The Logical Block Address to begin the read operation.
      * @param transferLength The transfer length field specifies the number of contiguous logical blocks of data to be
      *            transferred. A transfer length of zero indicates that <code>256</code> logical blocks shall be
      *            transferred. Any other value indicates the number of logical blocks that shall be transferred.
      * @return A <code>ByteBuffer</code> object with the above data.
      */
-    public static final ByteBuffer createReadMessage (final int logicalBlockAddress, final short transferLength) {
+    public static final ByteBuffer createReadMessage(final int logicalBlockAddress, final short transferLength) {
 
         return createReadWriteMessage(READ_OP_CODE, logicalBlockAddress, transferLength);
     }
 
     /**
      * Creates the Command Descriptor Block for a Write Message.
-     * 
+     *
      * @param logicalBlockAddress The Logical Block Address to begin the read operation.
      * @param transferLength The transfer length field specifies the number of contiguous logical blocks of data to be
      *            transferred. A transfer length of zero indicates that 256 logical blocks shall be transferred. Any
      *            other value indicates the number of logical blocks that shall be transferred.
      * @return A <code>ByteBuffer</code> object with the above data.
      */
-    public static final ByteBuffer createWriteMessage (final int logicalBlockAddress, final short transferLength) {
+    public static final ByteBuffer createWriteMessage(final int logicalBlockAddress, final short transferLength) {
 
         return createReadWriteMessage(WRITE_OP_CODE, logicalBlockAddress, transferLength);
     }
 
     /**
      * Creates the Command Descriptor Block for a given Operation Message.
-     * 
+     *
      * @param opCode The Operation Code.
      * @param logicalBlockAddress The Logical Block Address to begin the read operation.
      * @param transferLength The transfer length field specifies the number of contiguous logical blocks of data to be
@@ -343,7 +343,7 @@ public final class SCSICommandDescriptorBlockParser {
      *            other value indicates the number of logical blocks that shall be transferred.
      * @return A <code>ByteBuffer</code> object with the above data.
      */
-    private static final ByteBuffer createReadWriteMessage (final byte opCode, final int logicalBlockAddress, final short transferLength) {
+    private static final ByteBuffer createReadWriteMessage(final byte opCode, final int logicalBlockAddress, final short transferLength) {
 
         ByteBuffer cdb = ByteBuffer.allocate(DEFAULT_CDB_LENGTH);
         // operation code
@@ -364,10 +364,10 @@ public final class SCSICommandDescriptorBlockParser {
 
     /**
      * Creates the Command Descriptor Block for a Read Capacity Message.
-     * 
+     *
      * @return A <code>ByteBuffer</code> object with the above data.
      */
-    public static final ByteBuffer createReadCapacityMessage () {
+    public static final ByteBuffer createReadCapacityMessage() {
 
         ByteBuffer cdb = ByteBuffer.allocate(DEFAULT_CDB_LENGTH);
         // operation code

@@ -1,15 +1,15 @@
 package org.jscsi.target.scsi.sense.senseDataDescriptor.senseKeySpecific;
 
 
-import java.nio.ByteBuffer;
-
 import org.jscsi.target.util.ReadWrite;
+
+import java.nio.ByteBuffer;
 
 
 /**
  * Progress indication sense-key-specific data is used to communicate the progress of a previously issued SCSI command
  * (e.g. <code>FORMAT UNIT</code>).
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public final class ProgressIndicationSenseKeySpecificData extends SenseKeySpecificData {
@@ -32,18 +32,18 @@ public final class ProgressIndicationSenseKeySpecificData extends SenseKeySpecif
 
     /**
      * The consctructor.
-     * 
+     *
      * @param senseKeySpecificDataValid <code>true</code> if and only if the <i>progressIndication</i> parameter is to
-     *            be considered valid
-     * @param progressIndication specifies the progress, the integer must lie in the interval [0, 65536]
+     *                                  be considered valid
+     * @param progressIndication        specifies the progress, the integer must lie in the interval [0, 65536]
      */
-    public ProgressIndicationSenseKeySpecificData (final boolean senseKeySpecificDataValid, final int progressIndication) {
+    public ProgressIndicationSenseKeySpecificData(final boolean senseKeySpecificDataValid, final int progressIndication) {
         super(senseKeySpecificDataValid);
         this.progressIndication = (short) progressIndication;
     }
 
     @Override
-    protected void serializeSpecificFields (ByteBuffer byteBuffer, int index) {
+    protected void serializeSpecificFields(ByteBuffer byteBuffer, int index) {
 
         ReadWrite.writeTwoByteInt(byteBuffer, progressIndication, index + PROGRESS_INDICATION_FIELD_INDEX);
     }

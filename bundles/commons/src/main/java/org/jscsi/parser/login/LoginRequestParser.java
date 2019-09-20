@@ -1,13 +1,13 @@
 /**
  * Copyright (c) 2012, University of Konstanz, Distributed Systems Group All rights reserved.
- * 
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
  * following conditions are met: * Redistributions of source code must retain the above copyright notice, this list of
  * conditions and the following disclaimer. * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation and/or other materials provided with the
  * distribution. * Neither the name of the University of Konstanz nor the names of its contributors may be used to
  * endorse or promote products derived from this software without specific prior written permission.
- * 
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
  * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -18,7 +18,6 @@
  */
 package org.jscsi.parser.login;
 
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.BasicHeaderSegment;
 import org.jscsi.parser.Constants;
@@ -26,7 +25,6 @@ import org.jscsi.parser.InitiatorMessageParser;
 import org.jscsi.parser.ProtocolDataUnit;
 import org.jscsi.parser.datasegment.DataSegmentFactory.DataSegmentFormat;
 import org.jscsi.utils.Utils;
-
 
 /**
  * <h1>LoginRequestParser</h1>
@@ -84,60 +82,67 @@ import org.jscsi.utils.Utils;
  * and targets. Keys in Chapter 11 only need to be supported when the function to which they refer is mandatory to
  * implement.
  * <p>
- * 
+ *
  * @author Volker Wildi
  */
 public final class LoginRequestParser extends InitiatorMessageParser {
 
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
-
-    /** The Continue Flag. */
+    /**
+     * The Continue Flag.
+     */
     private boolean continueFlag;
 
-    /** The Current stage in the session. */
+    /**
+     * The Current stage in the session.
+     */
     private LoginStage currentStageNumber;
 
-    /** The next stage in the session. */
+    /**
+     * The next stage in the session.
+     */
     private LoginStage nextStageNumber;
 
-    /** The maximum version number to support. */
+    /**
+     * The maximum version number to support.
+     */
     private byte maxVersion;
 
-    /** The minimum version number to support. */
+    /**
+     * The minimum version number to support.
+     */
     private byte minVersion;
 
-    /** The Initiator Session ID (ISID). */
+    /**
+     * The Initiator Session ID (ISID).
+     */
     private ISID initiatorSessionID;
 
-    /** The Target Session Identifying Handle (TSIH). */
+    /**
+     * The Target Session Identifying Handle (TSIH).
+     */
     private short targetSessionIdentifyingHandle;
 
-    /** The Connection ID. */
+    /**
+     * The Connection ID.
+     */
     private int connectionID;
-
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
 
     /**
      * Default constructor, creates a new, empty <code>LoginRequestParser</code> object.
-     * 
+     *
      * @param initProtocolDataUnit The reference <code>ProtocolDataUnit</code> instance, which contains this
-     *            <code>LoginRequestParser</code> subclass object.
+     *                             <code>LoginRequestParser</code> subclass object.
      */
-    public LoginRequestParser (final ProtocolDataUnit initProtocolDataUnit) {
-
+    public LoginRequestParser(final ProtocolDataUnit initProtocolDataUnit) {
         super(initProtocolDataUnit);
         initiatorSessionID = new ISID();
     }
 
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
-
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public final String toString () {
-
+    public final String toString() {
         final StringBuilder sb = new StringBuilder(Constants.LOG_INITIAL_SIZE);
 
         Utils.printField(sb, "Continue Flag", continueFlag, 1);
@@ -153,24 +158,27 @@ public final class LoginRequestParser extends InitiatorMessageParser {
         return sb.toString();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public final DataSegmentFormat getDataSegmentFormat () {
-
+    public final DataSegmentFormat getDataSegmentFormat() {
         return DataSegmentFormat.TEXT;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public final boolean canHaveDigests () {
-
+    public final boolean canHaveDigests() {
         return false;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public final void clear () {
-
+    public final void clear() {
         super.clear();
 
         continueFlag = false;
@@ -187,9 +195,6 @@ public final class LoginRequestParser extends InitiatorMessageParser {
         connectionID = 0x00000000;
     }
 
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
-
     /**
      * A unique ID for this connection within the session.
      * <p>
@@ -200,11 +205,10 @@ public final class LoginRequestParser extends InitiatorMessageParser {
      * A Login Request with a non-zero <code>TSIH</code> and a <code>CID</code> equal to that of an existing connection
      * implies a logout of the connection followed by a Login (see Section 5.3.4 Connection Reinstatement). For the
      * details of the implicit Logout Request, see Section 10.14 Logout Request.
-     * 
+     *
      * @return The Connection ID of this LoginRequestParser object.
      */
-    public final int getConnectionID () {
-
+    public final int getConnectionID() {
         return connectionID;
     }
 
@@ -213,11 +217,10 @@ public final class LoginRequestParser extends InitiatorMessageParser {
      * complete (it will be continued on subsequent Login Requests); otherwise, it indicates that this Login Request
      * ends a set of key=value pairs. A Login Request with the <code>C</code> bit set to <code>1</code> MUST have the
      * <code>T</code> bit set to <code>0</code>.
-     * 
+     *
      * @return Returns <code>true</code>, if the Continue Bit is set. Else <code>false</code>.
      */
-    public final boolean isContinueFlag () {
-
+    public final boolean isContinueFlag() {
         return continueFlag;
     }
 
@@ -237,23 +240,21 @@ public final class LoginRequestParser extends InitiatorMessageParser {
      * </ul>
      * <p>
      * All other codes are reserved.
-     * 
+     *
      * @return Number of the Current Stage.
      * @see org.jscsi.parser.login.LoginStage
      */
-    public final LoginStage getCurrentStageNumber () {
-
+    public final LoginStage getCurrentStageNumber() {
         return currentStageNumber;
     }
 
     /**
      * Returns the <em>Initiator Session ID (ISID)</em> of this LoginRequestParser object.
-     * 
+     *
      * @return Returns the <em>Initiator Session ID (ISID)</em> of this <code>LoginRequestParser</code> object.
      * @see ISID
      */
-    public final ISID getInitiatorSessionID () {
-
+    public final ISID getInitiatorSessionID() {
         return initiatorSessionID;
     }
 
@@ -263,22 +264,20 @@ public final class LoginRequestParser extends InitiatorMessageParser {
      * All Login Requests within the Login Phase MUST carry the same Version-max.
      * <p>
      * The target MUST use the value presented with the first Login Request.
-     * 
+     *
      * @return The maximum version of this login request message.
      */
-    public final byte getMaxVersion () {
-
+    public final byte getMaxVersion() {
         return maxVersion;
     }
 
     /**
      * All Login Requests within the Login Phase MUST carry the same Version-min. The target MUST use the value
      * presented with the first Login Request.
-     * 
+     *
      * @return The minimum version of this login request message.
      */
-    public final byte getMinVersion () {
-
+    public final byte getMinVersion() {
         return minVersion;
     }
 
@@ -298,12 +297,11 @@ public final class LoginRequestParser extends InitiatorMessageParser {
      * </ul>
      * <p>
      * All other codes are reserved.
-     * 
+     *
      * @return The Number of the Next Stage.
      * @see org.jscsi.parser.login.LoginStage
      */
-    public final LoginStage getNextStageNumber () {
-
+    public final LoginStage getNextStageNumber() {
         return nextStageNumber;
     }
 
@@ -317,110 +315,96 @@ public final class LoginRequestParser extends InitiatorMessageParser {
      * <p>
      * The target MUST check the value presented with the first Login Request and act as specified in Section 5.3.1
      * Login Phase Start.
-     * 
+     *
      * @return Returns the Target Session Identifying Handle of this LoginRequestParser object.
      */
-    public final short getTargetSessionIdentifyingHandle () {
-
+    public final short getTargetSessionIdentifyingHandle() {
         return targetSessionIdentifyingHandle;
     }
 
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
-
     /**
      * Sets the new Connection ID of this LoginRequestParser object.
-     * 
+     *
      * @param initCID The new Connection ID.
      * @see #getConnectionID()
      */
-    public final void setConnectionID (final int initCID) {
-
+    public final void setConnectionID(final int initCID) {
         connectionID = initCID;
     }
 
     /**
      * Sets the new state of the <em>Continue Flag</em> of this <code>LoginRequestParser</code> obejct.
-     * 
+     *
      * @param initContinueFlag The new state of the Continue Flag.
      * @see #isContinueFlag()
      */
-    public final void setContinueFlag (final boolean initContinueFlag) {
-
+    public final void setContinueFlag(final boolean initContinueFlag) {
         continueFlag = initContinueFlag;
     }
 
     /**
      * Sets the new <em>Current Stage Number</em> of this <code>LoginRequestParser</code> object.
-     * 
+     *
      * @param initCSG The new Current Stage Number.
      * @see #getCurrentStageNumber()
      */
-    public final void setCurrentStageNumber (final LoginStage initCSG) {
-
+    public final void setCurrentStageNumber(final LoginStage initCSG) {
         currentStageNumber = initCSG;
     }
 
     /**
      * Sets the new <em>Initiator Session ID (ISID)</em> of this <code>LoginRequestParser</code> object.
-     * 
+     *
      * @param initISID The new Initiator Session ID (ISID).
      */
-    public final void setInitiatorSessionID (final ISID initISID) {
-
+    public final void setInitiatorSessionID(final ISID initISID) {
         initiatorSessionID = initISID;
     }
 
     /**
      * Sets the new <em>Maximum Version number</em> of this <code>LoginRequestParser</code> object.
-     * 
+     *
      * @param initMaxVersion The new Maximum Version.
      * @see #getMaxVersion
      */
-    public final void setMaxVersion (final byte initMaxVersion) {
-
+    public final void setMaxVersion(final byte initMaxVersion) {
         maxVersion = initMaxVersion;
     }
 
     /**
      * Sets the new <em>Minimum Version number</em> of this <code>LoginRequestParser</code> object.
-     * 
+     *
      * @param initMinVersion The new Minimum Version.
      * @see #getMinVersion
      */
-    public final void setMinVersion (final byte initMinVersion) {
-
+    public final void setMinVersion(final byte initMinVersion) {
         minVersion = initMinVersion;
     }
 
     /**
      * Sets the new <em>Next Stage Number</em> of this <code>LoginRequestParser</code> object.
-     * 
+     *
      * @param initNSG The new Next Stage Number.
      * @see #getNextStageNumber()
      */
-    public final void setNextStageNumber (final LoginStage initNSG) {
-
+    public final void setNextStageNumber(final LoginStage initNSG) {
         nextStageNumber = initNSG;
     }
 
     /**
      * Sets the new <em>Target Session Identifying Handle</em> of this <code>LoginRequestParser</code> object.
-     * 
+     *
      * @param initTSIH The new Target Session Identifying Handle.
      */
-    public final void setTargetSessionIdentifyingHandle (final short initTSIH) {
-
+    public final void setTargetSessionIdentifyingHandle(final short initTSIH) {
         targetSessionIdentifyingHandle = initTSIH;
     }
 
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
-
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    protected final void deserializeBytes1to3 (final int line) throws InternetSCSIException {
-
+    protected final void deserializeBytes1to3(final int line) throws InternetSCSIException {
         continueFlag = Utils.isBitSet(line & Constants.CONTINUE_FLAG_MASK);
 
         Utils.isReserved(line & LoginConstants.BIT_11_AND_12_FLAG_MASK);
@@ -432,10 +416,11 @@ public final class LoginRequestParser extends InitiatorMessageParser {
         minVersion = (byte) (line & Constants.FOURTH_BYTE_MASK);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    protected final void deserializeBytes12to15 (final int line) throws InternetSCSIException {
-
+    protected final void deserializeBytes12to15(final int line) throws InternetSCSIException {
         // use the logicalUnitNumber variable as temporary storage
         final long l = Utils.getUnsignedLong(line);
         logicalUnitNumber |= l;
@@ -444,21 +429,20 @@ public final class LoginRequestParser extends InitiatorMessageParser {
         targetSessionIdentifyingHandle = (short) (line & Constants.LAST_TWO_BYTES_MASK);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    protected void deserializeBytes20to23 (final int line) throws InternetSCSIException {
-
+    protected void deserializeBytes20to23(final int line) throws InternetSCSIException {
         connectionID = (line & Constants.FIRST_TWO_BYTES_MASK) >>> Constants.TWO_BYTES_SHIFT;
         Utils.isReserved(line & Constants.LAST_TWO_BYTES_MASK);
     }
 
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
-
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    protected final void checkIntegrity () throws InternetSCSIException {
-
+    protected final void checkIntegrity() throws InternetSCSIException {
         String exceptionMessage;
 
         do {
@@ -512,13 +496,11 @@ public final class LoginRequestParser extends InitiatorMessageParser {
         throw new InternetSCSIException(exceptionMessage);
     }
 
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
-
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    protected final int serializeBytes1to3 () {
-
+    protected final int serializeBytes1to3() {
         int line = minVersion;
         line |= maxVersion << Constants.ONE_BYTE_SHIFT;
 
@@ -532,34 +514,32 @@ public final class LoginRequestParser extends InitiatorMessageParser {
         return line;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    protected final int serializeBytes8to11 () throws InternetSCSIException {
-
+    protected final int serializeBytes8to11() throws InternetSCSIException {
         logicalUnitNumber = initiatorSessionID.serialize();
         return (int) (logicalUnitNumber >>> Constants.FOUR_BYTES_SHIFT);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    protected final int serializeBytes12to15 () {
-
+    protected final int serializeBytes12to15() {
         int line = (int) (logicalUnitNumber & Constants.LAST_FOUR_BYTES_MASK);
         line |= targetSessionIdentifyingHandle;
 
         return line;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    protected final int serializeBytes20to23 () {
-
+    protected final int serializeBytes20to23() {
         return connectionID << Constants.TWO_BYTES_SHIFT;
     }
-
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
-    // --------------------------------------------------------------------------
 
 }

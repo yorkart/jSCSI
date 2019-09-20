@@ -1,8 +1,5 @@
 package org.jscsi.target.connection.stage.fullfeature;
 
-import java.io.IOException;
-import java.security.DigestException;
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.BasicHeaderSegment;
 import org.jscsi.parser.ProtocolDataUnit;
@@ -21,22 +18,25 @@ import org.jscsi.target.settings.SettingsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.security.DigestException;
+
 
 /**
  * A stage for processing <code>MODE SENSE (6)</code> SCSI commands.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public final class ModeSenseStage extends TargetFullFeatureStage {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ModeSenseStage.class);
 
-    public ModeSenseStage (TargetFullFeaturePhase targetFullFeaturePhase) {
+    public ModeSenseStage(TargetFullFeaturePhase targetFullFeaturePhase) {
         super(targetFullFeaturePhase);
     }
 
     @Override
-    public void execute (final ProtocolDataUnit pdu) throws IOException , InterruptedException , InternetSCSIException , DigestException , SettingsException {
+    public void execute(final ProtocolDataUnit pdu) throws IOException, InterruptedException, InternetSCSIException, DigestException, SettingsException {
 
         final BasicHeaderSegment bhs = pdu.getBasicHeaderSegment();
         final SCSICommandParser parser = (SCSICommandParser) bhs.getParser();
@@ -62,15 +62,15 @@ public final class ModeSenseStage extends TargetFullFeatureStage {
         if (modePageCode == ModePageCode.INFORMATIONAL_EXCEPTIONS_CONTROL_MODE_PAGE) {
             // TODO this should to be made dynamic wrt. cdb.getPageControl();
 
-            modePages = new ModePage[] { getInformationExceptionsControlModePage() };
+            modePages = new ModePage[]{getInformationExceptionsControlModePage()};
 
         } else if (modePageCode == ModePageCode.CACHING_MODE_PAGE) {
 
-            modePages = new ModePage[] { getCachingModePage() };
+            modePages = new ModePage[]{getCachingModePage()};
 
         } else if (modePageCode == ModePageCode.RETURN_ALL_MODE_PAGES_ONLY) {
 
-            modePages = new ModePage[] { getInformationExceptionsControlModePage(), getCachingModePage() };
+            modePages = new ModePage[]{getInformationExceptionsControlModePage(), getCachingModePage()};
 
         }// else modeParameterList stays null
 
@@ -80,7 +80,7 @@ public final class ModeSenseStage extends TargetFullFeatureStage {
             // create ModeParameterList
             final ModeParameterListBuilder builder = new ModeParameterListBuilder(HeaderType.MODE_PARAMETER_HEADER_6);
             builder.setLogicalBlockDescriptors(new ShortLogicalBlockDescriptor(session.getStorageModule().getSizeInBlocks(),// numberOfLogicalBlocks
-            session.getStorageModule().getBlockSize()));// logicalBlockLength
+                    session.getStorageModule().getBlockSize()));// logicalBlockLength
             builder.setModePages(modePages);
             ModeParameterList modeParameterList = ModeParameterList.build(builder);
 
@@ -100,44 +100,44 @@ public final class ModeSenseStage extends TargetFullFeatureStage {
 
     }
 
-    private static final InformationExceptionsControlModePage getInformationExceptionsControlModePage () {
+    private static final InformationExceptionsControlModePage getInformationExceptionsControlModePage() {
         return new InformationExceptionsControlModePage(false,// parametersSaveable
-        false,// performance
-        false,// enableBackgroundFunction
-        false,// enableWarning
-        true,// disableExceptionControl
-        false,// test
-        false,// logErrors
-        0x0,// methodOfReportingInformationalExceptionConditions
-        0,// intervalTimer
-        0);// reportCount
+                false,// performance
+                false,// enableBackgroundFunction
+                false,// enableWarning
+                true,// disableExceptionControl
+                false,// test
+                false,// logErrors
+                0x0,// methodOfReportingInformationalExceptionConditions
+                0,// intervalTimer
+                0);// reportCount
     }
 
-    private static final CachingModePage getCachingModePage () {
+    private static final CachingModePage getCachingModePage() {
         return new CachingModePage(false,// parametersSaveable
-        false,// initiatorControl
-        true,// abortPrefetch
-        false,// cachingAnalysisPermitted
-        false,// discontinuity
-        true,// sizeEnable
-        false,// writebackCacheEnable
-        false,// multiplicationFactor
-        true,// readCacheDisable
-        0x0,// demandReadRetentionPriority
-        0x0,// writeRetentionPriority
-        0,// disablePrefetchTransferLength
-        0,// minimumPrefetch
-        65535,// maximumPrefetch
-        65535,// maximumPrefetchCeiling
-        true,// forceSequentialWrite
-        false,// logicalBlockCacheSegmentSize
-        false,// disableReadAhead
-        false,// nonVolatileCacheDisabled
-        20,// numberOfCacheSegments
-        0);// cacheSegmentSize
+                false,// initiatorControl
+                true,// abortPrefetch
+                false,// cachingAnalysisPermitted
+                false,// discontinuity
+                true,// sizeEnable
+                false,// writebackCacheEnable
+                false,// multiplicationFactor
+                true,// readCacheDisable
+                0x0,// demandReadRetentionPriority
+                0x0,// writeRetentionPriority
+                0,// disablePrefetchTransferLength
+                0,// minimumPrefetch
+                65535,// maximumPrefetch
+                65535,// maximumPrefetchCeiling
+                true,// forceSequentialWrite
+                false,// logicalBlockCacheSegmentSize
+                false,// disableReadAhead
+                false,// nonVolatileCacheDisabled
+                20,// numberOfCacheSegments
+                0);// cacheSegmentSize
     }
 
-    public boolean canHandle (final ProtocolDataUnit pdu) {
+    public boolean canHandle(final ProtocolDataUnit pdu) {
         final BasicHeaderSegment bhs = pdu.getBasicHeaderSegment();
         final SCSICommandParser parser = (SCSICommandParser) bhs.getParser();
         final ModeSense6Cdb cdb = new ModeSense6Cdb(parser.getCDB());

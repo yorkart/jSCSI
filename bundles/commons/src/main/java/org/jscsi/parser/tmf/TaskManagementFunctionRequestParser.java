@@ -1,13 +1,13 @@
 /**
  * Copyright (c) 2012, University of Konstanz, Distributed Systems Group All rights reserved.
- * 
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
  * following conditions are met: * Redistributions of source code must retain the above copyright notice, this list of
  * conditions and the following disclaimer. * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation and/or other materials provided with the
  * distribution. * Neither the name of the University of Konstanz nor the names of its contributors may be used to
  * endorse or promote products derived from this software without specific prior written permission.
- * 
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
  * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -19,9 +19,6 @@
 package org.jscsi.parser.tmf;
 
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.BasicHeaderSegment;
 import org.jscsi.parser.Constants;
@@ -29,6 +26,9 @@ import org.jscsi.parser.InitiatorMessageParser;
 import org.jscsi.parser.ProtocolDataUnit;
 import org.jscsi.parser.datasegment.DataSegmentFactory.DataSegmentFormat;
 import org.jscsi.utils.Utils;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -42,7 +42,7 @@ import org.jscsi.utils.Utils;
  * <h4>LUN</h4> This field is required for functions that address a specific LU (ABORT TASK, CLEAR TASK SET, ABORT TASK
  * SET, CLEAR ACA, LOGICAL UNIT RESET) and is reserved in all others.
  * <p>
- * 
+ *
  * @author Volker Wildi
  */
 public final class TaskManagementFunctionRequestParser extends InitiatorMessageParser {
@@ -79,38 +79,38 @@ public final class TaskManagementFunctionRequestParser extends InitiatorMessageP
 
         private byte value;
 
-        private static Map<Byte , FunctionCode> mapping;
+        private static Map<Byte, FunctionCode> mapping;
 
         static {
-            FunctionCode.mapping = new HashMap<Byte , FunctionCode>();
+            FunctionCode.mapping = new HashMap<Byte, FunctionCode>();
             for (FunctionCode s : values()) {
                 FunctionCode.mapping.put(s.value, s);
             }
         }
 
-        private FunctionCode (final byte newValue) {
+        private FunctionCode(final byte newValue) {
 
             value = newValue;
         }
 
         /**
          * Returns the value of this enumeration.
-         * 
+         *
          * @return The value of this enumeration.
          */
-        public final byte value () {
+        public final byte value() {
 
             return value;
         }
 
         /**
          * Returns the constant defined for the given <code>value</code>.
-         * 
+         *
          * @param value The value to search for.
          * @return The constant defined for the given <code>value</code>. Or <code>null</code>, if this value is not
          *         defined by this enumeration.
          */
-        public static final FunctionCode valueOf (final byte value) {
+        public static final FunctionCode valueOf(final byte value) {
 
             return FunctionCode.mapping.get(value);
         }
@@ -136,11 +136,11 @@ public final class TaskManagementFunctionRequestParser extends InitiatorMessageP
 
     /**
      * Default constructor, creates a new, empty <code>TaskManagementFunctionRequestParser</code> object.
-     * 
+     *
      * @param initProtocolDataUnit The reference <code>ProtocolDataUnit</code> instance, which contains this
      *            <code>TaskManagementFunctionRequestParser</code> subclass object.
      */
-    public TaskManagementFunctionRequestParser (final ProtocolDataUnit initProtocolDataUnit) {
+    public TaskManagementFunctionRequestParser(final ProtocolDataUnit initProtocolDataUnit) {
 
         super(initProtocolDataUnit);
     }
@@ -150,7 +150,7 @@ public final class TaskManagementFunctionRequestParser extends InitiatorMessageP
 
     /** {@inheritDoc} */
     @Override
-    public final String toString () {
+    public final String toString() {
 
         final StringBuilder sb = new StringBuilder(Constants.LOG_INITIAL_SIZE);
 
@@ -166,14 +166,14 @@ public final class TaskManagementFunctionRequestParser extends InitiatorMessageP
 
     /** {@inheritDoc} */
     @Override
-    public final DataSegmentFormat getDataSegmentFormat () {
+    public final DataSegmentFormat getDataSegmentFormat() {
 
         return DataSegmentFormat.NONE;
     }
 
     /** {@inheritDoc} */
     @Override
-    public final void clear () {
+    public final void clear() {
 
         super.clear();
 
@@ -204,10 +204,10 @@ public final class TaskManagementFunctionRequestParser extends InitiatorMessageP
      * <p/>
      * For other functions this field is reserved.
      * <p/>
-     * 
+     *
      * @return The expected data sequence number of this <code>TaskManagementFunctionRequestParser</code> object.
      */
-    public final int getExpDataSN () {
+    public final int getExpDataSN() {
 
         return expDataSN;
     }
@@ -330,10 +330,10 @@ public final class TaskManagementFunctionRequestParser extends InitiatorMessageP
      * in Task Management response of "Function rejected".
      * <p>
      * TASK REASSIGN MUST be issued as an immediate command.
-     * 
+     *
      * @return The function code of this <code>TaskManagementFunctionRequestParser</code> object.
      */
-    public final FunctionCode getFunction () {
+    public final FunctionCode getFunction() {
 
         return functionCode;
     }
@@ -347,10 +347,10 @@ public final class TaskManagementFunctionRequestParser extends InitiatorMessageP
      * described in section 10.6.1 when the task identified by the Referenced Task Tag field is not with the target.
      * <p>
      * Otherwise, this field is reserved.
-     * 
+     *
      * @return The referenced command sequence number of this <code>TaskManagementFunctionRequestParser</code> object.
      */
-    public final int getRefCmdSN () {
+    public final int getRefCmdSN() {
 
         return refCmdSN;
     }
@@ -358,10 +358,10 @@ public final class TaskManagementFunctionRequestParser extends InitiatorMessageP
     /**
      * The Initiator Task Tag of the task to be aborted for the ABORT TASK function or reassigned for the TASK REASSIGN
      * function. For all the other functions this field MUST be set to the reserved value <code>0xffffffff</code>.
-     * 
+     *
      * @return The referenced task tag of this <code>TaskManagementFunctionRequestParser</code> object.
      */
-    public final int getReferencedTaskTag () {
+    public final int getReferencedTaskTag() {
 
         return referencedTaskTag;
     }
@@ -371,7 +371,7 @@ public final class TaskManagementFunctionRequestParser extends InitiatorMessageP
 
     /** {@inheritDoc} */
     @Override
-    protected final void deserializeBytes1to3 (final int line) throws InternetSCSIException {
+    protected final void deserializeBytes1to3(final int line) throws InternetSCSIException {
 
         functionCode = FunctionCode.valueOf((byte) (line & Constants.SECOND_BYTE_MASK));
         Utils.isReserved(line & Constants.LAST_TWO_BYTES_MASK);
@@ -379,21 +379,21 @@ public final class TaskManagementFunctionRequestParser extends InitiatorMessageP
 
     /** {@inheritDoc} */
     @Override
-    protected final void deserializeBytes20to23 (final int line) throws InternetSCSIException {
+    protected final void deserializeBytes20to23(final int line) throws InternetSCSIException {
 
         referencedTaskTag = line;
     }
 
     /** {@inheritDoc} */
     @Override
-    protected final void deserializeBytes32to35 (final int line) throws InternetSCSIException {
+    protected final void deserializeBytes32to35(final int line) throws InternetSCSIException {
 
         refCmdSN = line;
     }
 
     /** {@inheritDoc} */
     @Override
-    protected final void deserializeBytes36to39 (final int line) throws InternetSCSIException {
+    protected final void deserializeBytes36to39(final int line) throws InternetSCSIException {
 
         expDataSN = line;
     }
@@ -403,7 +403,7 @@ public final class TaskManagementFunctionRequestParser extends InitiatorMessageP
 
     /** {@inheritDoc} */
     @Override
-    protected final void checkIntegrity () throws InternetSCSIException {
+    protected final void checkIntegrity() throws InternetSCSIException {
 
         String exceptionMessage;
 
@@ -435,28 +435,28 @@ public final class TaskManagementFunctionRequestParser extends InitiatorMessageP
 
     /** {@inheritDoc} */
     @Override
-    protected final int serializeBytes1to3 () {
+    protected final int serializeBytes1to3() {
 
         return functionCode.value() << Constants.TWO_BYTES_SHIFT;
     }
 
     /** {@inheritDoc} */
     @Override
-    protected final int serializeBytes20to23 () {
+    protected final int serializeBytes20to23() {
 
         return referencedTaskTag;
     }
 
     /** {@inheritDoc} */
     @Override
-    protected final int serializeBytes32to35 () {
+    protected final int serializeBytes32to35() {
 
         return refCmdSN;
     }
 
     /** {@inheritDoc} */
     @Override
-    protected final int serializeBytes36to39 () {
+    protected final int serializeBytes36to39() {
 
         return expDataSN;
     }

@@ -1,11 +1,6 @@
 package org.jscsi.target.connection.stage.login;
 
 
-import java.io.IOException;
-import java.security.DigestException;
-import java.util.List;
-import java.util.Vector;
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.BasicHeaderSegment;
 import org.jscsi.parser.ProtocolDataUnit;
@@ -17,10 +12,15 @@ import org.jscsi.target.settings.TextParameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.security.DigestException;
+import java.util.List;
+import java.util.Vector;
+
 
 /**
  * A {@link TargetLoginStage} sub-class representing Login Operational (Parameter) Negotiation Stages.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public final class LoginOperationalParameterNegotiationStage extends TargetLoginStage {
@@ -29,15 +29,15 @@ public final class LoginOperationalParameterNegotiationStage extends TargetLogin
 
     /**
      * The constructor.
-     * 
+     *
      * @param targetLoginPhase the login phase this stage is a part of.
      */
-    public LoginOperationalParameterNegotiationStage (TargetLoginPhase targetLoginPhase) {
+    public LoginOperationalParameterNegotiationStage(TargetLoginPhase targetLoginPhase) {
         super(targetLoginPhase, LoginStage.LOGIN_OPERATIONAL_NEGOTIATION);
     }
 
     @Override
-    public void execute (ProtocolDataUnit pdu) throws IOException , InterruptedException , InternetSCSIException , DigestException , IllegalArgumentException , SettingsException {
+    public void execute(ProtocolDataUnit pdu) throws IOException, InterruptedException, InternetSCSIException, DigestException, IllegalArgumentException, SettingsException {
         LOGGER.debug("Entering LOPN Stage");
 
         BasicHeaderSegment bhs = pdu.getBasicHeaderSegment();

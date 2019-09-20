@@ -1,9 +1,6 @@
 package org.jscsi.target.connection.stage.fullfeature;
 
 
-import java.io.IOException;
-import java.security.DigestException;
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.BasicHeaderSegment;
 import org.jscsi.parser.ProtocolDataUnit;
@@ -25,6 +22,9 @@ import org.jscsi.target.settings.SettingsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.security.DigestException;
+
 
 /**
  * A stage for processing <code>FORMAT UNIT</code> SCSI commands.
@@ -43,19 +43,19 @@ import org.slf4j.LoggerFactory;
  * <p>
  * <code>FORMAT UNIT</code> commands received by the jSCI Target will not lead to any persistent changes of the virtual
  * logical unit.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public class FormatUnitStage extends TargetFullFeatureStage {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReadStage.class);
 
-    public FormatUnitStage (TargetFullFeaturePhase targetFullFeaturePhase) {
+    public FormatUnitStage(TargetFullFeaturePhase targetFullFeaturePhase) {
         super(targetFullFeaturePhase);
     }
 
     @Override
-    public void execute (ProtocolDataUnit pdu) throws IOException , InterruptedException , InternetSCSIException , DigestException , SettingsException {
+    public void execute(ProtocolDataUnit pdu) throws IOException, InterruptedException, InternetSCSIException, DigestException, SettingsException {
 
         LOGGER.debug("Initiator has sent FORMAT UNIT command.");
 
@@ -72,22 +72,22 @@ public class FormatUnitStage extends TargetFullFeatureStage {
             // an illegal request has been made
 
             FixedFormatSenseData senseData = new FixedFormatSenseData(false,// valid
-            ErrorType.CURRENT,// error type
-            false,// file mark
-            false,// end of medium
-            false,// incorrect length indicator
-            SenseKey.ILLEGAL_REQUEST,// sense key
-            new FourByteInformation(),// information
-            new FourByteInformation(),// command specific information
-            AdditionalSenseCodeAndQualifier.INVALID_FIELD_IN_CDB,// additional
-                                                                 // sense
-                                                                 // code
-                                                                 // and
-                                                                 // qualifier
-            (byte) 0,// field replaceable unit code
-            illegalFieldPointers[0],// sense key specific data, only
-                                    // report first problem
-            new AdditionalSenseBytes());// additional sense bytes
+                    ErrorType.CURRENT,// error type
+                    false,// file mark
+                    false,// end of medium
+                    false,// incorrect length indicator
+                    SenseKey.ILLEGAL_REQUEST,// sense key
+                    new FourByteInformation(),// information
+                    new FourByteInformation(),// command specific information
+                    AdditionalSenseCodeAndQualifier.INVALID_FIELD_IN_CDB,// additional
+                    // sense
+                    // code
+                    // and
+                    // qualifier
+                    (byte) 0,// field replaceable unit code
+                    illegalFieldPointers[0],// sense key specific data, only
+                    // report first problem
+                    new AdditionalSenseBytes());// additional sense bytes
 
             responsePdu = TargetPduFactory.createSCSIResponsePdu(false,// bidirectionalReadResidualOverflow
                     false,// bidirectionalReadResidualUnderflow
@@ -101,7 +101,7 @@ public class FormatUnitStage extends TargetFullFeatureStage {
                     0,// bidirectionalReadResidualCount
                     0,// residualCount
                     new ScsiResponseDataSegment(senseData, parser.getExpectedDataTransferLength()));// data
-                                                                                                    // segment
+            // segment
 
         } else {
             // PDU is okay

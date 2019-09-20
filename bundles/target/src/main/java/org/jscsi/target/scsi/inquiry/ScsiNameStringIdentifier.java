@@ -8,7 +8,7 @@ import java.nio.ByteBuffer;
  * The null-terminated, null-padded (see 4.4.2) SCSI NAME STRING field contains a UTF-8 format string. The number of
  * bytes in the SCSI NAME STRING field (i.e., the value in the IDENTIFIER LENGTH field) shall be no larger than 256 and
  * shall be a multiple of four.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public class ScsiNameStringIdentifier extends Identifier {
@@ -33,7 +33,7 @@ public class ScsiNameStringIdentifier extends Identifier {
      */
     private static final String logicalUnitNameExtension = "493f51ba986f9800";
 
-    public ScsiNameStringIdentifier (String targetName) {
+    public ScsiNameStringIdentifier(String targetName) {
 
         /*
          * The SCSI NAME STRING field starts with either:<br> ...<br> c) The four UTF-8 characters "iqn." concatenated
@@ -45,7 +45,7 @@ public class ScsiNameStringIdentifier extends Identifier {
         nameString = targetName + ",L,0x" + logicalUnitNameExtension;
     }
 
-    public void serialize (ByteBuffer byteBuffer, int index) {
+    public void serialize(ByteBuffer byteBuffer, int index) {
         byteBuffer.position(index);
         final int size = size();// this many bytes will be written
         int stringLength = Math.min(nameString.length(), MAX_SIZE);
@@ -58,17 +58,17 @@ public class ScsiNameStringIdentifier extends Identifier {
             byteBuffer.put((byte) 0);
     }
 
-    public int size () {
+    public int size() {
         return Math.min(nameString.length() + getNullTerminatedPaddingLength(), MAX_SIZE);
     }
 
     /**
      * Returns the number of null-character padding bytes that have to be appended to the {@link #nameString} when used
      * in serialized form.
-     * 
+     *
      * @return the required number of null-character padding bytes
      */
-    private int getNullTerminatedPaddingLength () {
+    private int getNullTerminatedPaddingLength() {
         return 4 - (nameString.length() % 4);
     }
 }

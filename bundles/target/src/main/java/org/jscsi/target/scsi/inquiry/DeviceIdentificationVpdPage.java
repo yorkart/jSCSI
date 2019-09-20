@@ -1,11 +1,11 @@
 package org.jscsi.target.scsi.inquiry;
 
 
-import java.nio.ByteBuffer;
-
 import org.jscsi.target.TargetServer;
 import org.jscsi.target.scsi.IResponseData;
 import org.jscsi.target.util.ReadWrite;
+
+import java.nio.ByteBuffer;
 
 
 /**
@@ -29,7 +29,7 @@ import org.jscsi.target.util.ReadWrite;
  * device.
  * <p>
  * This class uses the singleton pattern since the content of the DEVICE IDENTIFICATION VPD PAGE will never change.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public class DeviceIdentificationVpdPage implements IResponseData {
@@ -66,7 +66,7 @@ public class DeviceIdentificationVpdPage implements IResponseData {
 
     private IdentificationDescriptor[] identificationDescriptors = new IdentificationDescriptor[0];
 
-    public DeviceIdentificationVpdPage (TargetServer target) {
+    public DeviceIdentificationVpdPage(TargetServer target) {
 
         /*
          * For each logical unit that is not a well known logical unit, the Device Identification VPD page shall include
@@ -90,10 +90,10 @@ public class DeviceIdentificationVpdPage implements IResponseData {
 
     /**
      * Returns the combined length of all contained IDENTIFICATION DESCRIPTORs.
-     * 
+     *
      * @return the combined length of all contained IDENTIFICATION DESCRIPTORs
      */
-    private short getPageLength () {
+    private short getPageLength() {
         short pageLength = 0;
         for (int i = 0; i < identificationDescriptors.length; ++i) {
             pageLength += identificationDescriptors[i].size();
@@ -101,7 +101,7 @@ public class DeviceIdentificationVpdPage implements IResponseData {
         return pageLength;
     }
 
-    public void serialize (ByteBuffer byteBuffer, int index) {
+    public void serialize(ByteBuffer byteBuffer, int index) {
         // serialize header
         byteBuffer.position(index);
         byteBuffer.put(peripheralQualifierAndPeripheralDeviceType);
@@ -111,7 +111,7 @@ public class DeviceIdentificationVpdPage implements IResponseData {
                 getPageLength(), index + PAGE_LENGTH_FIELD_INDEX);// index
     }
 
-    public int size () {
+    public int size() {
         return getPageLength() + HEADER_LENGTH;
     }
 }

@@ -1,13 +1,13 @@
 /**
  * Copyright (c) 2012, University of Konstanz, Distributed Systems Group All rights reserved.
- * 
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
  * following conditions are met: * Redistributions of source code must retain the above copyright notice, this list of
  * conditions and the following disclaimer. * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation and/or other materials provided with the
  * distribution. * Neither the name of the University of Konstanz nor the names of its contributors may be used to
  * endorse or promote products derived from this software without specific prior written permission.
- * 
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
  * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -19,16 +19,16 @@
 package org.jscsi.parser.scsi;
 
 
-import java.nio.ByteBuffer;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.Constants;
 import org.jscsi.parser.InitiatorMessageParser;
 import org.jscsi.parser.ProtocolDataUnit;
 import org.jscsi.parser.datasegment.DataSegmentFactory.DataSegmentFormat;
 import org.jscsi.utils.Utils;
+
+import java.nio.ByteBuffer;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -46,7 +46,7 @@ import org.jscsi.utils.Utils;
  * (e.g., from a WRITE operation) can be placed in the data segment (both cases are referred to as immediate data).
  * These data are governed by the rules for solicited vs. unsolicited data outlined in Section 3.2.4.2 Data Transfer
  * Overview.
- * 
+ *
  * @author Volker Wildi
  */
 public class SCSICommandParser extends InitiatorMessageParser {
@@ -115,38 +115,38 @@ public class SCSICommandParser extends InitiatorMessageParser {
 
         private final byte value;
 
-        private static Map<Byte , TaskAttributes> mapping;
+        private static Map<Byte, TaskAttributes> mapping;
 
         static {
-            TaskAttributes.mapping = new HashMap<Byte , TaskAttributes>();
+            TaskAttributes.mapping = new HashMap<Byte, TaskAttributes>();
             for (TaskAttributes s : values()) {
                 TaskAttributes.mapping.put(s.value, s);
             }
         }
 
-        private TaskAttributes (final byte newValue) {
+        private TaskAttributes(final byte newValue) {
 
             value = newValue;
         }
 
         /**
          * Returns the value of this enumeration.
-         * 
+         *
          * @return The value of this enumeration.
          */
-        public final byte value () {
+        public final byte value() {
 
             return value;
         }
 
         /**
          * Returns the constant defined for the given <code>value</code>.
-         * 
+         *
          * @param value The value to search for.
          * @return The constant defined for the given <code>value</code>. Or <code>null</code>, if this value is not
          *         defined by this enumeration.
          */
-        public static final TaskAttributes valueOf (final byte value) {
+        public static final TaskAttributes valueOf(final byte value) {
 
             return TaskAttributes.mapping.get(value);
         }
@@ -191,11 +191,11 @@ public class SCSICommandParser extends InitiatorMessageParser {
 
     /**
      * Default constructor, creates a new, empty <code>SCSICommandParser</code> object.
-     * 
+     *
      * @param initProtocolDataUnit The reference <code>ProtocolDataUnit</code> instance, which contains this
      *            <code>SCSICommandParser</code> subclass object.
      */
-    public SCSICommandParser (final ProtocolDataUnit initProtocolDataUnit) {
+    public SCSICommandParser(final ProtocolDataUnit initProtocolDataUnit) {
 
         super(initProtocolDataUnit);
         commandDescriptorBlock = ByteBuffer.allocate(CDB_SIZE);
@@ -206,7 +206,7 @@ public class SCSICommandParser extends InitiatorMessageParser {
 
     /** {@inheritDoc} */
     @Override
-    public final String toString () {
+    public final String toString() {
 
         final StringBuilder sb = new StringBuilder(Constants.LOG_INITIAL_SIZE);
 
@@ -221,21 +221,21 @@ public class SCSICommandParser extends InitiatorMessageParser {
 
     /** {@inheritDoc} */
     @Override
-    public final DataSegmentFormat getDataSegmentFormat () {
+    public final DataSegmentFormat getDataSegmentFormat() {
 
         return DataSegmentFormat.BINARY;
     }
 
     /** {@inheritDoc} */
     @Override
-    public final boolean canContainAdditionalHeaderSegments () {
+    public final boolean canContainAdditionalHeaderSegments() {
 
         return true;
     }
 
     /** {@inheritDoc} */
     @Override
-    public final void clear () {
+    public final void clear() {
 
         super.clear();
 
@@ -254,11 +254,11 @@ public class SCSICommandParser extends InitiatorMessageParser {
     /**
      * There are <code>16</code> bytes in the CDB field to accommodate the commonly used CDBs. Whenever the CDB is
      * larger than <code>16</code> bytes, an Extended CDB AHS MUST be used to contain the CDB spillover.
-     * 
+     *
      * @return A <code>ByteBuffer</code> with the content of the Command Descriptor Blocks contained in this
      *         <code>SCSICommandParser</code> object.
      */
-    public final ByteBuffer getCDB () {
+    public final ByteBuffer getCDB() {
 
         return (ByteBuffer) commandDescriptorBlock.rewind();
     }
@@ -287,20 +287,20 @@ public class SCSICommandParser extends InitiatorMessageParser {
      * <p>
      * Upon completion of a data transfer, the target informs the initiator (through residual counts) of how many bytes
      * were actually processed (sent and/or received) by the target.
-     * 
+     *
      * @return The Expected Data Transfer Length of this SCSICommandParser object.
      */
-    public final int getExpectedDataTransferLength () {
+    public final int getExpectedDataTransferLength() {
 
         return expectedDataTransferLength;
     }
 
     /**
      * The command expects input data (read).
-     * 
+     *
      * @return <code>true</code>,if a read command is expected. Else <code>false</code>.
      */
-    public final boolean isReadExpectedFlag () {
+    public final boolean isReadExpectedFlag() {
 
         return readExpectedFlag;
     }
@@ -308,7 +308,7 @@ public class SCSICommandParser extends InitiatorMessageParser {
     /**
      * @param newReadExpectedFlag The readExpectedFlag to set.
      */
-    public final void setReadExpectedFlag (final boolean newReadExpectedFlag) {
+    public final void setReadExpectedFlag(final boolean newReadExpectedFlag) {
 
         readExpectedFlag = newReadExpectedFlag;
     }
@@ -316,7 +316,7 @@ public class SCSICommandParser extends InitiatorMessageParser {
     /**
      * @return Returns the taskAttributes.
      */
-    public final TaskAttributes getTaskAttributes () {
+    public final TaskAttributes getTaskAttributes() {
 
         return taskAttributes;
     }
@@ -324,17 +324,17 @@ public class SCSICommandParser extends InitiatorMessageParser {
     /**
      * @param newTaskAttributes The taskAttributes to set.
      */
-    public final void setTaskAttributes (final TaskAttributes newTaskAttributes) {
+    public final void setTaskAttributes(final TaskAttributes newTaskAttributes) {
 
         taskAttributes = newTaskAttributes;
     }
 
     /**
      * The command expects output data (write).
-     * 
+     *
      * @return <code>true</code>,if a write command is expected. Else <code>false</code>.
      */
-    public final boolean isWriteExpectedFlag () {
+    public final boolean isWriteExpectedFlag() {
 
         return writeExpectedFlag;
     }
@@ -342,26 +342,28 @@ public class SCSICommandParser extends InitiatorMessageParser {
     /**
      * @param newWriteExpectedFlag The writeExpectedFlag to set.
      */
-    public final void setWriteExpectedFlag (final boolean newWriteExpectedFlag) {
+    public final void setWriteExpectedFlag(final boolean newWriteExpectedFlag) {
 
         writeExpectedFlag = newWriteExpectedFlag;
     }
 
     /**
      * Sets the new Command Descriptor Block.
-     * 
+     *
      * @param newCDB The new Command Descriptor Block.
      */
-    public final void setCommandDescriptorBlock (final ByteBuffer newCDB) {
+    public final void setCommandDescriptorBlock(final ByteBuffer newCDB) {
 
-        if (newCDB.limit() - newCDB.position() > CDB_SIZE) { throw new IllegalArgumentException("Buffer cannot be longer than 16 bytes, because AHS-support is not implemented."); }
+        if (newCDB.limit() - newCDB.position() > CDB_SIZE) {
+            throw new IllegalArgumentException("Buffer cannot be longer than 16 bytes, because AHS-support is not implemented.");
+        }
         commandDescriptorBlock = newCDB;
     }
 
     /**
      * @param newExpectedDataTransferLength The expectedDataTransferLength to set.
      */
-    public final void setExpectedDataTransferLength (final int newExpectedDataTransferLength) {
+    public final void setExpectedDataTransferLength(final int newExpectedDataTransferLength) {
 
         expectedDataTransferLength = newExpectedDataTransferLength;
     }
@@ -371,7 +373,7 @@ public class SCSICommandParser extends InitiatorMessageParser {
 
     /** {@inheritDoc} */
     @Override
-    protected final void deserializeBytes1to3 (final int line) throws InternetSCSIException {
+    protected final void deserializeBytes1to3(final int line) throws InternetSCSIException {
 
         readExpectedFlag = Utils.isBitSet(line & READ_EXPECTED_FLAG_MASK);
         writeExpectedFlag = Utils.isBitSet(line & WRITE_EXPECTED_FLAG_MASK);
@@ -382,14 +384,14 @@ public class SCSICommandParser extends InitiatorMessageParser {
 
     /** {@inheritDoc} */
     @Override
-    protected final void deserializeBytes20to23 (final int line) throws InternetSCSIException {
+    protected final void deserializeBytes20to23(final int line) throws InternetSCSIException {
 
         expectedDataTransferLength = line;
     }
 
     /** {@inheritDoc} */
     @Override
-    protected final void deserializeBytes32to35 (final int line) throws InternetSCSIException {
+    protected final void deserializeBytes32to35(final int line) throws InternetSCSIException {
 
         commandDescriptorBlock.rewind();
         commandDescriptorBlock.putInt(line);
@@ -397,21 +399,21 @@ public class SCSICommandParser extends InitiatorMessageParser {
 
     /** {@inheritDoc} */
     @Override
-    protected final void deserializeBytes36to39 (final int line) throws InternetSCSIException {
+    protected final void deserializeBytes36to39(final int line) throws InternetSCSIException {
 
         commandDescriptorBlock.putInt(line);
     }
 
     /** {@inheritDoc} */
     @Override
-    protected final void deserializeBytes40to43 (final int line) throws InternetSCSIException {
+    protected final void deserializeBytes40to43(final int line) throws InternetSCSIException {
 
         commandDescriptorBlock.putInt(line);
     }
 
     /** {@inheritDoc} */
     @Override
-    protected final void deserializeBytes44to47 (final int line) throws InternetSCSIException {
+    protected final void deserializeBytes44to47(final int line) throws InternetSCSIException {
 
         commandDescriptorBlock.putInt(line);
     }
@@ -421,7 +423,7 @@ public class SCSICommandParser extends InitiatorMessageParser {
 
     /** {@inheritDoc} */
     @Override
-    protected final void checkIntegrity () throws InternetSCSIException {
+    protected final void checkIntegrity() throws InternetSCSIException {
 
         String exceptionMessage;
         do {
@@ -448,7 +450,7 @@ public class SCSICommandParser extends InitiatorMessageParser {
 
     /** {@inheritDoc} */
     @Override
-    protected final int serializeBytes1to3 () {
+    protected final int serializeBytes1to3() {
 
         int line = 0;
 
@@ -467,14 +469,14 @@ public class SCSICommandParser extends InitiatorMessageParser {
 
     /** {@inheritDoc} */
     @Override
-    protected final int serializeBytes20to23 () {
+    protected final int serializeBytes20to23() {
 
         return expectedDataTransferLength;
     }
 
     /** {@inheritDoc} */
     @Override
-    protected final int serializeBytes32to35 () {
+    protected final int serializeBytes32to35() {
 
         commandDescriptorBlock.rewind();
         return commandDescriptorBlock.getInt();
@@ -482,21 +484,21 @@ public class SCSICommandParser extends InitiatorMessageParser {
 
     /** {@inheritDoc} */
     @Override
-    protected final int serializeBytes36to39 () {
+    protected final int serializeBytes36to39() {
 
         return commandDescriptorBlock.getInt();
     }
 
     /** {@inheritDoc} */
     @Override
-    protected final int serializeBytes40to43 () {
+    protected final int serializeBytes40to43() {
 
         return commandDescriptorBlock.getInt();
     }
 
     /** {@inheritDoc} */
     @Override
-    protected final int serializeBytes44to47 () {
+    protected final int serializeBytes44to47() {
 
         return commandDescriptorBlock.getInt();
     }

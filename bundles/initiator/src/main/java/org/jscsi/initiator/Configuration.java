@@ -1,13 +1,13 @@
 /**
  * Copyright (c) 2012, University of Konstanz, Distributed Systems Group All rights reserved.
- * 
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
  * following conditions are met: * Redistributions of source code must retain the above copyright notice, this list of
  * conditions and the following disclaimer. * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation and/or other materials provided with the
  * distribution. * Neither the name of the University of Konstanz nor the names of its contributors may be used to
  * endorse or promote products derived from this software without specific prior written permission.
- * 
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
  * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -18,25 +18,6 @@
  */
 package org.jscsi.initiator;
 
-
-import java.io.File;
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.UnknownHostException;
-import java.util.Hashtable;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import javax.xml.XMLConstants;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.dom.DOMResult;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
-import javax.xml.validation.Validator;
 
 import org.jscsi.exception.ConfigurationException;
 import org.jscsi.exception.NoSuchSessionException;
@@ -55,13 +36,31 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import javax.xml.XMLConstants;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.dom.DOMResult;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
+import java.io.File;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.UnknownHostException;
+import java.util.Hashtable;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 
 /**
  * <h1>Configuration</h1>
  * <p>
  * This class stores all informations, which are set during an iSCSI Session, Connection or are set as the default
  * values. Therefore, this class was implemented as a Singleton Pattern.
- * 
+ *
  * @author Volker Wildi, University of Konstanz
  */
 public final class Configuration {
@@ -134,10 +133,10 @@ public final class Configuration {
     // --------------------------------------------------------------------------
 
     /** Contains all global configuration parameters. */
-    private final Map<OperationalTextKey , SettingEntry> globalConfig;
+    private final Map<OperationalTextKey, SettingEntry> globalConfig;
 
     /** Contains all session-wide configuration parameters. */
-    private final ConcurrentHashMap<String , SessionConfiguration> sessionConfigs;
+    private final ConcurrentHashMap<String, SessionConfiguration> sessionConfigs;
 
     // --------------------------------------------------------------------------
     // --------------------------------------------------------------------------
@@ -145,14 +144,14 @@ public final class Configuration {
     /**
      * Constructor to create a new, empty <code>Configuration</code> object.
      */
-    public Configuration () {
-        this(new Hashtable<OperationalTextKey , SettingEntry>(), new ConcurrentHashMap<String , SessionConfiguration>(0));
+    public Configuration() {
+        this(new Hashtable<OperationalTextKey, SettingEntry>(), new ConcurrentHashMap<String, SessionConfiguration>(0));
     }
 
     /**
      * Constructor to create a <code>Configuration</code> object with existing data
      */
-    public Configuration (final Hashtable<OperationalTextKey , SettingEntry> paramGlobalConfig, final ConcurrentHashMap<String , SessionConfiguration> paramConfig) {
+    public Configuration(final Hashtable<OperationalTextKey, SettingEntry> paramGlobalConfig, final ConcurrentHashMap<String, SessionConfiguration> paramConfig) {
 
         globalConfig = paramGlobalConfig;
         sessionConfigs = paramConfig;
@@ -164,11 +163,11 @@ public final class Configuration {
     /**
      * Creates a instance of a <code>Configuration</code> object, which is initialized with the settings from the
      * system-wide configuration file.
-     * 
+     *
      * @return A <code>Configuration</code> instance with all settings.
      * @throws ConfigurationException If this operation is supported but failed for some reason.
      */
-    public static final Configuration create () throws ConfigurationException {
+    public static final Configuration create() throws ConfigurationException {
 
         return create(CONFIGURATION_SCHEMA_FILE, CONFIGURATION_CONFIG_FILE);
     }
@@ -176,14 +175,14 @@ public final class Configuration {
     /**
      * Creates a instance of a <code>Configuration</code> object, which is initialized with the settings from the
      * system-wide configuration file.
-     * 
+     *
      * @param configSchemaFileName The file name of the schema to check the configuration file against.s
      * @param configFileName The file name of the configuration file to use.
      * @return A <code>Configuration</code> instance with all settings.
      * @throws ConfigurationException If this operation is supported but failed for some reason.
-     * 
+     *
      */
-    public static final Configuration create (final File configSchemaFileName, final File configFileName) throws ConfigurationException {
+    public static final Configuration create(final File configSchemaFileName, final File configFileName) throws ConfigurationException {
 
         final Configuration config = new Configuration();
 
@@ -195,14 +194,14 @@ public final class Configuration {
 
     /**
      * Returns the value of a single parameter, instead of all values.
-     * 
+     *
      * @param targetName Name of the iSCSI Target to connect.
      * @param connectionID The ID of the connection to retrieve.
      * @param textKey The name of the parameter.
      * @return The value of the given parameter.
      * @throws OperationalTextKeyException If the given parameter cannot be found.
      */
-    public final String getSetting (final String targetName, final int connectionID, final OperationalTextKey textKey) throws OperationalTextKeyException {
+    public final String getSetting(final String targetName, final int connectionID, final OperationalTextKey textKey) throws OperationalTextKeyException {
 
         try {
             final SessionConfiguration sc;
@@ -212,7 +211,9 @@ public final class Configuration {
                 synchronized (sc) {
                     if (sc != null) {
                         String value = sc.getSetting(connectionID, textKey);
-                        if (value != null) { return value; }
+                        if (value != null) {
+                            return value;
+                        }
                     }
                 }
             }
@@ -227,7 +228,9 @@ public final class Configuration {
             se = globalConfig.get(textKey);
 
             synchronized (se) {
-                if (se != null) { return se.getValue(); }
+                if (se != null) {
+                    return se.getValue();
+                }
             }
         }
 
@@ -237,18 +240,18 @@ public final class Configuration {
     /**
      * Unifies all parameters (in the right precedence) and returns one <code>SettingsMap</code>. Right order means:
      * default, then the session-wide, and finally the connection-wide valid parameters.
-     * 
+     *
      * @param targetName Name of the iSCSI Target to connect.
      * @param connectionID The ID of the connection to retrieve.
      * @return All unified parameters in one single <code>SettingsMap</code>.
      */
-    public final SettingsMap getSettings (final String targetName, final int connectionID) {
+    public final SettingsMap getSettings(final String targetName, final int connectionID) {
 
         final SettingsMap sm = new SettingsMap();
 
         // set all default settings
         synchronized (globalConfig) {
-            for (Map.Entry<OperationalTextKey , SettingEntry> e : globalConfig.entrySet()) {
+            for (Map.Entry<OperationalTextKey, SettingEntry> e : globalConfig.entrySet()) {
                 sm.add(e.getKey(), e.getValue().getValue());
             }
         }
@@ -261,7 +264,7 @@ public final class Configuration {
             synchronized (sc) {
                 if (sc != null) {
                     final SettingsMap furtherSettings = sc.getSettings(connectionID);
-                    for (Map.Entry<OperationalTextKey , String> e : furtherSettings.entrySet()) {
+                    for (Map.Entry<OperationalTextKey, String> e : furtherSettings.entrySet()) {
                         sm.add(e.getKey(), e.getValue());
                     }
                 }
@@ -273,54 +276,58 @@ public final class Configuration {
 
     /**
      * Returns the value of a single parameter. It can only return session and global parameters.
-     * 
+     *
      * @param targetName Name of the iSCSI Target to connect.
      * @param textKey The name of the parameter.
      * @return The value of the given parameter.
      * @throws OperationalTextKeyException If the given parameter cannot be found.
      */
 
-    public final String getSessionSetting (final String targetName, final OperationalTextKey textKey) throws OperationalTextKeyException {
+    public final String getSessionSetting(final String targetName, final OperationalTextKey textKey) throws OperationalTextKeyException {
 
         return getSetting(targetName, -1, textKey);
     }
 
     /**
      * Returns the <code>InetAddress</code> instance of the connected iSCSI Target.
-     * 
+     *
      * @param targetName The name of the iSCSI Target.
      * @return The <code>InetAddress</code> instance of the requested iSCSI Target.
      * @throws NoSuchSessionException if a session with this target name is not open.
      */
-    public final InetSocketAddress getTargetAddress (final String targetName) throws NoSuchSessionException {
+    public final InetSocketAddress getTargetAddress(final String targetName) throws NoSuchSessionException {
 
         final SessionConfiguration sc = sessionConfigs.get(targetName);
 
-        if (sc == null) { throw new NoSuchSessionException("A session with the ID '" + targetName + "' does not exist."); }
+        if (sc == null) {
+            throw new NoSuchSessionException("A session with the ID '" + targetName + "' does not exist.");
+        }
 
         return sc.getInetSocketAddress();
     }
 
     /**
      * Updates the stored settings of a connection with these values from the response of the iSCSI Target.
-     * 
+     *
      * @param targetName The name of the iSCSI Target.
      * @param connectionID The ID of the connection within this iSCSI Target.
      * @param response The response settings.
      * @throws NoSuchSessionException if a session with this target name is not open.
      */
-    public final void update (final String targetName, final int connectionID, final SettingsMap response) throws NoSuchSessionException {
+    public final void update(final String targetName, final int connectionID, final SettingsMap response) throws NoSuchSessionException {
 
         final SessionConfiguration sc;
         synchronized (sessionConfigs) {
             sc = sessionConfigs.get(targetName);
 
             synchronized (sc) {
-                if (sc == null) { throw new NoSuchSessionException("A session with the ID '" + targetName + "' does not exist."); }
+                if (sc == null) {
+                    throw new NoSuchSessionException("A session with the ID '" + targetName + "' does not exist.");
+                }
 
                 synchronized (response) {
                     SettingEntry se;
-                    for (Map.Entry<OperationalTextKey , String> e : response.entrySet()) {
+                    for (Map.Entry<OperationalTextKey, String> e : response.entrySet()) {
                         synchronized (globalConfig) {
                             se = globalConfig.get(e.getKey());
 
@@ -350,13 +357,13 @@ public final class Configuration {
 
     /**
      * Reads the given configuration file in memory and creates a DOM representation.
-     * 
+     *
      * @throws SAXException If this operation is supported but failed for some reason.
      * @throws ParserConfigurationException If a <code>DocumentBuilder</code> cannot be created which satisfies the
      *             configuration requested.
      * @throws IOException If any IO errors occur.
      */
-    private final Document parse (final File schemaLocation, final File configFile) throws ConfigurationException {
+    private final Document parse(final File schemaLocation, final File configFile) throws ConfigurationException {
         try {
             final SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
             final Schema schema = schemaFactory.newSchema(schemaLocation);
@@ -386,12 +393,14 @@ public final class Configuration {
 
     /**
      * Parses all settings form the main configuration file.
-     * 
+     *
      * @param root The root element of the configuration.
      */
-    private final void parseSettings (final Element root) {
+    private final void parseSettings(final Element root) {
 
-        if (root == null) { throw new NullPointerException(); }
+        if (root == null) {
+            throw new NullPointerException();
+        }
 
         clear();
         parseGlobalSettings(root);
@@ -400,10 +409,10 @@ public final class Configuration {
 
     /**
      * Parses all global settings form the main configuration file.
-     * 
+     *
      * @param root The root element of the configuration.
      */
-    private final void parseGlobalSettings (final Element root) {
+    private final void parseGlobalSettings(final Element root) {
 
         final NodeList globalConfiguration = root.getElementsByTagName(ELEMENT_GLOBAL);
 
@@ -438,10 +447,10 @@ public final class Configuration {
 
     /**
      * Parses all target-specific settings form the main configuration file.
-     * 
+     *
      * @param root The root element of the configuration.
      */
-    private final void parseTargetSpecificSettings (final Element root) {
+    private final void parseTargetSpecificSettings(final Element root) {
 
         final NodeList targets = root.getElementsByTagName(ELEMENT_TARGET);
 
@@ -486,7 +495,7 @@ public final class Configuration {
     /**
      * Clears all parameters.
      */
-    private final void clear () {
+    private final void clear() {
 
         synchronized (globalConfig) {
             globalConfig.clear();
@@ -505,7 +514,7 @@ public final class Configuration {
     /**
      * This class contains a session-wide <code>SettingsMap</code> with one or more connection-specific
      * <code>SettingsMap</code>.
-     * 
+     *
      * @author Volker Wildi
      */
     private final class SessionConfiguration {
@@ -514,7 +523,7 @@ public final class Configuration {
         private final SettingsMap sessionConfiguration;
 
         /** The connection-specific settings. */
-        private final Map<Integer , SettingsMap> connectionConfiguration;
+        private final Map<Integer, SettingsMap> connectionConfiguration;
 
         /** The <code>InetSocketAddress</code> of the endpoint. */
         private InetSocketAddress inetAddress;
@@ -522,19 +531,19 @@ public final class Configuration {
         /**
          * Default constructor to create a new, empty <code>SessionConfiguration</code> object.
          */
-        SessionConfiguration () {
+        SessionConfiguration() {
 
             sessionConfiguration = new SettingsMap();
-            connectionConfiguration = new LinkedHashMap<Integer , SettingsMap>(0);
+            connectionConfiguration = new LinkedHashMap<Integer, SettingsMap>(0);
         }
 
         /**
          * Adds a session-wide parameter to this <code>SessionConfiguration</code> object.
-         * 
+         *
          * @param textKey The name of the parameter to add
          * @param textValue The value of the parameter to add.
          */
-        final void addSessionSetting (final OperationalTextKey textKey, final String textValue) {
+        final void addSessionSetting(final OperationalTextKey textKey, final String textValue) {
 
             sessionConfiguration.add(textKey, textValue);
         }
@@ -542,12 +551,12 @@ public final class Configuration {
         /**
          * Updates the value of the given <code>OperationTextKey</code> of this session with the response key
          * <code>textValue</code> and the result function.
-         * 
+         *
          * @param textKey The <code>OperationalTextKey</code> to update.
          * @param textValue The value of the response.
          * @param resultFunction The <code>IResultFunction</code> instance to use to obtain the result.
          */
-        final void updateSessionSetting (final OperationalTextKey textKey, final String textValue, final IResultFunction resultFunction) {
+        final void updateSessionSetting(final OperationalTextKey textKey, final String textValue, final IResultFunction resultFunction) {
 
             sessionConfiguration.update(textKey, textValue, resultFunction);
         }
@@ -580,13 +589,13 @@ public final class Configuration {
         /**
          * Updates the value of the given <code>OperationTextKey</code> of the given connection within this session with
          * the response key <code>textValue</code> and the result function.
-         * 
+         *
          * @param connectionID The ID of the connection.
          * @param textKey The <code>OperationalTextKey</code> to update.
          * @param textValue The value of the response.
          * @param resultFunction The <code>IResultFunction</code> instance to use to obtain the result.
          */
-        final void updateConnectionSetting (final int connectionID, final OperationalTextKey textKey, final String textValue, final IResultFunction resultFunction) {
+        final void updateConnectionSetting(final int connectionID, final OperationalTextKey textKey, final String textValue, final IResultFunction resultFunction) {
 
             SettingsMap sm = connectionConfiguration.get(connectionID);
             if (sm == null) {
@@ -663,38 +672,42 @@ public final class Configuration {
 
         /**
          * Returns a single setting value of a connection (specified by the ID).
-         * 
+         *
          * @param connectionID The ID of the connection.
          * @param textKey The name of the parameter.
          * @return the value of the given parameter of the connection.
          * @throws OperationalTextKeyException If the given parameter cannot be found.
          */
-        final String getSetting (final int connectionID, final OperationalTextKey textKey) throws OperationalTextKeyException {
+        final String getSetting(final int connectionID, final OperationalTextKey textKey) throws OperationalTextKeyException {
 
             final SettingsMap sm = connectionConfiguration.get(connectionID);
             if (sm != null) {
                 final String value = sm.get(textKey);
-                if (value != null) { return value; }
+                if (value != null) {
+                    return value;
+                }
             }
 
             final String value = sessionConfiguration.get(textKey);
-            if (value != null) { return value; }
+            if (value != null) {
+                return value;
+            }
 
             throw new OperationalTextKeyException("No OperationalTextKey entry found for key: " + textKey.value());
         }
 
         /**
          * Returns all settings of a connection (specified by the ID).
-         * 
+         *
          * @param connectionID The ID of the connection.
          * @return All session-wide and connection-specific settings of the connection.
          */
-        final SettingsMap getSettings (final int connectionID) {
+        final SettingsMap getSettings(final int connectionID) {
 
             final SettingsMap sm = new SettingsMap();
 
             // set all session settings
-            for (Map.Entry<OperationalTextKey , String> e : sessionConfiguration.entrySet()) {
+            for (Map.Entry<OperationalTextKey, String> e : sessionConfiguration.entrySet()) {
                 sm.add(e.getKey(), e.getValue());
             }
 
@@ -702,7 +715,7 @@ public final class Configuration {
             final SettingsMap connectionSettings = connectionConfiguration.get(connectionID);
             if (connectionSettings != null) {
 
-                for (Map.Entry<OperationalTextKey , String> e : connectionSettings.entrySet()) {
+                for (Map.Entry<OperationalTextKey, String> e : connectionSettings.entrySet()) {
                     sm.add(e.getKey(), e.getValue());
                 }
             }
@@ -711,23 +724,23 @@ public final class Configuration {
 
         /**
          * Returns the <code>InetAddress</code> of the leading connection of the session.
-         * 
+         *
          * @return An <code>InetAddress</code> instance.
          */
-        final InetSocketAddress getInetSocketAddress () {
+        final InetSocketAddress getInetSocketAddress() {
 
             return inetAddress;
         }
 
         /**
          * Sets the <code>InetAddress</code> of the leading connection to the given value.
-         * 
+         *
          * @param newInetAddress The new <code>InetAddress</code> of the leading connection.
          * @param port The new Port of the leading connection;
          * @throws UnknownHostException This exception is thrown, when the host with the given <code>InetAddress</code>
          *             is not reachable.
          */
-        final void setAddress (final String newInetAddress, final int port) throws UnknownHostException {
+        final void setAddress(final String newInetAddress, final int port) throws UnknownHostException {
 
             inetAddress = new InetSocketAddress(newInetAddress, port);
         }

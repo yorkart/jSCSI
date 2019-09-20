@@ -7,7 +7,7 @@ import org.jscsi.target.scsi.ISerializable;
 /**
  * Instances {@link ModeParameterHeader} are part of {@link ModeParameterList} objects and specify the layout and length
  * of the following non-header fields.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public abstract class ModeParameterHeader implements ISerializable {
@@ -71,11 +71,11 @@ public abstract class ModeParameterHeader implements ISerializable {
 
     /**
      * The abstract constructor.
-     * 
-     * @param modeDataLength the length in bytes of all MODE DATA list elements
+     *
+     * @param modeDataLength        the length in bytes of all MODE DATA list elements
      * @param blockDescriptorLength the length in bytes of all BLOCK DESCRIPTOR list elements
      */
-    public ModeParameterHeader (final int modeDataLength, final int blockDescriptorLength) {
+    public ModeParameterHeader(final int modeDataLength, final int blockDescriptorLength) {
         this.modeDataLength = modeDataLength;
         this.blockDescriptorLength = blockDescriptorLength;
     }

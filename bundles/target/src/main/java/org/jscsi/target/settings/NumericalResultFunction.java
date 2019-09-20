@@ -9,7 +9,7 @@ import org.jscsi.target.settings.entry.NumericalEntry;
  * negotiations.
  * <p>
  * The behavior of this enumeration is described in the {@link #getResult(int, int)} method.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public enum NumericalResultFunction {
@@ -24,12 +24,12 @@ public enum NumericalResultFunction {
 
     /**
      * Returns either the value of the first or the second parameter, depending of the value of this enumeration.
-     * 
+     *
      * @param a the first value
      * @param b the second value
      * @return either <i>a</i> or <i>b</i>
      */
-    public int getResult (final int a, final int b) {
+    public int getResult(final int a, final int b) {
         if (this == MIN) return Math.min(a, b);
         return Math.max(a, b);
     }

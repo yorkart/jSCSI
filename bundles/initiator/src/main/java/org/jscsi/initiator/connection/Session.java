@@ -1,13 +1,13 @@
 /**
  * Copyright (c) 2012, University of Konstanz, Distributed Systems Group All rights reserved.
- * 
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
  * following conditions are met: * Redistributions of source code must retain the above copyright notice, this list of
  * conditions and the following disclaimer. * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation and/or other materials provided with the
  * distribution. * Neither the name of the University of Konstanz nor the names of its contributors may be used to
  * endorse or promote products derived from this software without specific prior written permission.
- * 
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
  * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -17,20 +17,11 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /**
- * 
+ *
  */
 
 package org.jscsi.initiator.connection;
 
-
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
-import java.util.concurrent.LinkedBlockingQueue;
 
 import org.jscsi.exception.NoSuchConnectionException;
 import org.jscsi.exception.TaskExecutionException;
@@ -48,6 +39,15 @@ import org.jscsi.utils.SerialArithmeticNumber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
+
 
 /**
  * <h1>Session</h1>
@@ -55,7 +55,7 @@ import org.slf4j.LoggerFactory;
  * A session or Initiator Target Nexus is a directed communication from an iSCSI Initiator to an iSCSI Target. Each
  * session can contain several connections. This allows a better usage of bandwidth and decreases latency times. The
  * Abstract Class is used to implement serveral single- and multithreaded variants of Sessions
- * 
+ *
  * @author Volker Wildi, University of Konstanz
  * @author Patrice Matthias Brend'amour, University of Kontanz
  * @author Sebastian Graf, University of Kontanz
@@ -120,7 +120,7 @@ public final class Session {
 
     /** Contains all queues, which are till now not successfully finished. */
     // FIXME: Support me!
-    private final ConcurrentHashMap<ITask , Connection> outstandingTasks;
+    private final ConcurrentHashMap<ITask, Connection> outstandingTasks;
 
     /**
      * Handles the load balancing of the task distribution to the opened connections.
@@ -133,7 +133,7 @@ public final class Session {
     /**
      * Constructor to create a new, empty <code>AbsSession</code> object with a maximum number of allowed connections to
      * a given iSCSI Target. This is the abstract definition for Session implementations
-     * 
+     *
      * @param linkFactory The LinkFactory which called the Constructor
      * @param initConfiguration The configuration to use within this session.
      * @param initTargetName The name of the iSCSI Target.
@@ -142,7 +142,7 @@ public final class Session {
      * @throws Exception if anything happens
      */
 
-    public Session (final LinkFactory linkFactory, final Configuration initConfiguration, final String initTargetName, final InetSocketAddress inetAddress, final ExecutorService initExecutor) throws Exception {
+    public Session(final LinkFactory linkFactory, final Configuration initConfiguration, final String initTargetName, final InetSocketAddress inetAddress, final ExecutorService initExecutor) throws Exception {
 
         maxConnections = Integer.parseInt(initConfiguration.getSessionSetting(initTargetName, OperationalTextKey.MAX_CONNECTIONS));
         factory = linkFactory;
@@ -158,7 +158,7 @@ public final class Session {
         connections = new LinkedBlockingQueue<Connection>(maxConnections);
         executor = initExecutor;
         taskBalancer = new SimpleTaskBalancer(connections);
-        outstandingTasks = new ConcurrentHashMap<ITask , Connection>();
+        outstandingTasks = new ConcurrentHashMap<ITask, Connection>();
 
         // Add the leading connection
         addNewConnection();
@@ -183,10 +183,10 @@ public final class Session {
 
     /**
      * Returns the Target Session Identifying Handle (TSID) of this <code>Session</code> object.
-     * 
+     *
      * @return The current Target Session Identifying Handle (TSIH)
      */
-    public final short getTargetSessionIdentifyingHandle () {
+    public final short getTargetSessionIdentifyingHandle() {
 
         return targetSessionIdentifyingHandle;
     }
@@ -194,10 +194,10 @@ public final class Session {
     /**
      * Sets the Target Session Identifying Handle (TSIH) to the given value. This TSIH is specified at the Login Phase
      * by the target in a new session. So, it can only set one time.
-     * 
+     *
      * @param tsih The new Target Session Identifying Handle.
      */
-    public final void setTargetSessionIdentifyingHandle (final short tsih) {
+    public final void setTargetSessionIdentifyingHandle(final short tsih) {
 
         if (!tsihChanged) {
             targetSessionIdentifyingHandle = tsih;
@@ -210,40 +210,40 @@ public final class Session {
 
     /**
      * Returns the Command Sequence Number of this session.
-     * 
+     *
      * @return The current Command Sequence Number.
      */
-    public final int getCommandSequenceNumber () {
+    public final int getCommandSequenceNumber() {
 
         return commandSequenceNumber.getValue();
     }
 
     /**
      * Sets the Maximum Command Sequence Number to a new value.
-     * 
+     *
      * @param newMaximumCommandSequenceNumber The new Maximum Command Sequence Number.
      */
-    public final void setMaximumCommandSequenceNumber (final int newMaximumCommandSequenceNumber) {
+    public final void setMaximumCommandSequenceNumber(final int newMaximumCommandSequenceNumber) {
 
         maximumCommandSequenceNumber.setValue(newMaximumCommandSequenceNumber);
     }
 
     /**
      * Returns the Maximum Command Sequence Number of this session.
-     * 
+     *
      * @return The current Maximum Command Sequence Number.
      */
-    public final SerialArithmeticNumber getMaximumCommandSequenceNumber () {
+    public final SerialArithmeticNumber getMaximumCommandSequenceNumber() {
 
         return maximumCommandSequenceNumber;
     }
 
     /**
      * Returns the Initiator Task Tag of this session.
-     * 
+     *
      * @return The Initiator Task Tag.
      */
-    public final int getInitiatorTaskTag () {
+    public final int getInitiatorTaskTag() {
 
         return initiatorTaskTag.getValue();
     }
@@ -251,18 +251,18 @@ public final class Session {
     /**
      * Increments the Initiator Task Tag as defined in RFC1982 where <code>SERIAL_BITS = 32</code>.
      */
-    public final void incrementInitiatorTaskTag () {
+    public final void incrementInitiatorTaskTag() {
 
         initiatorTaskTag.increment();
     }
 
     /**
      * Has the iSCSI Target enough resources to accept more incoming PDU?
-     * 
+     *
      * @return <code>true</code>, if the iSCSI Target has enough resources to accept more incoming PDUs. Else
      *         <code>false</code> and hold out for sending.
      */
-    public final boolean hasTargetMoreResources () {
+    public final boolean hasTargetMoreResources() {
 
         return maximumCommandSequenceNumber.compareTo(commandSequenceNumber.getValue()) > 0;
     }
@@ -272,10 +272,10 @@ public final class Session {
 
     /**
      * Returns the name of the iSCSI Target of this session.
-     * 
+     *
      * @return The name of the iSCSI Target.
      */
-    public final String getTargetName () {
+    public final String getTargetName() {
 
         return targetName;
     }
@@ -285,11 +285,11 @@ public final class Session {
 
     /**
      * Adds a number of new connections to this session.
-     * 
+     *
      * @param max The number of Connections to open.
      * @throws Exception if any error occurs.
      */
-    public final void addConnections (final int max) throws Exception {
+    public final void addConnections(final int max) throws Exception {
 
         if (connections.size() < maxConnections) {
             for (int i = 1; i < max; i++) {
@@ -300,11 +300,11 @@ public final class Session {
 
     /**
      * Adds a new connection to this session with the next free connection ID (if the maximum number is not reached).
-     * 
+     *
      * @return The connection ID of the newly created connection.
      * @throws Exception if any error occurs.
      */
-    protected final short addNewConnection () throws Exception {
+    protected final short addNewConnection() throws Exception {
 
         if (connections.size() < maxConnections) {
 
@@ -332,10 +332,10 @@ public final class Session {
 
     /**
      * Updates the MaxConnection setting, so that it grows/shrinks the Connectionlist.
-     * 
+     *
      * @param max The maximum number of concurrent <code>Connections</code> to a target.
      */
-    public void updateMaxConnections (final int max) {
+    public void updateMaxConnections(final int max) {
 
         try {
             Connection conn = taskBalancer.getConnection();
@@ -374,11 +374,11 @@ public final class Session {
 
     /**
      * Returns the next free <code>Connection</code> object of this <code>Session</code> object.
-     * 
+     *
      * @return The connection to use for the next task.
      * @throws NoSuchConnectionException If there is no such connection.
      */
-    public final Connection getNextFreeConnection () throws NoSuchConnectionException {
+    public final Connection getNextFreeConnection() throws NoSuchConnectionException {
 
         return taskBalancer.getConnection();
     }
@@ -386,7 +386,7 @@ public final class Session {
     /**
      * Increments the Command Sequence Number as defined in RFC1982, where <code>SERIAL_BITS = 32</code>.
      */
-    public final void incrementCommandSequenceNumber () {
+    public final void incrementCommandSequenceNumber() {
 
         commandSequenceNumber.increment();
     }
@@ -396,10 +396,10 @@ public final class Session {
 
     /**
      * Closes this session instances with all opened connections.
-     * 
+     *
      * @throws IOException if an I/O error occurs.
      */
-    public final void close () throws IOException {
+    public final void close() throws IOException {
 
         LOGGER.info("Closing was requested.");
 
@@ -416,20 +416,20 @@ public final class Session {
 
     /**
      * Returns the used block size of the connected iSCSI Target.
-     * 
+     *
      * @return The used block size in bytes.
      */
-    public final long getBlockSize () {
+    public final long getBlockSize() {
 
         return capacityInformations.getBlockSize();
     }
 
     /**
      * Returns the capacity (in blocks) of the connected iSCSI Target.
-     * 
+     *
      * @return The capacity in blocks.
      */
-    public final long getCapacity () {
+    public final long getCapacity() {
 
         return capacityInformations.getSize();
     }
@@ -439,22 +439,22 @@ public final class Session {
 
     /**
      * This method invokes the same called method of the current <code>IPhase</code> instance.
-     * 
-     * 
+     *
+     *
      * @throws Exception if any error occurs.
      */
-    public final void login () throws Exception {
+    public final void login() throws Exception {
 
         executeTask(new LoginTask(this));
     }
 
     /**
      * This method invokes the same called method of the current <code>IPhase</code> instance.
-     * 
-     * 
+     *
+     *
      * @throws TaskExecutionException if any error occurs.
      */
-    public final void logout () throws TaskExecutionException {
+    public final void logout() throws TaskExecutionException {
 
         executeTask(new LogoutTask(this));
     }
@@ -464,8 +464,8 @@ public final class Session {
 
     /**
      * This method invokes the same called method of the current <code>IPhase</code> instance.
-     * 
-     * 
+     *
+     *
      * @param dst Store the read bytes to this buffer.
      * @param logicalBlockAddress The logical block address of the device to begin the read operation.
      * @param transferLength The number of bytes to read from the device.
@@ -473,15 +473,15 @@ public final class Session {
      * @return The Future object.
      * @throws TaskExecutionException if execution fails
      */
-    public final Future<Void> read (final ByteBuffer dst, final int logicalBlockAddress, final long transferLength) throws TaskExecutionException {
+    public final Future<Void> read(final ByteBuffer dst, final int logicalBlockAddress, final long transferLength) throws TaskExecutionException {
 
         return executeTask(new ReadTask(this, dst, logicalBlockAddress, transferLength));
     }
 
     /**
      * This method invokes the same called method of the current <code>IPhase</code> instance.
-     * 
-     * 
+     *
+     *
      * @param src Write the remaining bytes to the device.
      * @param logicalBlockAddress The logical block address of the device to begin the write operation.
      * @param transferLength The number of bytes to write to the device.
@@ -489,7 +489,7 @@ public final class Session {
      * @return The Future object.
      * @throws TaskExecutionException if execution fails
      */
-    public final Future<Void> write (final ByteBuffer src, final int logicalBlockAddress, final long transferLength) throws TaskExecutionException {
+    public final Future<Void> write(final ByteBuffer src, final int logicalBlockAddress, final long transferLength) throws TaskExecutionException {
 
         return executeTask(new WriteTask(this, src, logicalBlockAddress, transferLength));
     }
@@ -502,20 +502,20 @@ public final class Session {
 
     /**
      * Returns the current <code>LoginStage</code> object.
-     * 
+     *
      * @return The instance to the current <code>LoginStage</code>.
      */
-    public final LoginStage getPhase () {
+    public final LoginStage getPhase() {
 
         return phase.getStage();
     }
 
     /**
      * This method sets the current <code>IPhase</code> instance to the given value.
-     * 
+     *
      * @param newPhase The new instance to switch to.
      */
-    public final void setPhase (final IPhase newPhase) {
+    public final void setPhase(final IPhase newPhase) {
 
         phase = newPhase;
         LOGGER.trace("Switching to phase " + newPhase.getClass().getSimpleName());
@@ -524,14 +524,14 @@ public final class Session {
 
     /**
      * This methods appends the given task to the end of the taskQueue and set the calling thread is sleep state.
-     * 
+     *
      * @param task The task to append to the end of the taskQueue.
      * @throws InterruptedException if another thread interrupted the current thread before or while the current thread
      *             was waiting for a notification. The interrupted status of the current thread is cleared when this
      *             exception is thrown.
      * @throws ExecutionException if anything happens while execution
      */
-    private final Future<Void> executeTask (final ITask task) throws TaskExecutionException {
+    private final Future<Void> executeTask(final ITask task) throws TaskExecutionException {
 
         if (task instanceof IOTask) {
             final Future<Void> returnVal = executor.submit((IOTask) task);
@@ -549,10 +549,10 @@ public final class Session {
 
     /**
      * removes Task from outstandingTasks.
-     * 
+     *
      * @param ftask The Task which was finished .
      */
-    public final void finishedTask (final ITask ftask) {
+    public final void finishedTask(final ITask ftask) {
 
         try {
             taskBalancer.releaseConnection(outstandingTasks.get(ftask));
@@ -565,11 +565,11 @@ public final class Session {
 
     /**
      * restarts a Task from outstandingTasks.
-     * 
+     *
      * @param task The failed Task.
      * @throws ExecutionException for failed restart of the task
      */
-    public final void restartTask (final ITask task) throws ExecutionException {
+    public final void restartTask(final ITask task) throws ExecutionException {
 
         try {
             if (task != null) {
@@ -589,11 +589,11 @@ public final class Session {
 
     /**
      * Adds a Task to the outstandingTasks Hashmap.
-     * 
+     *
      * @param connection The Connection where the Task will be started
      * @param task The Task which was started.
      */
-    public final void addOutstandingTask (final Connection connection, final ITask task) {
+    public final void addOutstandingTask(final Connection connection, final ITask task) {
 
         outstandingTasks.put(task, connection);
         LOGGER.debug("Added a Task to the outstandingTasks Queue");
@@ -601,11 +601,11 @@ public final class Session {
 
     /**
      * Adds a Task to the outstandingTasks Hashmap.
-     * 
+     *
      * @param connection The Connection which will be released
      * @throws NoSuchConnectionException if any errors occur
      */
-    public final void releaseUsedConnection (final Connection connection) throws NoSuchConnectionException {
+    public final void releaseUsedConnection(final Connection connection) throws NoSuchConnectionException {
 
         taskBalancer.releaseConnection(connection);
     }

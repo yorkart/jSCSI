@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * <p>
  * The (byte) values of the additional sense code and the additional sense code qualifier, respectively, can be
  * retrieved independently from a given instance.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public enum AdditionalSenseCodeAndQualifier {
@@ -40,7 +40,7 @@ public enum AdditionalSenseCodeAndQualifier {
     /**
      * Maps two-byte fields (aka. short integers) to instances of this enumeration.
      */
-    private static Map<Short , AdditionalSenseCodeAndQualifier> mapping;
+    private static Map<Short, AdditionalSenseCodeAndQualifier> mapping;
 
     static {// initialize mapping
         /*
@@ -54,47 +54,47 @@ public enum AdditionalSenseCodeAndQualifier {
 
     /**
      * Returns the {@link AdditionalSenseCodeAndQualifier} instance representing the passed value.
-     * 
+     *
      * @param value the combined bytes of an ADDITIONAL SENSE CODE and an ADDITIONAL SENSE CODE QUALIFIER field
      * @return the {@link AdditionalSenseCodeAndQualifier} instance representing the passed value
      */
-    public static AdditionalSenseCodeAndQualifier valueOf (short value) {
+    public static AdditionalSenseCodeAndQualifier valueOf(short value) {
         return mapping.get(value);
     }
 
     /**
      * The constructor.
-     * 
+     *
      * @param value the serialiezd value of the two represented fields.
      */
-    private AdditionalSenseCodeAndQualifier (short value) {
+    private AdditionalSenseCodeAndQualifier(short value) {
         this.value = value;
     }
 
     /**
      * Returns the two-byte/short value of the two represented fields.
-     * 
+     *
      * @return the two-byte/short value of the two represented fields
      */
-    public short getValue () {
+    public short getValue() {
         return value;
     }
 
     /**
      * Returns the value of the ADDITIONAL SENSE CODE field represented by this instance.
-     * 
+     *
      * @return value of the ADDITIONAL SENSE CODE field
      */
-    public byte getAdditionalSenseCode () {
+    public byte getAdditionalSenseCode() {
         return (byte) (value >>> 8);
     }
 
     /**
      * Returns the value of the ADDITIONAL SENSE CODE QUALIFIER field represented by this instance.
-     * 
+     *
      * @return the value of the ADDITIONAL SENSE CODE QUALIFIER field
      */
-    public byte getAdditionalSenseCodeQualifier () {
+    public byte getAdditionalSenseCodeQualifier() {
         return (byte) value;
     }
 }

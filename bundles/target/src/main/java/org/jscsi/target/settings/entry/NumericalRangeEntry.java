@@ -23,7 +23,7 @@ import org.jscsi.target.settings.SingleNumericalValue;
  * {@link Entry#negotiate(org.jscsi.target.TargetServer, org.jscsi.parser.login.LoginStage, boolean, boolean, String, String, java.util.Collection)}
  * method, which will lead to correct responses without having to check for additional constraints (the presence and
  * <i>value</i> of <code>IFMarker</code> and <code>OFMarker</code> <i>key=value</i> pairs.
- * 
+ *
  * @author Andreas Ergenzinger
  */
 public final class NumericalRangeEntry extends Entry {
@@ -42,29 +42,29 @@ public final class NumericalRangeEntry extends Entry {
 
     /**
      * The {@link NumericalRangeEntry} constructor.
-     * 
-     * @param keySet contains all relevant keys
-     * @param use determines under which circumstances the parameter may be negotiated
-     * @param negotiationStatus indicates whether there is a default value or if the parameter must be negotiated
-     * @param negotiationValue the value the jSCSI Target would like to use
+     *
+     * @param keySet             contains all relevant keys
+     * @param use                determines under which circumstances the parameter may be negotiated
+     * @param negotiationStatus  indicates whether there is a default value or if the parameter must be negotiated
+     * @param negotiationValue   the value the jSCSI Target would like to use
      * @param protocolValueRange specifies the boundaries into which any RFC-conform <i>value</i> range proposed by the
-     *            iSCSI initiator must fall
-     * @param defaultValue the default value or <code>null</code>
+     *                           iSCSI initiator must fall
+     * @param defaultValue       the default value or <code>null</code>
      */
-    public NumericalRangeEntry (final KeySet keySet, final Use use, final NegotiationStatus negotiationStatus, final int negotiationValue, final NumericalValueRange protocolValueRange, final Object defaultValue) {
+    public NumericalRangeEntry(final KeySet keySet, final Use use, final NegotiationStatus negotiationStatus, final int negotiationValue, final NumericalValueRange protocolValueRange, final Object defaultValue) {
         super(keySet, NegotiationType.NEGOTIATED, use, negotiationStatus, defaultValue);
         this.negotiationValue = negotiationValue;
         this.protocolValueRange = protocolValueRange;
     }
 
     @Override
-    protected boolean inProtocolValueRange (Object values) {
+    protected boolean inProtocolValueRange(Object values) {
         // receives a NumericalValueRange
         return protocolValueRange.contains((NumericalValueRange) values);
     }
 
     @Override
-    protected Object parseOffer (TargetServer target, String values) {
+    protected Object parseOffer(TargetServer target, String values) {
         // expected format: "1234~5678"
 
         NumericalValueRange range = NumericalValueRange.parseNumericalValueRange(values);
@@ -84,12 +84,12 @@ public final class NumericalRangeEntry extends Entry {
     }
 
     @Override
-    protected void processDeclaration (Object values) {
+    protected void processDeclaration(Object values) {
         // there are no declarations, see constructor
     }
 
     @Override
-    protected String processNegotiation (Object values) {
+    protected String processNegotiation(Object values) {
         // receives a NumericalValueRange
         final NumericalValueRange range = (NumericalValueRange) values;
         // accept if negotiatedValue in initiator offer, else reject
@@ -102,12 +102,12 @@ public final class NumericalRangeEntry extends Entry {
     }
 
     @Override
-    public Integer getIntegerValue () {
+    public Integer getIntegerValue() {
         return (Integer) value;
     }
 
     @Override
-    public Entry copy () {
+    public Entry copy() {
         final NumericalRangeEntry e = new NumericalRangeEntry(keySet, use, negotiationStatus, negotiationValue, protocolValueRange, (Integer) value);
         e.alreadyNegotiated = this.alreadyNegotiated;
         return e;
