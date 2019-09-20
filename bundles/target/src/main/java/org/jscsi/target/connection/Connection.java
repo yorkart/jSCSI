@@ -213,8 +213,9 @@ public interface Connection extends Callable<Void> {
 
                     // if this is the leading connection, set the session type
                     final Settings settings = getSettings();
-                    if (isLeadingConnection)
+                    if (isLeadingConnection) {
                         targetSession.setSessionType(SessionType.getSessionType(settings.getSessionType()));
+                    }
                     targetSession.setTargetName(settings.getTargetName());
                     // *** full feature phase ***
                     phase = new TargetFullFeaturePhase(this);

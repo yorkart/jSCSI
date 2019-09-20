@@ -117,8 +117,8 @@ public class TargetSenderWorker {
              * The connection's ConnectionSettingsNegotiator has not been initialized, hence getSettings() would throw a
              * NullPointerException. Initialize PDU with default values, i.e. no digests.
              */
-            pdu = protocolDataUnitFactory.create(TextKeyword.NONE,// header
-                    // digest
+            pdu = protocolDataUnitFactory.create(
+                    TextKeyword.NONE,// header digest
                     TextKeyword.NONE);// data digest
         } else {
             // use negotiated or (now available) default settings
@@ -132,7 +132,9 @@ public class TargetSenderWorker {
             throw new InternetSCSIException(e);
         }
 
-        if (LOGGER.isDebugEnabled()) LOGGER.debug("Receiving this PDU:\n" + pdu);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Receiving this PDU:\n" + pdu);
+        }
 
         // parse sequence counters
         final BasicHeaderSegment bhs = pdu.getBasicHeaderSegment();
