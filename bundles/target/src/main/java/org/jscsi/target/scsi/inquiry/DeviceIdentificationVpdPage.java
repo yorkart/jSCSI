@@ -1,12 +1,10 @@
 package org.jscsi.target.scsi.inquiry;
 
-
 import org.jscsi.target.TargetServer;
 import org.jscsi.target.scsi.IResponseData;
 import org.jscsi.target.util.ReadWrite;
 
 import java.nio.ByteBuffer;
-
 
 /**
  * The Device Identification VPD page provides the means to retrieve identification descriptors applying to the logical
@@ -67,7 +65,6 @@ public class DeviceIdentificationVpdPage implements IResponseData {
     private IdentificationDescriptor[] identificationDescriptors = new IdentificationDescriptor[0];
 
     public DeviceIdentificationVpdPage(TargetServer target) {
-
         /*
          * For each logical unit that is not a well known logical unit, the Device Identification VPD page shall include
          * at least one identification descriptor in which a logical unit name (see SAM-3) is indicated.
@@ -81,7 +78,13 @@ public class DeviceIdentificationVpdPage implements IResponseData {
         String[] targetNames = target.getTargetNames();
         identificationDescriptors = new IdentificationDescriptor[targetNames.length];
         for (int curTargetNum = 0; curTargetNum < targetNames.length; curTargetNum++) {
-            final IdentificationDescriptor identDescriptor = new IdentificationDescriptor(protocolIdentifier, codeSet, protocolIdentifierValid, association, identifierType, new ScsiNameStringIdentifier(targetNames[curTargetNum]));
+            final IdentificationDescriptor identDescriptor = new IdentificationDescriptor(
+                    protocolIdentifier,
+                    codeSet,
+                    protocolIdentifierValid,
+                    association,
+                    identifierType,
+                    new ScsiNameStringIdentifier(targetNames[curTargetNum]));
 
             identificationDescriptors[curTargetNum] = identDescriptor;
         }
@@ -107,8 +110,10 @@ public class DeviceIdentificationVpdPage implements IResponseData {
         byteBuffer.put(peripheralQualifierAndPeripheralDeviceType);
         byteBuffer.put(pageCode);
 
-        ReadWrite.writeTwoByteInt(byteBuffer,// buffer
-                getPageLength(), index + PAGE_LENGTH_FIELD_INDEX);// index
+        ReadWrite.writeTwoByteInt(
+                byteBuffer,// buffer
+                getPageLength(),
+                index + PAGE_LENGTH_FIELD_INDEX);// index
     }
 
     public int size() {

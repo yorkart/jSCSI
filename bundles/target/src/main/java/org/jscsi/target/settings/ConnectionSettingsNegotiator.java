@@ -128,8 +128,12 @@ public final class ConnectionSettingsNegotiator extends SettingsNegotiator {
      * @param responseKeyValuePairs will contain the <i>key-value</i> pairs from the jSCSI target
      * @return <code>true</code> if everything went fine and <code>false</code> if there was an irreconcilable problem
      */
-    public boolean negotiate(TargetServer target, final LoginStage loginStage, final boolean leadingConnection, final boolean initialPdu, final List<String> requestKeyValuePairs, final List<String> responseKeyValuePairs) {
-
+    public boolean negotiate(TargetServer target,
+                             final LoginStage loginStage,
+                             final boolean leadingConnection,
+                             final boolean initialPdu,
+                             final List<String> requestKeyValuePairs,
+                             final List<String> responseKeyValuePairs) {
         // split up key=value pairs from requester
         final List<String> keys = new Vector<>();
         final List<String> values = new Vector<>();
@@ -184,8 +188,7 @@ public final class ConnectionSettingsNegotiator extends SettingsNegotiator {
                 // check if proposed TargetName is correct
                 final StringEntry targetNameEntry = (StringEntry) getEntry(TextKeyword.TARGET_NAME);
                 final String targetName = targetNameEntry.getStringValue();
-                if (targetName == null || // not declared
-                        !target.isValidTargetName(targetName)) {// wrong name
+                if (targetName == null || !target.isValidTargetName(targetName)) {
                     everythingOkay = false;
                 }
 
@@ -194,8 +197,8 @@ public final class ConnectionSettingsNegotiator extends SettingsNegotiator {
                 if (everythingOkay) {
                     targetAlias = target.getTarget(targetName).getTargetAlias();// might
                 }
-                // be
-                // undefined
+
+                // be undefined
                 if (targetAlias != null) {
                     responseKeyValuePairs.add(TextParameter.toKeyValuePair(TextKeyword.TARGET_ALIAS, targetAlias));
                 }
@@ -230,8 +233,9 @@ public final class ConnectionSettingsNegotiator extends SettingsNegotiator {
         Entry entry;
         // check connection-only entries
         entry = getEntry(key, entries);
-        if (entry == null) // keep looking in session-wide entries
+        if (entry == null) {// keep looking in session-wide entries
             entry = sessionSettingsNegotiator.getEntry(key);
+        }
         return entry;
     }
 
@@ -243,7 +247,9 @@ public final class ConnectionSettingsNegotiator extends SettingsNegotiator {
      */
     public Settings getSettings() {
         // check if settings are up to date
-        if (sessionSettingsNegotiator.getCurrentSettingsId() > settings.getSettingsId()) updateSettings();
+        if (sessionSettingsNegotiator.getCurrentSettingsId() > settings.getSettingsId()) {
+            updateSettings();
+        }
         return settings;
     }
 
@@ -256,11 +262,11 @@ public final class ConnectionSettingsNegotiator extends SettingsNegotiator {
 
     @Override
     protected void initializeEntries() {
-
         /*
          * Determines type and use of the data digest.
          */
-        entries.add(new StringEntry(new KeySet(TextKeyword.DATA_DIGEST),// keySet
+        entries.add(new StringEntry(
+                new KeySet(TextKeyword.DATA_DIGEST),// keySet
                 NegotiationType.NEGOTIATED,// negotiationType
                 Use.LOPNS,// use
                 NegotiationStatus.DEFAULT,// negotiationStatus
@@ -270,7 +276,8 @@ public final class ConnectionSettingsNegotiator extends SettingsNegotiator {
         /*
          * Determines type and use of the header digest.
          */
-        entries.add(new StringEntry(new KeySet(TextKeyword.HEADER_DIGEST),// keySet
+        entries.add(new StringEntry(
+                new KeySet(TextKeyword.HEADER_DIGEST),// keySet
                 NegotiationType.NEGOTIATED,// negotiationType
                 Use.LOPNS,// use
                 NegotiationStatus.DEFAULT,// negotiationStatus
@@ -280,7 +287,8 @@ public final class ConnectionSettingsNegotiator extends SettingsNegotiator {
         /*
          * Turns the target-to-initiator markers on or off.
          */
-        entries.add(new BooleanEntry(new KeySet(TextKeyword.IF_MARKER),// keySet
+        entries.add(new BooleanEntry(
+                new KeySet(TextKeyword.IF_MARKER),// keySet
                 Use.LOPNS,// use
                 NegotiationStatus.DEFAULT,// negotiationStatus
                 false,// negotiationValue
@@ -292,7 +300,8 @@ public final class ConnectionSettingsNegotiator extends SettingsNegotiator {
          * one marker to the beginning of the next one. The offer can have only a range; the response can have only a
          * single value (picked from the offered range) or Reject. Will always be Irrelevant.
          */
-        entries.add(new NumericalRangeEntry(new KeySet(TextKeyword.IF_MARK_INT),// keySet
+        entries.add(new NumericalRangeEntry(
+                new KeySet(TextKeyword.IF_MARK_INT),// keySet
                 Use.LOPNS,// use
                 NegotiationStatus.IRRELEVANT,// negotiationStatus
                 2048,// negotiationValue
@@ -305,7 +314,8 @@ public final class ConnectionSettingsNegotiator extends SettingsNegotiator {
          * specific parameter. The actual value used by the target will be min(This value, MaxBurstLength) for data-in
          * and solicited data-out data. Min(This value, FirstBurstLength) for unsolicited data.
          */
-        entries.add(new NumericalEntry(new KeySet(TextKeyword.MAX_RECV_DATA_SEGMENT_LENGTH),// keySet
+        entries.add(new NumericalEntry(
+                new KeySet(TextKeyword.MAX_RECV_DATA_SEGMENT_LENGTH),// keySet
                 NegotiationType.DECLARED,// negotiationType
                 Use.LOPNS_AND_FFP,// use
                 NegotiationStatus.DEFAULT,// negotiationStatus
@@ -320,7 +330,8 @@ public final class ConnectionSettingsNegotiator extends SettingsNegotiator {
         /*
          * Turns the initiator-to-target markers on or off.
          */
-        entries.add(new BooleanEntry(new KeySet(TextKeyword.OF_MARKER),// keySet
+        entries.add(new BooleanEntry(
+                new KeySet(TextKeyword.OF_MARKER),// keySet
                 Use.LOPNS,// use
                 NegotiationStatus.DEFAULT,// negotiationStatus
                 false,// negotiationValue
@@ -332,7 +343,8 @@ public final class ConnectionSettingsNegotiator extends SettingsNegotiator {
          * one marker to the beginning of the next one. The offer can have only a range; the response can have only a
          * single value (picked from the offered range) or Reject. Will always be Irrelevant.
          */
-        entries.add(new NumericalRangeEntry(new KeySet(TextKeyword.OF_MARK_INT),// keySet
+        entries.add(new NumericalRangeEntry(
+                new KeySet(TextKeyword.OF_MARK_INT),// keySet
                 Use.LOPNS,// use
                 NegotiationStatus.IRRELEVANT,// negotiationStatus
                 2048,// negotiationValue
@@ -343,7 +355,8 @@ public final class ConnectionSettingsNegotiator extends SettingsNegotiator {
          * This entry is not used for Settings initialization, TargetName has a session-wide scope. This entry
          * intercepts the TargetName parameter the initiator has to declare at the beginning of normal sessions.
          */
-        entries.add(new StringEntry(new KeySet(TextKeyword.TARGET_NAME),// keySet
+        entries.add(new StringEntry(
+                new KeySet(TextKeyword.TARGET_NAME),// keySet
                 NegotiationType.DECLARED,// negotiationType
                 Use.INITIAL,// use
                 NegotiationStatus.NOT_NEGOTIATED,// negotiationStatus

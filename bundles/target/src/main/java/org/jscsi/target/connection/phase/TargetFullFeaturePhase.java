@@ -1,6 +1,5 @@
 package org.jscsi.target.connection.phase;
 
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.BasicHeaderSegment;
 import org.jscsi.parser.ProtocolDataUnit;
@@ -30,7 +29,6 @@ import org.slf4j.LoggerFactory;
 import javax.naming.OperationNotSupportedException;
 import java.io.IOException;
 import java.security.DigestException;
-
 
 /**
  * Objects of this class represent the Target Full Feature Phase of a connection.
@@ -75,10 +73,14 @@ public final class TargetFullFeaturePhase extends TargetPhase {
      * @throws SettingsException              {@inheritDoc}
      */
     public boolean execute() throws DigestException, IOException, InterruptedException, InternetSCSIException, SettingsException {
+        LOGGER.info("phase execute and op event loop...");
+
         running = true;
         while (running) {
             ProtocolDataUnit pdu = connection.receivePdu();
             BasicHeaderSegment bhs = pdu.getBasicHeaderSegment();
+
+            LOGGER.info("op_event [" + bhs.getOpCode() + "]");
 
             // identify desired stage
             switch (bhs.getOpCode()) {
@@ -88,7 +90,7 @@ public final class TargetFullFeaturePhase extends TargetPhase {
                         final SCSICommandParser parser = (SCSICommandParser) bhs.getParser();
                         ScsiOperationCode scsiOpCode = ScsiOperationCode.valueOf(parser.getCDB().get(0));
 
-                        LOGGER.debug("scsiOpCode = " + scsiOpCode);// log SCSI
+                        LOGGER.info("scsiOpCode = " + scsiOpCode);// log SCSI
                         // Operation Code
 
                         if (scsiOpCode != null) {
@@ -168,6 +170,7 @@ public final class TargetFullFeaturePhase extends TargetPhase {
             }
 
             // process the PDU
+            LOGGER.info("begin process th pdu stage => " + stage.getClass().getSimpleName());
             stage.execute(pdu);
         }
 

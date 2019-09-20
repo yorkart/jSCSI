@@ -1,6 +1,5 @@
 package org.jscsi.target.connection.phase;
 
-
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.BasicHeaderSegment;
 import org.jscsi.parser.ProtocolDataUnit;
@@ -12,11 +11,12 @@ import org.jscsi.target.connection.stage.login.SecurityNegotiationStage;
 import org.jscsi.target.connection.stage.login.TargetLoginStage;
 import org.jscsi.target.settings.ConnectionSettingsNegotiator;
 import org.jscsi.target.settings.SettingsException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.naming.OperationNotSupportedException;
 import java.io.IOException;
 import java.security.DigestException;
-
 
 /**
  * Objects of this class represent the Target Login Phase of a connection.
@@ -25,6 +25,7 @@ import java.security.DigestException;
  * @see TargetPhase
  */
 public final class TargetLoginPhase extends TargetPhase {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TargetLoginPhase.class);
 
     /**
      * The current stage of this phase
@@ -73,6 +74,8 @@ public final class TargetLoginPhase extends TargetPhase {
      */
     @Override
     public boolean execute(ProtocolDataUnit pdu) throws IOException, InterruptedException, InternetSCSIException, DigestException, SettingsException {
+        LOGGER.info("phase execute");
+
         // begin login negotiation
         final ConnectionSettingsNegotiator negotiator = connection.getConnectionSettingsNegotiator();
         while (!negotiator.beginNegotiation()) {
@@ -130,19 +133,7 @@ public final class TargetLoginPhase extends TargetPhase {
             // else
             loginSuccessful = false;
             return false;
-        } catch (DigestException e) {
-            loginSuccessful = false;
-            throw e;
-        } catch (IOException e) {
-            loginSuccessful = false;
-            throw e;
-        } catch (InterruptedException e) {
-            loginSuccessful = false;
-            throw e;
-        } catch (InternetSCSIException e) {
-            loginSuccessful = false;
-            throw e;
-        } catch (SettingsException e) {
+        } catch (DigestException | IOException | InterruptedException | InternetSCSIException | SettingsException e) {
             loginSuccessful = false;
             throw e;
         } finally {

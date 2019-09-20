@@ -117,15 +117,19 @@ public final class SecurityNegotiationStage extends TargetLoginStage {
                 if (authMethodValues.contains(TextKeyword.NONE)) {
 
                     authenticated = true;
-                    responseKeyValuePairs.add(TextParameter.toKeyValuePair(TextKeyword.AUTH_METHOD,// key
+                    responseKeyValuePairs.add(TextParameter.toKeyValuePair(
+                            TextKeyword.AUTH_METHOD,// key
                             TextKeyword.NONE));// value
 
                     // concatenate key value pairs to single string
                     final String responseString = TextParameter.concatenateKeyValuePairs(responseKeyValuePairs);
 
-                    if (LOGGER.isDebugEnabled()) LOGGER.debug("response: " + responseString);
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.debug("response: " + responseString);
+                    }
 
                     // send reply (sequence), set transit bit of last PDU
+                    LOGGER.info("send pdu with SECURITY_NEGOTIATION stage");
                     sendPduSequence(responseString, requestedNextStageNumber);
 
                     // leave this (and proceed to next) stage

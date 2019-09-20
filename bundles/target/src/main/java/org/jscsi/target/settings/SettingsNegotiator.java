@@ -1,12 +1,10 @@
 package org.jscsi.target.settings;
 
-
 import org.jscsi.target.settings.entry.Entry;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
 
 /**
  * This is an abstract parent-class to {@link ConnectionSettingsNegotiator} and {@link SessionSettingsNegotiator}. The

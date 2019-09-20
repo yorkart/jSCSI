@@ -51,6 +51,7 @@ public final class TextKeyword {
     // additional string values
     public static final String NONE = "None";
     public static final String CRC_32C = "CRC-32C";
+    // SessionType
     public static final String NORMAL = "Normal";
     public static final String DISCOVERY = "Discovery";
     public static final String ALL = "All";

@@ -80,6 +80,7 @@ public final class LoginOperationalParameterNegotiationStage extends TargetLogin
         final String keyValuePairReply = TextParameter.concatenateKeyValuePairs(responseKeyValuePairs);
 
         // send reply, finish negotiation, and return successfully
+        LOGGER.info("send pdu with FULL_FEATURE_PHASE stage");
         sendPduSequence(keyValuePairReply, LoginStage.FULL_FEATURE_PHASE);
         negotiator.finishNegotiation(true);
         nextStageNumber = LoginStage.FULL_FEATURE_PHASE;

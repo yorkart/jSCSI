@@ -45,7 +45,7 @@ public enum SessionType {
      * @param value <code>Discovery</code> or <code>Normal</code>
      * @return the specified {@link SessionType} or <code>null</code>
      */
-    public static final SessionType getSessionType(final String value) {
+    public static SessionType getSessionType(final String value) {
         final SessionType[] values = values();
         for (SessionType s : values) {
             if (s.value.equals(value)) {

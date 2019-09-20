@@ -78,7 +78,9 @@ public final class TextNegotiationStage extends TargetFullFeatureStage {
                 final boolean sendTargetName = // see upper table
                         !normal && sendTargetsValue.equals(TextKeyword.ALL);
                 final boolean sendTargetAddress = // see upper table
-                        (!normal && sendTargetsValue.equals(TextKeyword.ALL)) || session.getTargetServer().isValidTargetName(sendTargetsValue) || (normal && sendTargetsValue.length() == 0);
+                        (!normal && sendTargetsValue.equals(TextKeyword.ALL))
+                                || session.getTargetServer().isValidTargetName(sendTargetsValue)
+                                || (normal && sendTargetsValue.length() == 0);
 
                 /*
                  * A target record consists of a TargetName key-value pair followed by one or more TargetAddress
@@ -91,7 +93,8 @@ public final class TextNegotiationStage extends TargetFullFeatureStage {
                         responseKeyValuePairs.add(TextParameter.toKeyValuePair(TextKeyword.TARGET_NAME, curTargetName));
                         // add TargetAddress
                         if (sendTargetAddress)
-                            responseKeyValuePairs.add(TextParameter.toKeyValuePair(TextKeyword.TARGET_ADDRESS, session.getTargetServer().getConfig().getExternalTargetAddress() + // domain
+                            responseKeyValuePairs.add(TextParameter.toKeyValuePair(TextKeyword.TARGET_ADDRESS,
+                                    session.getTargetServer().getConfig().getExternalTargetAddress() + // domain
                                     TextKeyword.COLON + // :
                                     session.getTargetServer().getConfig().getExternalPort() + // port
                                     TextKeyword.COMMA + // ,
@@ -100,7 +103,8 @@ public final class TextNegotiationStage extends TargetFullFeatureStage {
                 } else {
                     // We're here if they sent us a target name and are asking for the address (I think)
                     if (sendTargetAddress)
-                        responseKeyValuePairs.add(TextParameter.toKeyValuePair(TextKeyword.TARGET_ADDRESS, session.getTargetServer().getConfig().getExternalTargetAddress() + // domain
+                        responseKeyValuePairs.add(TextParameter.toKeyValuePair(TextKeyword.TARGET_ADDRESS,
+                                session.getTargetServer().getConfig().getExternalTargetAddress() + // domain
                                 TextKeyword.COLON + // :
                                 session.getTargetServer().getConfig().getExternalPort() + // port
                                 TextKeyword.COMMA + // ,
@@ -132,6 +136,7 @@ public final class TextNegotiationStage extends TargetFullFeatureStage {
                 initiatorTaskTag, 0xffffffff,// targetTransferTag
                 replyDataSegment);// dataSegment
 
+        LOGGER.info("send pud");
         connection.sendPdu(responsePdu);
     }
 
