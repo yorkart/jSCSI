@@ -1,5 +1,6 @@
 package org.jscsi.target;
 
+import org.jscsi.target.context.Configuration;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 

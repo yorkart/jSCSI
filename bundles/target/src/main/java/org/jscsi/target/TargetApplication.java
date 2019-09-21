@@ -1,5 +1,7 @@
 package org.jscsi.target;
 
+import org.jscsi.target.context.Configuration;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;

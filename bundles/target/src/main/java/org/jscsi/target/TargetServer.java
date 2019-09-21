@@ -1,13 +1,13 @@
 package org.jscsi.target;
 
-import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.ProtocolDataUnit;
-import org.jscsi.target.connection.ConnectionPrepare;
 import org.jscsi.target.connection.TargetConnection;
 import org.jscsi.target.connection.TargetSession;
 import org.jscsi.target.connection.TargetSessionManager;
+import org.jscsi.target.context.Configuration;
+import org.jscsi.target.context.Target;
+import org.jscsi.target.context.TargetContext;
 import org.jscsi.target.scsi.inquiry.DeviceIdentificationVpdPage;
-import org.jscsi.target.settings.SettingsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
-import java.security.DigestException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -30,7 +29,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Andreas Ergenzinger, University of Konstanz
  * @author Sebastian Graf, University of Konstanz
  */
-public class TargetServer implements Callable<Void> {
+public class TargetServer implements Callable<Void>, TargetContext {
     protected static final Logger LOGGER = LoggerFactory.getLogger(TargetServer.class);
 
     /**
@@ -126,6 +125,7 @@ public class TargetServer implements Callable<Void> {
             } catch (Exception e) {
                 LOGGER.error("running target error:", e);
             } finally {
+                // todo remove target, why???
                 // coming back from call() means the session is ended
                 // we can delete the target from local cache.
                 synchronized (targets) {
@@ -168,17 +168,7 @@ public class TargetServer implements Callable<Void> {
                 // deactivate Nagle algorithm
                 socketChannel.socket().setTcpNoDelay(true);
 
-                TargetConnection newConnection = new TargetConnection(socketChannel, true);
-                ConnectionPrepare connectionPrepare = new ConnectionPrepare(newConnection, sessionManager, this);
-                try {
-                    connectionPrepare.execute();
-
-                    // threadPool.submit(connection);// ignore returned Future
-                    workerPool.submit(new ConnectionHandler(newConnection)); // ignore returned Future
-                } catch (DigestException | InternetSCSIException | SettingsException e) {
-                    LOGGER.info("Throws Exception", e);
-                    continue;
-                }
+                workerPool.submit(() -> new TargetWorkHandler(socketChannel, this).handle());
             }
         } catch (IOException e) {
             // this block is entered if the desired port is already in use
@@ -206,6 +196,27 @@ public class TargetServer implements Callable<Void> {
         synchronized (targets) {
             return targets.get(targetName);
         }
+    }
+
+    public void removeTarget(TargetConnection targetConnection) {
+        synchronized (targets) {
+            Target target = targetConnection.getTargetSession().getTarget();
+            if (target != null) {
+                targets.remove(target.getTargetName());
+                try {
+                    target.getStorageModule().close();
+                } catch (Exception e) {
+                    LOGGER.error("Error when closing storage:", e);
+                }
+                LOGGER.info("closed local storage module");
+            } else {
+                LOGGER.warn("No target to delete on logout?");
+            }
+        }
+    }
+
+    public TargetSessionManager getSessionManager() {
+        return sessionManager;
     }
 
     /**

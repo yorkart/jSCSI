@@ -1,7 +1,7 @@
 package org.jscsi.target.example;
 
 
-import org.jscsi.target.Configuration;
+import org.jscsi.target.context.Configuration;
 import org.jscsi.target.TargetServer;
 import org.xml.sax.SAXException;
 

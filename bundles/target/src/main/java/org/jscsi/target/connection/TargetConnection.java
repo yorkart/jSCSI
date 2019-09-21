@@ -3,6 +3,7 @@ package org.jscsi.target.connection;
 import org.jscsi.exception.InternetSCSIException;
 import org.jscsi.parser.OperationCode;
 import org.jscsi.parser.ProtocolDataUnit;
+import org.jscsi.target.context.TargetContext;
 import org.jscsi.target.connection.phase.TargetFullFeaturePhase;
 import org.jscsi.target.connection.phase.TargetLoginPhase;
 import org.jscsi.target.connection.phase.TargetPhase;
@@ -70,6 +71,7 @@ public class TargetConnection implements Connection {
      */
     private final boolean isLeadingConnection;
 
+    private final TargetContext targetContext;
     /**
      * The last {@link ProtocolDataUnit} received on this connection.
      */
@@ -82,9 +84,10 @@ public class TargetConnection implements Connection {
      * @param isLeadingConnection <code>true</code> if and only if this connection is the first connection
      *                            associated with its enclosing session
      */
-    public TargetConnection(SocketChannel socketChannel, final boolean isLeadingConnection) {
+    public TargetConnection(SocketChannel socketChannel, final boolean isLeadingConnection, final TargetContext targetContext) {
         this.isLeadingConnection = isLeadingConnection;
-        senderWorker = new TargetSenderWorker(this, socketChannel);
+        this.senderWorker = new TargetSenderWorker(this, socketChannel);
+        this.targetContext = targetContext;
     }
 
     /**
@@ -174,6 +177,14 @@ public class TargetConnection implements Connection {
      */
     public void establish() {
         try {
+            final ProtocolDataUnit pdu = receivePdu();
+            // confirm OpCode-
+            if (pdu.getBasicHeaderSegment().getOpCode() != OperationCode.LOGIN_REQUEST) {
+                throw new InternetSCSIException();
+            }
+
+            this.targetSession = this.targetContext.getSessionManager().createTargetSession(pdu, this, targetContext);
+
             // *** login phase ***
             phase = new TargetLoginPhase(this);
             if (phase.execute(lastReceivedPDU)) {
